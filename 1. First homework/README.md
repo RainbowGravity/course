@@ -1,5 +1,5 @@
 ### About me
-<p>My name is Ivan Marchenko, i'm 23 years old.</p>
+<p>My name is Ivan Marchenko.</p>
 <p>I'm in love with computer hardware and i'm enthusiast in 
   this direction: building PCs, overclocking and tuning them, 
   creating and programming circuit schemes. I've done all of that. But now i wanna
