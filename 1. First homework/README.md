@@ -7,7 +7,7 @@
   i wanna be a DevOps-engineer and learn some new skills and get
   interesting experience. </p> 
  
-### There is three reasons why i've chosen this course:
+### There are three reasons why i've chosen this course:
 
 * DevOps. Yeah. That's the main reason.
 * Wanna get great experience and knowledge and learn from experienced DevOps engineers. 
