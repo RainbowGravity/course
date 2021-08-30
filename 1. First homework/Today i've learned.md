@@ -7,5 +7,5 @@
 * more about containers and pods;
 * more about YALM manifests of a containerts, "latest" tag using, checksums of a containers, image pull policies.
 2. In the first lesson i've learned today:
-* about DevOps engineers and their role in programmed products life cycle;
+* about DevOps engineers and their role in products life cycle;
 * about ways of products development: waterfall, icremetal, iterative, spiral and Agile.
