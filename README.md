@@ -1,7 +1,7 @@
 ## Andersen DevOps course repository
 
 Hello!  
-In this repository i will be sharing my progress of learning 
+In this repository i'll be sharing my progress of learning 
   things about DevOps-engineering (you can check it in my [TIL](1.%20First%20homework/TIL.md)) and uploading finished homework.  
   
 ### About me
