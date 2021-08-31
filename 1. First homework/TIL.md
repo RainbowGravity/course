@@ -10,7 +10,11 @@ You can switch between days and weeks via simple navigation. You can also return
 | :-----------: | :-----------: |
 |[Monday](#monday)| 30.08.2021 |
 |[Tuesday](#tuesday)| 31.08.2021 |
-
+|[Wednesday](#wednesday)| 01.09.2021 |
+|[Thursday](#thursday)| 02.09.2021 |
+|[Friday](#friday )| 03.09.2021 |
+|[Saturday](#saturday)| 04.09.2021 |
+|[Sunday](#sunday)| 05.09.2021 |
 
 ### [Monday](#first-week)
 30.08.2021
