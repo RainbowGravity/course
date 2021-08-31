@@ -1,23 +1,24 @@
 ## Today i've learned
-Hello there! This is my personal TIL. Here you can check my progress and something about my new knowledges.  
+#### Hello there! 
+
+This is my personal TIL. Here you can check my progress and something about my new knowledges.  
 You can switch between days and weeks via simple navigation. You can also return to the first page by clicking on any day.
 
 * ### [First week](#first-week)
 
-## First week 
+## [First week](#hello-there) 
 
 | Day   | Date |
 | :-----------: | :-----------: |
-|[Monday](#monday)| 30.08.2021 |
-|[Tuesday](#tuesday)| 31.08.2021 |
+|[Monday](#monday-30082021)| 30.08.2021 |
+|[Tuesday](#tuesday-31082021)| 31.08.2021 |
 |[Wednesday](#wednesday)| 01.09.2021 |
 |[Thursday](#thursday)| 02.09.2021 |
 |[Friday](#friday )| 03.09.2021 |
 |[Saturday](#saturday)| 04.09.2021 |
 |[Sunday](#sunday)| 05.09.2021 |
 
-### [Monday](#first-week)
-30.08.2021
+### [Monday, 30.08.2021](#first-week)
 <p>
   
 1. Learned something about Github and created my first repository.
@@ -44,8 +45,7 @@ You can switch between days and weeks via simple navigation. You can also return
 
 </p>
 
-### [Tuesday](#first-week)
-31.08.2021
+### [Tuesday, 31.08.2021](#first-week)
 
 <p> 
   
