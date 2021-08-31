@@ -46,3 +46,19 @@ You can switch between days and weeks via simple navigation. You can also return
 
 ### [Tuesday](#first-week)
 31.08.2021
+
+<p> 
+  
+1. And again, <b> Cloud Native DevOps with Kubernetes</b>:
+  * <b> Container security</b>: principle of minimal privileges, why you need not to run processes inside a container as a root, how to ban root-privileged containers and why, how to give containers read-only rights, how to prevent privilege escalation, capabilities of containers and about security contexts and policies;
+  * <b> Volumes</b>: learned about emptyDir (they are used by containers for data transfer between them) and Persistent volumes (for data storage), restart policies (you can change from Always to OnFailure) and imagePullSecrets (used for the private registry pulls).
+  * <b> Managing pods</b>: more about labels and selectors (not really), about complicated selectors (they are used for advanced sorting), how to bring the pods together on a single node and how to prevent them to do so (hard/soft Affinity/antiAffinity).
+  * <b> Pod controllers</b>: DaemonSet objects (DaemonSet are used to create only one replica of the pod on every single node), StatefulSet (used to run the pods in order), Cronjob  and Job-objects (Cronjob are used to run the Job-objects in ordered time, Job-objects are used to complete limited amount of tasks by limited amount of pods)
+  * <b> Ingress Resources</b>: learned about the Ingress (load balancer which manages external connections to the services in a cluster), learned a little about Ingress controllers, Isito and Envoy.
+</p>
+
+<p>
+  
+2. Learned more about the Github again, especially about the markdown syntax (URLs, paragraphs, links, tables, etc.)
+
+</p>
