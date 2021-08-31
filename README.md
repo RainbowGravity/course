@@ -1,17 +1,17 @@
-### Andersen DevOps course repository
+## Andersen DevOps course repository
 
-Hello!
-<p>In this repository i will share my progress of learning 
-  things about DevOps-engineering and upload finished homework. </p>
-
+Hello!  
+In this repository i will share my progress of learning 
+  things about DevOps-engineering (you can check it in my [TIL](1.%20First%20homework/TIL.md)) and upload finished homework.  
+  
 ### About me
-<p>My name is Ivan Marchenko.</p>
-<p>I'm in love with computer hardware and i'm enthusiast in 
+My name is Ivan Marchenko.  
+I'm in love with computer hardware and i'm enthusiast in 
   this direction: building PCs, overclocking and tuning them, 
   creating and programming circuit schemes. I've done all of that. But now i wanna
   go forward and become an IT specialist. To be more accurate,
   i wanna be a DevOps-engineer and learn some new skills and get
-  interesting experience. </p> 
+  interesting experience.  
  
 ### There are three reasons why i've chosen this course:
 
