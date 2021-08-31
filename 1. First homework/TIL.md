@@ -1,6 +1,6 @@
 ## Today i've learned
 Hello there! This is my personal TIL. Here you can check my progress and something about my new knowledges.  
-You can switch between days and weeks via simple navigation. You can also return to the first page by clicking on day.
+You can switch between days and weeks via simple navigation. You can also return to the first page by clicking on any day.
 
 * ### [First week](#first-week)
 
