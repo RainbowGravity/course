@@ -2,21 +2,21 @@
 #### Hello there! 
 
 This is my personal TIL. Here you can check my progress and something about my new knowledges.  
-You can switch between days and weeks via simple navigation. You can also return to the first page by clicking on any day.
+You can switch between days and weeks via simple navigation. You can also return to the first page by clicking on the week, and to the week from name of the day.
 
 * ### [First week](#first-week)
 
-## [First week](#hello-there) 
+## [First week](#today-ive-learned) 
 
 | Day   | Date |
 | :-----------: | :-----------: |
 |[Monday](#monday-30082021)| 30.08.2021 |
 |[Tuesday](#tuesday-31082021)| 31.08.2021 |
-|[Wednesday](#wednesday)| 01.09.2021 |
-|[Thursday](#thursday)| 02.09.2021 |
-|[Friday](#friday )| 03.09.2021 |
-|[Saturday](#saturday)| 04.09.2021 |
-|[Sunday](#sunday)| 05.09.2021 |
+|[Wednesday](#wednesday-01092021)| 01.09.2021 |
+|[Thursday](#thursday-02092021)| 02.09.2021 |
+|[Friday](#friday-03092021)| 03.09.2021 |
+|[Saturday](#saturday-04092021)| 04.09.2021 |
+|[Sunday](#sunday-05092021)| 05.09.2021 |
 
 ### [Monday, 30.08.2021](#first-week)
 <p>
