@@ -18,6 +18,17 @@ You can switch between days and weeks via simple navigation. You can also return
 |[Saturday](#saturday-04092021)| 04.09.2021 |
 |[Sunday](#sunday-05092021)| 05.09.2021 |
 
+### [Thursday, 02.09.2021](#first-week)
+
+<p>
+  
+1. Learned many interesting Python stuff and created my second Python [app](https://github.com/RainbowGravity/course/tree/main/2.%20Second%20homework%20(WIP))!
+   *  <b> And, yes, it works!</b> It is not finished yet, but basic functions works perfectly fine: if you send command like that: ```curl -XPOST -d '{"animal":"Anime catgirl", "sound":"nya", "count": 6}' -k https://localhost``` you will get this reply six times (because value of the "count" key equals 6): ``` Anime catgirl says nya ```
+   * Also added <b>SSL keys</b> to the app, so it can work via HTTPS protocol. Of course, i didn't uploaded them to Github beacuse of security and privacy. If you wanna test my app you can create self-signed keys by yoursef using the OpenSSL.
+2. Learned way more about Docker container building and deploying, so i've put my program into container and succesfully deployed it. And it worked too!  
+3. Unfortinately, no <b> Cloud Native DevOps with Kubernetes</b> today, but i promise to finish it in next 2 days. Honestly.
+  </p>
+  
 ### [Wednesday, 01.09.2021](#first-week)
 
 <p> 
@@ -25,13 +36,13 @@ You can switch between days and weeks via simple navigation. You can also return
 1. This is getting to be a tradiditon, <b> Cloud Native DevOps with Kubernetes</b>!
    * <b> ConfigMap objects</b>: learned how to create the ConfigMap and Secret objects and how to import variables from them (you can import variables via env or envFrom or connect them as file), how to update pods after  new ConfigMap data. 
    * <b> Confidetial information</b>: learned about RBAC and passive encrypting of the etcd data.
-   ...
+   * <b> Managing of confidetial information</b>: learned about the encrypting data in VCS (you can put there encrypted data, but you need to update her manually (ecrypt and decrypt) which may lead to fatal issues if you forgot to encrypt files), remote encrypted data storage (apps will getting the decrypted data when they are deploying, but you need to develop the process of updating and logging the data) and using the special utilities of confidential data managing (you can monitoring atomatically updated logs, create UIDs and roles, but you need to add some instruments and update apps and services).
+   * <b> Data encrypting</b>: learned about the Sops tool from Mozilla (this tool allows to encrypt and decrypt data like passwords or logins automatically via popular encrypting systems like the PGP). 
 <p>
   
-2. Learned some Python stuff...
-  
- there will be more information tomorrow, feeling very sleepy right now...
+2. Learned some Python stuff and Stalin's reprssions and purges.
 
+ 
 </p>
 
 
