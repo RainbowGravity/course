@@ -24,7 +24,7 @@ You can switch between days and weeks via simple navigation. You can also return
   
 1. Learned many interesting Python stuff and created my second Python [app](https://github.com/RainbowGravity/course/tree/main/2.%20Second%20homework%20(WIP))!
    *  <b> And, yes, it works!</b> It is not finished yet, but basic functions works perfectly fine: if you send command like that: ```curl -XPOST -d '{"animal":"Anime catgirl", "sound":"nya", "count": 6}' -k https://localhost``` you will get this reply six times (because value of the "count" key equals 6): ``` Anime catgirl says nya ```
-   * Also added <b>SSL keys</b> to the app, so it can work via HTTPS protocol. Of course, i didn't uploaded them to Github beacuse of security and privacy. If you wanna test my app you can create self-signed keys by yoursef using the OpenSSL.
+   * Also added <b>SSL keys</b> to the app, so it can work via HTTPS protocol. Of course, i didn't uploaded them to the Github beacuse of security and privacy. If you wanna test my app you can create self-signed keys by yoursef using the OpenSSL.
 2. Learned way more about Docker container building and deploying, so i've put my program into container and succesfully deployed it. And it worked too!  
 3. Unfortinately, no <b> Cloud Native DevOps with Kubernetes</b> today, but i promise to finish it in next 2 days. Honestly.
   </p>
