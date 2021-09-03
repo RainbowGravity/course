@@ -1,6 +1,6 @@
 ## Heheheheh
 
-### Exaple of request:
+### Example request:
 
 ``` 
 curl -XPOST -d '{"animal":"Anime catgirl", "sound":"nya", "count": 6}' -k https://localhost:443  
