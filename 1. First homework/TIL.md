@@ -23,17 +23,17 @@ You can switch between days and weeks via simple navigation. You can also return
 <p>
   
 1. <b>Python, HTML, CSS, JS</b>
-   * Desined copletely my Python app with Flask support and learned some new Python stuff;
+   * Desined completely my Python app with Flask support and learned some new Python and Flask stuff;
    * Desined the web interface of my app. Web version will be available via 
   localhost/web. For example, you'll be able to send JSON requests from fancy-looking
   web interface and get replies right in it. Also you can chose HTTP method by using 
   a simple toggle switch.
    * Created very simple JS script which changes HTTP request method from GET to POST and backwards.
 2. Completely lost in the process of developmet and deployment of my simple app.
-3. Bought very interesting pre-builded HP PC without a videocard and was very surprised about its unusual motherboard and PSU.
+3. Bought a very interesting pre-builded HP PC without a videocard and was very surprised about its unusual motherboard and PSU.
    * So, PSU supplies the motherboard only with 12V. I've never seen something like this before. Also PSU are 80 Plus Gold certified.
-   * More interesting thing is about 3.3V and 5V. Motherboard converts 12V to 3.3V and 5V by herself and that means you need to connect
-  your SATA HDD/SSD power connector into special motherboard socket. 
+   * More interesting thing is about 3.3V and 5V. The motherboard converts 12V to 3.3V and 5V by herself and that means you need to connect
+  your SATA HDD/SSD power cable in a special socket on the motherboard. 
 </p>
 
 ### [Thursday, 02.09.2021](#first-week)
