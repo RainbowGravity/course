@@ -14,9 +14,27 @@ You can switch between days and weeks via simple navigation. You can also return
 |[Tuesday](#tuesday-31082021)| 31.08.2021 |
 |[Wednesday](#wednesday-01092021)| 01.09.2021 |
 |[Thursday](#thursday-02092021)| 02.09.2021 |
-|[Friday](#friday-03092021)| 03.09.2021 |
-|[Saturday](#saturday-04092021)| 04.09.2021 |
+|[Friday](#friday-and-saturday-03092021-04092021)| 03.09.2021 |
+|[Saturday](#friday-and-saturday-03092021-04092021)| 04.09.2021 |
 |[Sunday](#sunday-05092021)| 05.09.2021 |
+
+### [Friday and Saturday, 03.09.2021-04.09.2021](#first-week)
+
+<p>
+  
+1. <b>Python, HTML, CSS, JS</b>
+   * Desined copletely my Python app with Flask support and learned some new Python stuff;
+   * Desined the web interface of my app. Web version will be available via 
+  localhost/web. For example, you'll be able to send JSON requests from fancy-looking
+  web interface and get replies right in it. Also you can chose HTTP method by using 
+  a simple toggle switch.
+   * Created very simple JS script which changes HTTP request method from GET to POST and backwards.
+2. Completely lost in the process of developmet and deployment of my simple app.
+3. Bought very interesting pre-builded HP PC without a videocard and was very surprised about its unusual motherboard and PSU.
+   * So, PSU supplies the motherboard only with 12V. I've never seen something like this before. Also PSU are 80 Plus Gold certified.
+   * More interesting thing is about 3.3V and 5V. Motherboard converts 12V to 3.3V and 5V by herself and that means you need to connect
+  your SATA HDD/SSD power connector into special motherboard socket. 
+</p>
 
 ### [Thursday, 02.09.2021](#first-week)
 
