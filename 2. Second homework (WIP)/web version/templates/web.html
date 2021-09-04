@@ -1,0 +1,53 @@
+<html>
+    <meta charset="UTF-8">
+	<head>
+            <title>Web interface</title>
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <form action = "https://localhost:8888/web" method = "GET" class="block1" id="form" >
+            <h1>Web version of the JSON request service</h1>
+            <input class="input" type = "text" name = "js" onfocus="this.placeholder=''" placeholder="Enter your JSON request here" />
+                <div class="switch_1">
+                    <p>
+                        <input class="submit" type = "submit" value = "Send request" />
+                    </p>
+                    <label class="switch">
+                        <input type="checkbox" id="cb" name="cb" onclick="changeMethod()" >
+                        <span class="slider round">
+                        </span>
+                    </label>
+                    <script>
+                        function changeMethod() {
+                        let check = document.getElementById("cb")
+                        let method = document.getElementById("form");
+                        check.checked ? form.method = "POST" : form.method = "GET"
+                        }
+                    </script>
+                </div>
+                <p>
+                    <output class="output"  style="white-space: pre-line"> {{ result }}
+                    </output>
+                </p>
+        </form> 
+     	<div  class=block2>
+            <h1>About</h1>
+            <p>
+                This web version of the JSON request service is created just for fun and was not in the technical task. 
+                But i've get some advantages from that experience: learned some Python, HTML, CSS and JS, lol.
+            </p>
+            <p>
+                <b>Features:</b>
+            </p>     
+                <ul>
+                    <li><p>You can send your JSON request via the top field; </p></li>
+                    <li><p>You can chose HTTP method by the toggle switch. By default it is GET request.</p></li>
+                    <li><p><b>Emoji!</b> To give an example, just put your <b>cat</b> (lol) in the colons like that: <b>:cat:</b> 
+                        and you'll get an emojized &#128008!</p></li>
+                </ul>
+            <p>
+                Nothing more here. 
+            </p>
+        </div>
+	</body>
+</html>
