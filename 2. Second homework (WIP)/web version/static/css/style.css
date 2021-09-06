@@ -2,17 +2,17 @@
     {
         top:0px;
         margin: 0 auto; padding: 0;
-        width: 100%; height: 100%;
+        width: 100%; height: 100% + 200px;
         background-color: rgb(242, 242, 242);
-        min-width: 900;
-        min-height: 900;
+        min-width: 820px;
+        padding-bottom: 120px;
     }
 
     h1 
     {
         color: rgb(0, 0, 0);
         font-size: x-large;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: Arial, Helvetica;
         text-align: center;
     }
 
@@ -20,14 +20,14 @@
     {
         color: rgb(44, 44, 44);
         font-size: 14pt;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: Arial, Helvetica;
         text-align: justify;
     }
 
     td
     {
-        font: size 14pt;ch;
-        font-family: Arial, Helvetica, sans-serif;
+        font: 14pt;
+        font-family: Arial, Helvetica;
         text-align: center; 
         vertical-align: middle;
     }
@@ -37,8 +37,8 @@
     .switch_1
     {
         margin: 0 auto;
-        width: 225;
-        height: 43 ;
+        width: 225px;
+        height: 43px;
         position: relative;
     }
 
@@ -46,11 +46,10 @@
 
     .block1 
     {
-        width: 800;
+        width: 800px;
         height: auto;
-        top: 100;
-        left: 0;
-        margin: 0 auto;
+        top: 100px;
+        margin: 0px auto;
         padding-top: 7px;
         padding-bottom: 15px;
         border-radius: 20px;
@@ -62,13 +61,13 @@
 
     .block2
     {
-        width: 700;
+        width: 700px;
         height: auto;
-        top: 135;
-        bottom: 100;
-        margin: 0 auto ;
-        padding-left: 50;
-        padding-right: 50;
+        top: 135px;
+        bottom: 100px;
+        margin: 0px auto ;
+        padding-left: 50px;
+        padding-right: 50px;
         padding-top: 7px;
         padding-bottom: 10px;
         border-radius: 20px;
@@ -80,12 +79,12 @@
 
     .input
     {
-        width: 498;
-        height:50;
-        margin: 0 auto;
-        top: 15;
+        width: 498px;
+        height:50px;
+        margin: 0px auto;
+        top: 15px;
         display: block;
-        padding: 13;
+        padding: 13px;
         font-size:14pt;
         box-sizing: border-box;
         border:1px solid #b1b1b1;
@@ -104,7 +103,7 @@
 
     .submit
     {
-        width: auto;
+        width: 130;
         height:auto;
         display: block;
         padding: 10;
@@ -131,13 +130,13 @@
 
     .output
     {
-        width: 474;
-        height: 200;
-        margin: 0 auto;
-        top: 15;
+        width: 474px;
+        height: 200px;
+        margin: 0px auto;
+        top: 15px;
         display: block;
         background: rgba(245, 245, 245, 0.986);
-        padding: 13;
+        padding: 13px;
         font-size:14pt;
         border-style:solid;
         border:1px solid #ffffff;
@@ -147,8 +146,8 @@
 
         output::-webkit-scrollbar
         {
-            width: 25;
-            top: -10;
+            width: 25px;
+            top: -10px;
             display: block;
             height: 120px;
         }
@@ -161,13 +160,13 @@
             background-clip: content-box;
         }
 
-
         body::-webkit-scrollbar
         {
-            width: 25;
-            top: -10;
+            width: 25px;
+            top: -10px;
             display: block;
             height: 25px;
+            background-color: transparent;
         }
 
         body::-webkit-scrollbar-thumb
@@ -177,6 +176,10 @@
             border-radius: 15px;
             background-clip: content-box;
         }
+        body::-webkit-scrollbar-track {
+            background:rgba(145, 145, 145, 0.1);
+        }
+
 
     /* Toggle switch */  
 
@@ -186,25 +189,25 @@
         display: inline-block;
         width: 60px;
         height: 34px;
-        top: 4.5;
-        right:2 ;
+        top: 4px;
+        right: 2px;
     }
       
         .switch input
         {
-            opacity: 0;
-            width: 0;
-            height: 0;
+            opacity: 0px;
+            width: 0px;
+            height: 0px;
         }
         
         .slider
         {
             position: absolute;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
             background-color: rgb(230, 228, 228);
             -webkit-transition: .4s;
             transition: .4s;
