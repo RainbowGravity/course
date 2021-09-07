@@ -4,7 +4,33 @@
 This is my personal TIL. Here you can check my progress and something about my new knowledges.  
 You can switch between days and weeks via simple navigation. You can also return to the first page by clicking on the week, and to the week from the name of the day.
 
-* ### [First week](#first-week)
+* ### [1. First week](#first-week)
+* ### [2. Second week](#second-week)
+
+## [Second week](#today-ive-learned) 
+
+| Day   | Date |
+| :-----------: | :-----------: |
+|[Monday](#monday-06092021)| 06.09.2021 |
+|[Tuesday](#tuesday-07092021)| 07.09.2021 |
+|[Wednesday](#wednesday-08092021)| 08.09.2021 |
+|[Thursday](#thursday-09092021)| 09.09.2021 |
+|[Friday](#friday-10092021)| 10.09.2021 |
+|[Saturday](#saturday-11092021)| 11.09.2021 |
+|[Sunday](#sunday-12092021)| 12.09.2021 |
+
+### [Monday, 06.09.2021](#second-week)
+
+<p>
+ 
+1. <b>Good news! My app will work on the single page!</b>
+   * Learned some about data in the HTTP header. You can read information about a browser, its version, OS type and more useful data from header. Nothing new to me, but i didn't expect that I'll be able to use that in Python code. So now my app just reading the HTTP header data and if type of a browser is None, my app will respond only with a text message without loading the HTML page. It's obvious that if type is not None (for example, Firefox or Edge) it will load the HTML.  
+2. <b>Added new feature to my HTML page.</b>
+   * At first in my HTML was only one button with a 'Send request' text in it and a toggle switch to the right. Now the text inside the button will change depending on the toggle switch position.
+3. Learned more details about SSH keys, Ansible vault and Ansible playbooks. I'll be writing my playbook from today now on.
+  
+</p>
+
 
 ## [First week](#today-ive-learned) 
 
@@ -17,6 +43,18 @@ You can switch between days and weeks via simple navigation. You can also return
 |[Friday](#friday-and-saturday-03092021-04092021)| 03.09.2021 |
 |[Saturday](#friday-and-saturday-03092021-04092021)| 04.09.2021 |
 |[Sunday](#sunday-05092021)| 05.09.2021 |
+
+### [Sunday, 05.09.2021](#first-week)
+
+<p>
+ 
+1. More about Python again:
+   * Tried to design the app in the way that it can recieve curl requests and loading Web page if you use browser on the same address, but failed;
+   * Learned about the interesting try/except stuff which allows me not to crash the app in <b>INTERNAL SERVER ERROR</b> with every wrong JSON input.
+2. Fixed some HTML and CSS stuff.
+  
+</p>
+
 
 ### [Friday and Saturday, 03.09.2021-04.09.2021](#first-week)
 
