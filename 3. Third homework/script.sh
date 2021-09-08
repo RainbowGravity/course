@@ -97,7 +97,7 @@ sa=$(ss -ptua | awk '/'$na'/ {print $6}' | grep -oP '(\d+\.){3}\d+' | grep -v '0
 
 while [ $sa -gt 0 ]
 	do
-	p1=$(ss -ptua | awk '/'$na'/ {print $6}' | grep -oP '(\d+\.){3}\d+' | grep -v '0.0.0.0' |\
+	ip1=$(ss -ptua | awk '/'$na'/ {print $6}' | grep -oP '(\d+\.){3}\d+' | grep -v '0.0.0.0' |\
 	sort | uniq -c | sort -r | grep -m$sa -oP '(\d+\.){3}\d+' | tail -1)
     whois $ip1 > cache
 		if [ "$pa" == "all" ];
