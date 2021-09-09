@@ -27,7 +27,7 @@
 	# Error message about option
 		Error()
 		{
-			echo -e '\033[0;31mError! Incorrect option\033[0m'
+			echo -e '\033[1;31m Error! Incorrect option\033[0m'
 			echo
 		}
 
@@ -38,7 +38,7 @@
 			if [ "$?" == "0" ]
 				then 
 				echo
-				echo -e '\033[0;31mError! Incorrect option: "'$sa'" is not a number.\033[0m'		
+				echo -e '\033[1;31m Error! Incorrect option: "'$sa'" is not a number.\033[0m'		
 				echo
 				exit
 			fi	
@@ -51,7 +51,7 @@
 			if [ "$?" == "1" ]
 				then 
 				echo
-				echo -e '\033[0;31mError! Incorrect option: there is no "'$na'" process.\033[0m'		
+				echo -e '\033[1;31m Error! Incorrect option: there is no "'$na'" process.\033[0m'		
 				echo
 				exit
 			fi
@@ -66,7 +66,7 @@
 			echo
 		}
 
-	# Field of the additional information about IP
+	# Field of additional information about IP
 		Additional()
 		{
 			if [ "$a" == "True" ];
@@ -89,6 +89,22 @@
 				echo -e '\033[0;31mThere is no information about "'$pa2'" for this IP address.\033[0m'
 				echo
 			fi
+		}
+
+	# Displaying an information about amount of the connections displayed (yeah)
+		Counter()
+		{
+			echo "____________________________________________"
+			echo
+			ca=$(ss -ptua | awk '/'$na'/ {print $6}' | grep -oP '(\d+\.){3}\d+' | grep -v '0.0.0.0' | wc -l)
+			echo $na | grep -q -i '[a-z]'
+			if [ "$?" == 0 ]
+				then			
+					echo -e '\033[1;32m Done! Displayed '$sa' connections of '$ca' for "'$na'" process. \033[0m'
+				else
+					echo -e '\033[1;32m Done! Displayed '$sa' connections of '$ca' for all processes. \033[0m'
+			fi
+			echo
 		}
 
 	# Default options
@@ -131,16 +147,16 @@ done
 
 	# Counting the real amount of the IP adresses that in use by the process
 sa=$(ss -ptua | awk '/'$na'/ {print $6}' | grep -oP '(\d+\.){3}\d+' | grep -v '0.0.0.0' | tail -n$sa | wc -l)
-
+ca=$sa
 
 	# Processing the information about the IP address
-while [ $sa -gt 0 ]
+while [ $ca -gt 0 ]
 	do
 	ip1=$(ss -ptua | awk '/'$na'/ {print $6}' | grep -oP '(\d+\.){3}\d+' | grep -v '0.0.0.0' |\
-	sort | uniq -c | sort -r | grep -m$sa -oP '(\d+\.){3}\d+' | tail -1)
+	sort | uniq -c | sort -r | grep -m$ca -oP '(\d+\.){3}\d+' | tail -1)
     whois $ip1 > cache
 		
-	# Checking for the paragraphs chosen
+	# Checking for paragraphs chosen
 		if [ "$pa" == "all" ];
 			then
 			Header
@@ -150,7 +166,7 @@ while [ $sa -gt 0 ]
 			Header
 			p=$(echo $pa | sed -e 's#,# #g' | wc -w)
 			
-	# Checking for errors in the paragraps request, responding with an error if failed
+	# Checking for errors in paragraps requests, responding with error if failed
 			while [ $p -gt 0 ]
                 do
                 pa2=$(echo $pa | sed -e 's#,# #g' | awk '{print $'$p''})
@@ -162,6 +178,7 @@ while [ $sa -gt 0 ]
 
 	# Calling the function that will be display or not the additional info
 		Additional
-	((sa--))
+	((ca--))
 done
+Counter
 rm ./cache 2&> tee /dev/null
