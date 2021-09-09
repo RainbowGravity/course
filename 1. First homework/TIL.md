@@ -19,6 +19,26 @@ You can switch between days and weeks via simple navigation. You can also return
 |[Saturday](#saturday-11092021)| 11.09.2021 |
 |[Sunday](#sunday-12092021)| 12.09.2021 |
 
+### [Wednesday, 08.09.2021](#second-week)
+
+<p>
+ 
+1. <b> Learned to work with cache! </b>
+   * Significantly improved the speed of my script working for 250-300% just by creating a simple text file in which script is writing whois info and then using it to find the chosen paragraphs. That allows to display a message about the missing paragraphs which my script was unable to find in the whois respond.  
+2. <b> Learned something new about IDEs, new languages and compiling </b>
+   * By myself i'm using the VS Code with many plugins. Light-weight and low processor and ram usage of the VS Code made me fall in love with it. Prevously i've used pyCharm, Intellij IDEA, but i had bad experince with using them on my Ubuntu machine: crashes, bad UI scaling (don't know why, but this is a very common problem), high ram and cpu usage.
+ 
+### [Tuesday, 07.09.2021](#second-week)
+
+<p>
+
+1. Learned stuff about bash scripting and built-in networking utilities like ss which allows to investigate sockets.
+   * My bash script that is being created for the Third homework is able to work now with built-in ss utility instead of using the netstat and by that there is no more anoying message about root privileges. 
+2. Learned to create a custom options for bash scripts.
+   * And have added many of them! For example, you can enter process name, paragraphs from whois, amount of the IPs processed and some more. 
+  
+</p>
+
 ### [Monday, 06.09.2021](#second-week)
 
 <p>
