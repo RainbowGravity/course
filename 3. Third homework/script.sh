@@ -91,7 +91,7 @@
 			fi
 		}
 
-	# Displaying an information about amount of the connections displayed (yeah)
+	# Displaying information about amount of the connections displayed (yeah)
 		Counter()
 		{
 			echo "____________________________________________"
@@ -100,9 +100,9 @@
 			echo $na | grep -q -i '[a-z]'
 			if [ "$?" == 0 ]
 				then			
-					echo -e '\033[1;32m Done! Displayed '$sa' connections of '$ca' for "'$na'" process. \033[0m'
+					echo -e '\033[1;32m Done! Displayed '$sa'/'$ca' connections for "'$na'" process. \033[0m'
 				else
-					echo -e '\033[1;32m Done! Displayed '$sa' connections of '$ca' for all processes. \033[0m'
+					echo -e '\033[1;32m Done! Displayed '$sa'/'$ca' connections for of processes. \033[0m'
 			fi
 			echo
 		}
@@ -181,4 +181,4 @@ while [ $ca -gt 0 ]
 	((ca--))
 done
 Counter
-rm ./cache 2&> tee /dev/null
+rm ./cache 2> /dev/null
