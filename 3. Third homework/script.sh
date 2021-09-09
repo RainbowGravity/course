@@ -111,7 +111,7 @@ while [ $sa -gt 0 ]
 			while [ $p -gt 0 ]
                 do
                 pa2=$(echo $pa | sed -e 's#,# #g' | awk '{print $'$p''})
-                cat ./cache.txt | grep -i $pa2
+                cat ./cache | grep -i $pa2
                 if [ "$?" == "1" ]
 				    then
 				    Gerror
