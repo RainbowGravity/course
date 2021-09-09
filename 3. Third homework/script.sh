@@ -1,5 +1,4 @@
 #!/bin/bash
-
 		Help()
 		{
 			echo '	_____________________________________________________________________________________		'
@@ -23,118 +22,72 @@
 			echo '	_____________________________________________________________________________________'
 			echo
 		}
-
-	# Error message about option
+	# Error message about the option
 		Error()
 		{
-			echo -e '\033[1;31m Error! Incorrect option\033[0m'
-			echo
+			printf '\033[1;31m Error! Incorrect option\033[0m\n\n'
 		}
-
-	# Cheching for the s-option argument
+	# Checking for the s-option argument
 		Serror()
 		{
-			echo $sa | grep -q -i '[a-z]' 
-			if [ "$?" == "0" ]
-				then 
-				echo
-				echo -e '\033[1;31m Error! Incorrect option: "'$sa'" is not a number.\033[0m'		
-				echo
-				exit
-			fi	
+			echo $sa | grep -q -i '[a-z]' && { printf '\n\033[1;31m Error! Incorrect option: "'$sa'" is not a number.\033[0m\n\n'; exit; }
 		}
-
-	# Cheching for the n-option argument
+	# Checking for the n-option argument
 		Nerror()
 		{
-			ss -ptua | awk '{print $7}' | grep -q $na
-			if [ "$?" == "1" ]
-				then 
-				echo
-				echo -e '\033[1;31m Error! Incorrect option: there is no "'$na'" process.\033[0m'		
-				echo
-				exit
-			fi
+			ss -ptua | awk '{print $7}' | grep -q $na && echo -n ||\
+			{ printf '\n\033[1;31m Error! Incorrect option: there is no "'$na'" process.\033[0m\n\n'; exit; }
 		}
-
 	# Header of the script output
 		Header()
 		{
-			echo "____________________________________________"
-			echo
-			echo "Information from whois about $ip1:"
-			echo
+			printf '____________________________________________\n\n Information from whois about '$ip1':\n\n'
 		}
-
-	# Field of additional information about IP
+	# Field of the additional information about IP
 		Additional()
 		{
 			if [ "$a" == "True" ];
 				then
-				echo 'Additional information:'
-				echo
-				echo 'Netid:	State:	Local Address:		Peer Address:		Process:'
+				printf ' Additional information:\n\nNetid:	State:	Local Address:		Peer Address:		Process:\n' 
 				ss -p dst $ip1 | awk -v OFS='\t' '{print $1,$2,$5,$6,$7}' | grep -v "Netid"
-				echo
 			fi
 		}
-
-	# Cheching for the paragraphs in the whois info
+	# Checking for the paragraphs in the whois info
 		Gerror()
 		{
-			cat ./cache | grep -i ^$pa2
-			if [ "$?" == "1" ]
-				then
-				echo
-				echo -e '\033[0;31mThere is no information about "'$pa2'" for this IP address.\033[0m'
-				echo
-			fi
+			cat ./cache | grep -i ^$pa2 && echo -n ||\
+			echo -e '\033[0;31mThere is no information about "'$pa2'" for this IP address.\033[0m'
 		}
-
 	# Displaying information about amount of the connections displayed (yeah)
 		Counter()
 		{
-			echo "____________________________________________"
-			echo
+			printf "____________________________________________\n\n"
 			ca=$(ss -ptua | awk '/'$na'/ {print $6}' | grep -oP '(\d+\.){3}\d+' | grep -v '0.0.0.0' | wc -l)
-			echo $na | grep -q -i '[a-z]'
-			if [ "$?" == 0 ]
-				then			
-					echo -e '\033[1;32m Done! Displayed '$sa'/'$ca' connections for "'$na'" process. \033[0m'
-				else
-					echo -e '\033[1;32m Done! Displayed '$sa'/'$ca' connections for of processes. \033[0m'
-			fi
-			echo
+			echo $na | grep -q -i '[a-z]' && printf '\033[1;32m Done! Displayed '$sa'/'$ca' connections for "'$na'" process. \033[0m\n\n' ||\
+			printf '\033[1;32m Done! Displayed '$sa'/'$ca' connections for of processes. \033[0m\n\n'
 		}
-
 	# Default options
-
 pa=$(echo "netname,address,country")
 sa="5"
-
 while getopts "as:p:n:h" option; do
 	case $option in
 	h)
 		Help
 		exit;;
-	
 	# PID or process name
 	n)
 		na=$OPTARG
 		Nerror
 		;;
-	
 	# Selected data from whois
 	p)
 		pa=$OPTARG
 		;;
-	
 	# Amount of IP connections to selected process
 	s)
         sa=$OPTARG
 		Serror
 		;;
-		
 	# Additional info from ss about socket connections
 	a)
 		a="True"
@@ -144,18 +97,15 @@ while getopts "as:p:n:h" option; do
 		exit;;
 	esac
 done
-
 	# Counting the real amount of the IP adresses that in use by the process
 sa=$(ss -ptua | awk '/'$na'/ {print $6}' | grep -oP '(\d+\.){3}\d+' | grep -v '0.0.0.0' | tail -n$sa | wc -l)
 ca=$sa
-
 	# Processing the information about the IP address
 while [ $ca -gt 0 ]
 	do
 	ip1=$(ss -ptua | awk '/'$na'/ {print $6}' | grep -oP '(\d+\.){3}\d+' | grep -v '0.0.0.0' |\
 	sort | uniq -c | sort -r | grep -m$ca -oP '(\d+\.){3}\d+' | tail -1)
     whois $ip1 > cache
-		
 	# Checking for paragraphs chosen
 		if [ "$pa" == "all" ];
 			then
@@ -164,8 +114,7 @@ while [ $ca -gt 0 ]
 			echo
 		else
 			Header
-			p=$(echo $pa | sed -e 's#,# #g' | wc -w)
-			
+			p=$(echo $pa | sed -e 's#,# #g' | wc -w)	
 	# Checking for errors in paragraps requests, responding with error if failed
 			while [ $p -gt 0 ]
                 do
@@ -175,7 +124,6 @@ while [ $ca -gt 0 ]
 			done
 			echo
 		fi
-
 	# Calling the function that will be display or not the additional info
 		Additional
 	((ca--))
