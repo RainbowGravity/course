@@ -19,6 +19,42 @@ You can switch between days and weeks via simple navigation. You can also return
 |[Saturday](#saturday-11092021)| 11.09.2021 |
 |[Sunday](#sunday-12092021)| 12.09.2021 |
 
+### [Sunday, 12.09.2021](#second-week)
+
+<b> Nothing for my TIL today, just chillin' </b>
+
+### [Saturday, 11.09.2021](#second-week)
+
+<p>
+ 
+1. <b> Learned to create the local venv and to copy files. </b>
+   * I've created the venv with required packages and copied the app files to the remote server! Now I need only to deploy the Nginx server and try to use the HTTPS protocol with it.
+2. <b> Learned to create new users and how to add the ssh keys with Ansible </b>
+   *   Achived some cool results today. I've created a new user, added the ssh key and have disabled some unsequre things such as root login, password login and empty password login. 
+
+</p>
+ 
+### [Friday, 10.09.2021](#second-week)
+
+<p>
+
+1. <b> Succesfully deployed my app using uWSGI and Nginx web server </b>
+   * Deployed my app with the uWSGI and the Nginx web server. This was not a hard task. Now i need to create an Ansible playbook that will install all the required apps and packages and then deploy my app.
+2. <b> Started to work with Ansible and learned some things by practice! </b>
+   * Learned more from practical experience about playbooks. My first playbook is used to simply install the Nginx web server and nothing more. 
+
+</p>
+ 
+### [Thursday, 09.09.2021](#second-week)
+
+<p>
+ 
+1. <b> Learned how to use exit codes in bash scripts. </b>
+   * I've added many error messages to my script. Most of them is about incorrect options which was applied. 
+2. I think that my bash script is completed, but I want to add an option which will allow to show some info from dig about DNS.
+
+</p>
+
 ### [Wednesday, 08.09.2021](#second-week)
 
 <p>
@@ -27,7 +63,9 @@ You can switch between days and weeks via simple navigation. You can also return
    * Significantly improved the speed of my script working for 250-300% just by creating a simple text file in which script is writing whois info and then using it to find the chosen paragraphs. That allows to display a message about the missing paragraphs which my script was unable to find in the whois respond.  
 2. <b> Learned something new about IDEs, new languages and compiling </b>
    * By myself i'm using the VS Code with many plugins. Light-weight and low processor and ram usage of the VS Code made me fall in love with it. Prevously i've used pyCharm, Intellij IDEA, but i had bad experince with using them on my Ubuntu machine: crashes, bad UI scaling (don't know why, but this is a very common problem), high ram and cpu usage.
- 
+
+</p>
+
 ### [Tuesday, 07.09.2021](#second-week)
 
 <p>
@@ -92,6 +130,7 @@ You can switch between days and weeks via simple navigation. You can also return
    * So, PSU supplies the motherboard only with 12V. I've never seen something like this before. Also PSU are 80 Plus Gold certified.
    * More interesting thing is about 3.3V and 5V. The motherboard converts 12V to 3.3V and 5V by herself and that means you need to connect
   your SATA HDD/SSD power cable in a special socket on the motherboard. 
+
 </p>
 
 ### [Thursday, 02.09.2021](#first-week)
@@ -103,7 +142,8 @@ You can switch between days and weeks via simple navigation. You can also return
    * Also added <b>SSL keys</b> to the app, so it can work via HTTPS protocol. Of course, i didn't uploaded them to the Github beacuse of security and privacy. If you wanna test my app you can create self-signed keys by yoursef using the OpenSSL.
 2. Learned way more about Docker container building and deploying, so i've put my program into container and succesfully deployed it. And it worked too!  
 3. Unfortinately, no <b> Cloud Native DevOps with Kubernetes</b> today, but i promise to finish it in next 2 days. Honestly.
-  </p>
+
+</p>
   
 ### [Wednesday, 01.09.2021](#first-week)
 
@@ -113,9 +153,7 @@ You can switch between days and weeks via simple navigation. You can also return
    * <b> ConfigMap objects</b>: learned how to create the ConfigMap and Secret objects and how to import variables from them (you can import variables via env or envFrom or connect them as file), how to update pods after  new ConfigMap data. 
    * <b> Confidetial information</b>: learned about RBAC and passive encrypting of the etcd data.
    * <b> Managing of confidetial information</b>: learned about the encrypting data in VCS (you can put there encrypted data, but you need to update her manually (ecrypt and decrypt) which may lead to fatal issues if you forgot to encrypt files), remote encrypted data storage (apps will getting the decrypted data when they are deploying, but you need to develop the process of updating and logging the data) and using the special utilities of confidential data managing (you can monitoring atomatically updated logs, create UIDs and roles, but you need to add some instruments and update apps and services).
-   * <b> Data encrypting</b>: learned about the Sops tool from Mozilla (this tool allows to encrypt and decrypt data like passwords or logins automatically via popular encrypting systems like the PGP). 
-<p>
-  
+   * <b> Data encrypting</b>: learned about the Sops tool from Mozilla (this tool allows to encrypt and decrypt data like passwords or logins automatically via popular encrypting systems like the PGP).   
 2. Learned some Python stuff and Stalin's reprssions and purges.
 
  
@@ -132,24 +170,16 @@ You can switch between days and weeks via simple navigation. You can also return
    * <b> Managing pods</b>: more about labels and selectors (not really), about complicated selectors (they are used for advanced sorting), how to bring the pods together on a single node and how to prevent them to do so (hard/soft Affinity/antiAffinity).
    * <b> Pod controllers</b>: DaemonSet objects (DaemonSet are used to create only one replica of the pod on every single node), StatefulSet (used to run the pods in order), Cronjob  and Job-objects (Cronjob are used to run the Job-objects in ordered time, Job-objects are used to complete limited amount of tasks by limited amount of pods)
    * <b> Ingress Resources</b>: learned about the Ingress (load balancer which manages external connections to the services in a cluster), learned a little about Ingress controllers, Isito and Envoy.
-</p>
-
-<p>
-  
 2. Learned more about the Github again, especially about the markdown syntax (URLs, paragraphs, links, tables, etc.)
 
 </p>
 
 
 ### [Monday, 30.08.2021](#first-week)
+
 <p>
   
 1. Learned something about Github and created my first repository.
-
-</p>
-
-<p>
-  
 2. Continued to read and practicing with <b> Cloud Native DevOps with Kubernetes </b> and learned:
    * more kubectl commands, flags and their shortening, kubectx, kubens, how to work with jq and JSON files;
    * about imperative kubectl commands, generation and exporting of YALM files and compairing them;
@@ -157,11 +187,6 @@ You can switch between days and weeks via simple navigation. You can also return
    * about contexts and namespaces and how to interact with them by kubectx and kubens apps.
    * more about containers and pods;
    * more about YALM manifests of a containers, "latest" tag using, checksums of a containers, image pull policies.
-
-</p>
-
-<p>
-
 3. On the first lesson i've learned today:
    * about DevOps engineers and their role in products life cycle;
    * about ways of products development: waterfall, icremetal, iterative, spiral and Agile.
