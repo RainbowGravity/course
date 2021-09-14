@@ -19,6 +19,66 @@ Script works fine by now, need some time to think about the readme.
 * -a -- show additional info from ss about the ip address.
 
 ### Examples and how to use
-Example of use: if you want to display 7 connections of the Chrome process with the additional information field, you must type: 
-```./script.sh -a -n chrome -s 7```
+
+1. <b> An example of use</b>: if you want to display 3 connections of the Thunderbird process with the additional information field, you must type: 
+```
+./script.sh -a -n Thunderbird -s 3
+```
 Output: 
+
+```
+____________________________________________
+
+ Information from whois about 17.42.251.56:
+
+Country:        US
+Address:        20400 Stevens Creek Blvd., City Center Bldg 3
+NetName:        APPLE-WWNET
+
+ Additional information:
+
+Netid:	State:	Local Address:				Peer Address:				Process:
+tcp	ESTAB	192.168.0.28:32774			17.42.251.56:imaps			"thunderbird",pid=2337,fd=83
+____________________________________________
+
+ Information from whois about 173.194.222.109:
+
+Country:        US
+Address:        1600 Amphitheatre Parkway
+NetName:        GOOGLE
+
+ Additional information:
+
+Netid:	State:	Local Address:				Peer Address:				Process:
+tcp	ESTAB	192.168.0.28:35546			173.194.222.109:imaps			"thunderbird",pid=2337,fd=85
+tcp	ESTAB	192.168.0.28:35574			173.194.222.109:imaps			"thunderbird",pid=2337,fd=41
+tcp	ESTAB	192.168.0.28:35576			173.194.222.109:imaps			"thunderbird",pid=2337,fd=77
+____________________________________________
+
+ Done! Displayed 2/3 connections for "thunderbird" process. 
+```
+2. <b> Second example</b>: information of "organization","city","country" and "descr" paragraphs from whois for the telegram process, but using PID this time:
+```
+./script.sh -a -n 2290 -p organization,city,country,descr
+```
+Output:
+```
+____________________________________________
+
+ Information from whois about 149.154.167.51:
+
+descr:          Telegram Messenger Network
+descr:          Telegram Messenger Amsterdam Network
+Country:        NL
+country:        GB
+City:           Amsterdam
+Organization:   RIPE Network Coordination Centre (RIPE)
+
+ Additional information:
+
+Netid:	State:	Local Address:				Peer Address:				Process:
+tcp	ESTAB	192.168.0.28:40044			149.154.167.51:https			"telegram-deskto",pid=2290,fd=37
+____________________________________________
+
+ Done! Displayed 1/1 connections for "2290" process. 
+```
