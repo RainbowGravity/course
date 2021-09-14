@@ -64,7 +64,7 @@
 			printf "____________________________________________\n\n"
 			ca=$(echo $ips | wc -w)
 			sa=$(echo $ips | awk '{NF='$sa'}1' | wc -w)
-			echo $na | grep -q -i '[a-z]' && printf '\033[1;32m Done! Displayed '$sa'/'$ca' connections for "'$na'" process. \033[0m\n\n' ||\
+			echo $na | grep -q -i -E '[a-z]|[0-9]' && printf '\033[1;32m Done! Displayed '$sa'/'$ca' connections for "'$na'" process. \033[0m\n\n' ||\
 			printf '\033[1;32m Done! Displayed '$sa'/'$ca' connections of all processes. \033[0m\n\n'
 		}
 	# Default options
