@@ -83,5 +83,6 @@ ____________________________________________
  Done! Displayed 1/1 connections for "2290" process. 
 ```
 ### Known issues: 
-* Connection may be terminated when the script works, so there will be no information in the additional field. It happens because of the ping to the whois service, so i need to add the error message about it.
+*  ~~Connection may be terminated while the script works, so there will be no information in the additional field. It happens because of the ping to the whois service, so i need to add the error message about it. ~~
+:heavy_check_mark: Fixed 
 * No error message, when there is no connections to display in case when no process was specified, just ```Done! Displayed 0/0 connections of all processes.``` message in the output.
