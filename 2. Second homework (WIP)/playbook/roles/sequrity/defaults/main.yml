@@ -1,0 +1,14 @@
+---
+# defaults file for sequrity
+
+# set the username of the server user
+user: 'user'
+
+# set the ssh daemon
+sshd: ssh
+
+# set the sshd config path
+sshd_config: /etc/ssh/sshd_config
+
+# set the location of your ssh key
+key_location: /home/user/.ssh/id_rsa.pub
