@@ -57,7 +57,7 @@ ____________________________________________
 
  Done! Displayed 2/3 connections for "thunderbird" process. 
 ```
-2. <b> Second example</b>: information of "organization","city","country" and "descr" paragraphs from whois for the telegram process, but using PID this time:
+2. <b> Second example</b>: displaying an information of "organization","city","country" and "descr" paragraphs from whois for the telegram process, but using PID this time:
 ```
 ./script.sh -a -n 2290 -p organization,city,country,descr
 ```
