@@ -20,9 +20,9 @@ Script works fine by now, need some time to think about the readme.
 
 ### Examples and how to use
 
-1. <b> An example of use</b>: if you want to display 3 connections of the Thunderbird process with the additional information field, you must type: 
+1. <b> An example of use</b>: if you want to display 2 connections of the Thunderbird process with the additional information field, you must type: 
 ```
-./script.sh -a -n Thunderbird -s 3
+./script.sh -a -n Thunderbird -s 2
 ```
 Output: 
 
