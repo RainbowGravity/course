@@ -1,5 +1,5 @@
 ## Bash script for checking process connections
-Script works fine by now, need some time to think about the readme.
+This script is used to read information about the process connections and displaying it with information from whois and the optional information from ss.
 ### Requierments: 
 * Installed Whois
 * ss
