@@ -35,7 +35,7 @@
 	# Checking for the n-option argument
 		Nerror()
 		{
-			ss -ptua | awk '{print $7}' | grep -q $na && echo -n ||\
+			ss -ptua | awk '{print $7}' | grep -iq $na && echo -n ||\
 			{ printf '\n\033[1;31m Error! Incorrect option: there is no "'$na'" process.\033[0m\n\n'; exit; }
 		}
 	# Header of the script output
@@ -48,8 +48,8 @@
 		{
 			if [ "$a" == "True" ];
 				then
-				printf ' Additional information:\n\nNetid:	State:	Local Address:		Peer Address:		Process:\n' 
-				ss -p dst $ip1 | awk -v OFS='\t' '{print $1,$2,$5,$6,$7}' | grep -v "Netid"
+				printf ' Additional information:\n\nNetid:	State:	Local Address:				Peer Address:				Process:\n' 
+				ss -p dst $ip1 | awk -v OFS='\t' '{print $1,$2,$5,"\t",$6,"\t",$7}' | grep -v "Netid" | sed -e 's/users:((//' -e 's/))//'
 			fi
 		}
 	# Checking for the paragraphs in the whois info
@@ -62,9 +62,10 @@
 		Counter()
 		{
 			printf "____________________________________________\n\n"
-			ca=$(ss -ptua | awk '/'$na'/ {print $6}' | grep -oP '(\d+\.){3}\d+' | grep -v '0.0.0.0' | wc -l)
+			ca=$(echo $ips | wc -w)
+			sa=$(echo $ips | awk '{NF='$sa'}1' | wc -w)
 			echo $na | grep -q -i '[a-z]' && printf '\033[1;32m Done! Displayed '$sa'/'$ca' connections for "'$na'" process. \033[0m\n\n' ||\
-			printf '\033[1;32m Done! Displayed '$sa'/'$ca' connections for of processes. \033[0m\n\n'
+			printf '\033[1;32m Done! Displayed '$sa'/'$ca' connections of all processes. \033[0m\n\n'
 		}
 	# Default options
 pa=$(echo "netname,address,country")
@@ -98,14 +99,15 @@ while getopts "as:p:n:h" option; do
 	esac
 done
 	# Counting the real amount of the IP adresses that in use by the process
-sa=$(ss -ptua | awk '/'$na'/ {print $6}' | grep -oP '(\d+\.){3}\d+' | grep -v '0.0.0.0' | tail -n$sa | wc -l)
-ca=$sa
+ips=$(ss -ptua | grep -i ''$na''| awk '{print $6}' | grep -oP '(\d+\.){3}\d+' | sort | uniq -c | sort -r |\
+awk '{print $2}' | grep -v '0.0.0.0')
+ca=$(echo $ips | awk '{NF='$sa'}1' | wc -w)
+
 	# Processing the information about the IP address
 while [ $ca -gt 0 ]
 	do
-	ip1=$(ss -ptua | awk '/'$na'/ {print $6}' | grep -oP '(\d+\.){3}\d+' | grep -v '0.0.0.0' |\
-	sort | uniq -c | sort -r | grep -m$ca -oP '(\d+\.){3}\d+' | tail -1)
-    whois $ip1 > cache
+	ip1=$(echo $ips | awk '{NF='$sa'}1' | awk '{print $'$ca'}')
+    whois $ip1 > cache 
 	# Checking for paragraphs chosen
 		if [ "$pa" == "all" ];
 			then
