@@ -48,8 +48,11 @@
 		{
 			if [ "$a" == "True" ];
 				then
-				printf ' Additional information:\n\nNetid:	State:	Local Address:				Peer Address:				Process:\n' 
-				ss -p dst $ip1 | awk -v OFS='\t' '{print $1,$2,$5,"\t",$6,"\t",$7}' | grep -v "Netid" | sed -e 's/users:((//' -e 's/))//'
+				ss -p dst $ip1 | grep -v "Netid" | grep -q -i -E '[a-z]|[0-9]' && \
+				{ printf ' Additional information:\n\nNetid:	State:	Local Address:				Peer Address:				Process:\n';   \
+				ss -p dst $ip1 | awk -v OFS='\t' '{print $1,$2,$5,"\t",$6,"\t",$7}' | grep -v "Netid" | sed -e 's/users:((//' -e 's/))//'; } ||\
+				{ printf ' Additional information:\n' ;\
+				printf '\n\033[1;31mUnfortunately, connection was closed or terminated while script was processing other connections. \nIt may be caused by the ping to whois or process was terminated too. \nNo information from ss to display.\033[0m\n\n'; }
 			fi
 		}
 	# Checking for the paragraphs in the whois info
