@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: yes
+  name: Deploy jsonservice app
+  tasks:   
+  
+  roles: 
+    - sequrity
+    - install
+    - deploy

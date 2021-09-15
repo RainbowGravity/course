@@ -1,0 +1,93 @@
+---
+# tasks for deploy jsonservice
+
+- name: Creates app directory
+  file:
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0760'
+    path: "{{ app_dest }}/app"
+    state: directory
+  
+- name: Copy app files to the Virtual Machine
+  copy:
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    dest: "{{ app_dest }}"
+    src: "app"
+  
+- name: Install virtualenv via pip
+  become: no
+  pip:
+    name: virtualenv
+    executable: pip3
+  
+- name: Install requirements
+  become: no
+  pip: 
+    virtualenv: "~/{{ app_dest }}/app/env"
+    virtualenv_command: 'python3 -m venv'
+    requirements: "~/{{ app_dest }}/app/requirements.txt"
+  
+- name: Copy Nginx config file
+  copy:
+    dest: /etc/nginx/sites-available/
+    src: config_files/jsonservice
+    mode: '0760'
+    owner: root
+    group: root
+
+- name: Set address in Nginx config file
+  replace: 
+    dest: /etc/nginx/sites-available/jsonservice
+    regexp: '"IP"'
+    replace: "{{ address }}"
+
+- name: Copy SSL certificate
+  copy:
+    dest: /etc/ssl/certs/
+    src: ssl/jsonservice.crt
+    mode: '0400'
+    owner: root
+    group: root
+
+- name: Copy private SSL key
+  copy:
+    dest: /etc/ssl/private/
+    src: ssl/jsonservice.key
+    mode: '0400'
+    owner: root
+    group: root
+
+- name: Copy jsonservie config file
+  copy:
+    dest: /etc/systemd/system/
+    src: config_files/jsonservice.service
+    mode: '0760'
+    owner: root
+    group: root
+  notify: start jsonservice
+
+- name: Set path in the service file
+  replace: 
+    dest: /etc/systemd/system/jsonservice.service
+    regexp: '"PATH"'
+    replace: "/home/{{user}}/{{ app_dest }}"
+    
+- name: Set user in the service file
+  replace: 
+    dest: /etc/systemd/system/jsonservice.service
+    regexp: '"USER"'
+    replace: "{{ user }}"
+
+- name: Enable site on the Nginx server
+  file:
+    src: /etc/nginx/sites-available/jsonservice
+    dest: /etc/nginx/sites-enabled/jsonservice
+    state: link
+
+- name: Restart the jsonservice
+  service:
+    name: jsonservice
+    state: restarted
+  notify: reload nginx

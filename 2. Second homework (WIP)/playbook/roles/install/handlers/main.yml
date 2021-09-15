@@ -1,0 +1,14 @@
+---
+# handlers file for install
+
+- name: start nginx
+  service: 
+    name: nginx 
+    state: started 
+    enabled: yes
+
+- name: start uwsgi
+  service: 
+    name: uwsgi 
+    state: started 
+    enabled: yes
