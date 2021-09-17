@@ -1,0 +1,81 @@
+---
+# tasks for sequring server 
+
+- name: Delete sources.list file
+  file:
+    path: /etc/apt/sources.list
+    state: absent
+
+- name: Replace sources.list file
+  copy:
+    dest: /etc/apt/
+    src: sources.list
+    mode: '0550'
+    owner: root
+    group: root
+
+- name: Update apt
+  apt: 
+    update_cache: yes
+
+- name: Add ssh key
+  authorized_key:
+    user: "{{ user }}"
+    key: "{{ lookup ('file', key_location) }}"
+  register: add_ssh_key
+
+- name: Disable empty password login
+  lineinfile: 
+    dest: "{{ sshd_config }}"
+    regexp: '^#?PermitEmptyPasswords' 
+    line: 'PermitEmptyPasswords no'
+  notify: restart sshd
+
+- name: Disable remote root login
+  lineinfile: 
+    dest: "{{ sshd_config }}"
+    regexp: '^#?PermitRootLogin' 
+    line: 'PermitRootLogin no'
+  notify: restart sshd
+
+- name: Disable password login
+  lineinfile: 
+    dest: "{{ sshd_config }}"
+    regexp: '^(#\s*)?PasswordAuthentication '
+    line: 'PasswordAuthentication no'
+  when: 
+    - add_ssh_key is succeeded 
+    - not add_ssh_key is skipped
+  notify: restart sshd
+
+- name: Enable PAM
+  lineinfile:     
+    dest: "{{ sshd_config }}" 
+    regexp: '^#?UsePAM' 
+    line: 'UsePAM yes'
+  notify: restart sshd
+
+- name: Install UFW
+  apt: 
+    name: ufw 
+    state: latest  
+
+- name: Allow SSH connection
+  ufw: 
+    rule: allow 
+    port: ssh
+
+- name: Allow 80 port connection
+  ufw: 
+    port: 80
+    rule: allow
+    
+- name: Allow 443 port connection
+  ufw: 
+    port: 443
+    rule: allow
+
+- name: Enable UFW and reject all incoming connections
+  ufw: 
+    policy: reject 
+    state: enabled

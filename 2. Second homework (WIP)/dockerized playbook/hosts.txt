@@ -1,0 +1,3 @@
+
+[Debian_VM]
+debian ansible_host=YOUR_IP ansible_user=YOUR_USER ansible_ssh_pass=YOUR_PASS
