@@ -1,0 +1,22 @@
+---
+# tasks file for install
+
+- name: Install Python3
+  apt: 
+    name: python3 
+    state: latest
+ 
+- name: Install Python3-pip package
+  apt: 
+    name: python3-pip 
+    state: latest
+  
+- name: Install Docker
+  pip: 
+    name: docker 
+    state: latest
+
+- name: Install Docker-compose
+  apt:
+    name: docker-compose
+    state: latest

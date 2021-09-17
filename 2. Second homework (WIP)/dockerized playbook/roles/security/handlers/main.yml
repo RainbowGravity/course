@@ -1,0 +1,6 @@
+---
+# handlers file for sequrity
+- name: restart sshd
+  service: 
+    name: "{{ sshd }}"  
+    state: restarted
