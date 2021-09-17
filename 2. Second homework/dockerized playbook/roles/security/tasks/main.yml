@@ -1,18 +1,27 @@
 ---
 # tasks for sequring server 
 
-- name: Delete sources.list file
-  file:
-    path: /etc/apt/sources.list
-    state: absent
+# - name: Delete sources.list file
+#   file:
+#     path: /etc/apt/sources.list
+#     state: absent
+# when: ansible_distribution == 'Debian' and ansible_distribution_version =< '10'
 
-- name: Replace sources.list file
-  copy:
-    dest: /etc/apt/
-    src: sources.list
-    mode: '0550'
-    owner: root
-    group: root
+# - name: Replace sources.list file
+#   copy:
+#     dest: /etc/apt/
+#     src: sources.list
+#     mode: '0550'
+#     owner: root
+#     group: root
+# when: ansible_distribution == 'Debian' and ansible_distribution_version =< '10'
+
+- name: Disable CDROM source
+  lineinfile:
+    dest: "{{ source }}"
+    regexp: '^deb cdrom:*'
+    line: ''
+  when: ansible_distribution == 'Debian' and ansible_distribution_version <= '10'
 
 - name: Update apt
   apt: 
