@@ -43,21 +43,31 @@
     regexp: '"IP"'
     replace: "{{ address }}"
 
-- name: Copy SSL certificate
-  copy:
-    dest: /etc/ssl/certs/
-    src: ssl/jsonservice.crt
-    mode: '0400'
-    owner: root
-    group: root
+- name: Create directory for SSL
+  file:
+    path: /etc/nginx/ssl
+    state: directory
 
-- name: Copy private SSL key
+- name: Generate an OpenSSL private key
+  community.crypto.openssl_privatekey:
+    path: /etc/nginx/ssl/jsonservice.key
+    size: "{{ size }}"
+  when: auto_ssl == true
+
+- name: Generate an SSL certificate on the Virual Machine
+  community.crypto.x509_certificate:
+    path: /etc/nginx/ssl/jsonservice.crt
+    privatekey_path: /etc/nginx/ssl/jsonservice.key
+    provider: selfsigned
+  when: auto_ssl == true
+
+- name: Copy SSL key and certificate files to the Virtual Machine
   copy:
-    dest: /etc/ssl/private/
-    src: ssl/jsonservice.key
-    mode: '0400'
     owner: root
     group: root
+    dest: "/etc/nginx/"
+    src: "ssl"
+  when: auto_ssl == false
 
 - name: Copy jsonservie config file
   copy:

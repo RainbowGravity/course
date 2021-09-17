@@ -9,7 +9,7 @@
     dest: "~/{{ app_dest }}"
     src: "app"
 
-- name: Creates app directory
+- name: Create directory for SSL
   file:
     path: /etc/nginx/ssl
     state: directory

@@ -1,10 +1,5 @@
 ---
 # tasks file for install
-- name: Disable CDROM source
-  lineinfile:
-    dest: "{{ source }}"
-    regexp: '^deb cdrom:*'
-    line: ''
 
 - name: Install Python3
   apt: 
@@ -25,12 +20,12 @@
   apt: 
     name: python3-dev 
     state: latest   
-  
-- name: Install rsync
-  apt: 
-    name: rsync 
-    state: latest
-  
+
+- name: Install PyOpenSSL
+  pip:
+    name: pyopenssl 
+    state: latest  
+
 - name: Install Nginx
   apt: 
     name: nginx 

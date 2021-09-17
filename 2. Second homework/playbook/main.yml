@@ -5,6 +5,6 @@
   tasks:   
   
   roles: 
-    - sequrity
+    - seсurity
     - install
     - deploy

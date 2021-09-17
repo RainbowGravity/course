@@ -2,8 +2,10 @@ server {
     listen 80;
     listen 443 ssl;
     server_name "IP";
-    ssl_certificate     /etc/ssl/certs/jsonservice.crt;
-    ssl_certificate_key /etc/ssl/private/jsonservice.key;
+    
+    ssl_certificate     /etc/nginx/ssl/jsonservice.crt;
+    ssl_certificate_key /etc/nginx/ssl/jsonservice.key;
+    
     location / {
         include uwsgi_params;
         uwsgi_pass unix:/tmp/jsonservice.sock;

@@ -2,9 +2,18 @@
 # defaults file for deploy
 
 # set the username of the server user
-user: rainbow
+user: YOUR_USER
 
 app_dest: jsonservice
 
 # set a domain name of the server or an IP address
-address: '192.168.0.29'
+address: 'YOUR_VM_IP'
+
+# set an SSL key params
+size: 4096
+
+# sources file source
+source: /etc/apt/sources.list
+
+# set SLL mode
+auto_ssl: true
