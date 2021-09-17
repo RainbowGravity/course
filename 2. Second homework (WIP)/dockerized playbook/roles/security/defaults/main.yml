@@ -2,7 +2,7 @@
 # defaults file for sequrity
 
 # set the username of the server user
-user: 'rainbow'
+user: 'YOUR_USER'
 
 # set the ssh daemon
 sshd: ssh
