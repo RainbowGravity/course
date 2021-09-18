@@ -12,8 +12,5 @@ address: 'YOUR_VM_IP'
 # set an SSL key params
 size: 4096
 
-# sources file source
-source: /etc/apt/sources.list
-
 # set SLL mode
 auto_ssl: true

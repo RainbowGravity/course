@@ -1,6 +1,6 @@
-## Dockerized Ansible playbook
+## Ansible playbook
 
-This playbook version is used to deploy app with Docker. Less commands and interactions with Linux system. 
+This playbook version is used to deploy app with creating virtialenv and using the unux socket between uWSGI and Nginx. More commands and interactions with Linux system in comparison with Dockerized version. 
 
 ### Requirements:
 
@@ -34,3 +34,4 @@ After installing requirements you must configure the playbook:
 
 You can run the playbook with ```ansible-playbook main.yml --ask-become-pass``` command (and with ```--ask-vault-pass``` if you have an ectrypted with Ansible vault data). If everything is succeded, 
 you will be able to open the service page in your browser on YOUR_ADDRESS:80 and YOUR_ADDRESS:443 and also curl to it.
+ 

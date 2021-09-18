@@ -1,38 +1,22 @@
-Role Name
+Deploy role
 =========
 
-A brief description of the role goes here.
+This role is used to deploy jsonservice app. 
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Installed:
+* Docker;
+* Docker-compose.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+There are four variables for this role in [<b>defaults/main.yml</b>](defaults/main.yml):
+* <b>user</b> - you need to enter name of user on the remote vm/server.
+* <b>app_dest</b> - destination of the app on the remote vm/server. It will be instlalled in /home/YOUR_USER/jsonservice by default.
+* <b>address</b> - line in the Nginx server config file. You must enter your domain name or IP address of the remote vm/server.
+* <b>size</b> - SSL key size.
+* <b>auto_ssl</b> - this option allows you to choose between automatically genereated SSL key and cert and 
+generated ones by yourself. Your key and cert must be located in [files/ssl](files/ssl) directory and named as **_jsonservice.crt_** and **_jsonservice.key_** and alse be passphraseless.

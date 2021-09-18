@@ -11,4 +11,4 @@ sshd: ssh
 sshd_config: /etc/ssh/sshd_config
 
 # set the location of your ssh key
-key_location: /home/putin228/.ssh/id_rsa.pub
+key_location: /home/rainbow/.ssh/id_rsa.pub
