@@ -27,7 +27,9 @@ func main() {
 	gitRepo := "course"
 	gitUrl := gitRepos + gitUser + gitRepo
 
-	requestCase = "Task"
+	fmt.Println("Choose one of commands: \n- Git - link to my repository\n- Tasks - list of my completed homework\n- Task# - choose completed task")
+
+	fmt.Scan(&requestCase)
 
 	switch requestCase {
 	case "Git":
@@ -35,8 +37,7 @@ func main() {
 	case "Tasks":
 		msg = completedHomework(gitUrl)
 		botMessage = errorHandling(msg, err)
-	case "Task":
-		hmwrkNum = 1
+	case "Task#":
 		msg, err = specifiedHomework(gitUrl, hmwrkNum)
 		botMessage = errorHandling(msg, err)
 	default:
@@ -48,6 +49,7 @@ func main() {
 
 }
 
+//reading information from Guthub API
 func getContents(gitUrl string) {
 
 	resp, err := http.Get(gitUrl + "/contents/")
@@ -85,7 +87,10 @@ func completedHomework(gitUrl string) (hmwrkAll string) {
 func specifiedHomework(gitUrl string, hmwrkNum int) (hmwrkSpc string, err error) {
 
 	getContents(gitUrl)
+	hwmrkAmount := len(reading)
+	specifiedChoice(hwmrkAmount - 1)
 
+	fmt.Scan(&hmwrkNum)
 	hmwrkNum = hmwrkNum - 1
 
 	if hmwrkNum < len(reading)-1 && hmwrkNum > -1 {
@@ -100,7 +105,19 @@ func specifiedHomework(gitUrl string, hmwrkNum int) (hmwrkSpc string, err error)
 	return hmwrkSpc, err
 }
 
-//error gandling function
+//prints amount of choises
+func specifiedChoice(hmwrkAmount int) (hmwrkNum int, botMessage string) {
+
+	s := []int{}
+	for i := 0; i < hmwrkAmount; i++ {
+		s = append(s, i+1)
+	}
+	botMessage = ("Choose completed homework: \n" + strings.Trim(fmt.Sprint(s), "[ ]"))
+	println(botMessage)
+	return
+}
+
+//error handling function
 func errorHandling(msg string, err error) (botMessage string) {
 	if err != nil {
 		botMessage = ("An error occurred: " + fmt.Sprint(err))
@@ -109,23 +126,3 @@ func errorHandling(msg string, err error) (botMessage string) {
 	}
 	return
 }
-
-// func contentsParse(gitUrl string) (s []string) {
-
-// 	getContents(gitUrl)
-
-//for _, val := range reading {	if strings.Contains(val.Name+"\t"+val.Html, "homework") {
-//	var s []string
-//	s = append(s, val.Name+"\t"+val.Html)
-///jsonResult := (val.Name + "\t" + val.Html)
-///fmt.Println(jsonResult)
-// for _, val := range s {
-// 	putin := val
-// 	return putin, s
-// }
-//	fmt.Println(s)
-//}
-
-// 	}
-// 	return s
-// }
