@@ -77,7 +77,7 @@ func completedHomework(gitUrl string) (hmwrkAll string) {
 		}
 	}
 	return hmwrkAll
-} git config --global user.name
+}
 
 func specifiedHomework(gitUrl string, hmwrkNum int) (hmwrkSpc string, err error) {
 
