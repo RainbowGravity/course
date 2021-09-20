@@ -23,27 +23,35 @@ var reading []JsonData
 var err error
 
 func main() {
-	//var hmwrkNum int
+	var hmwrkNum int
 	var botMessage string
+	var msg string
+	var requestCase string
 
 	gitRepos := "https://api.github.com/repos/"
 	gitUser := "RainbowGravity/"
 	gitRepo := "course"
 	gitUrl := gitRepos + gitUser + gitRepo
 
-	fmt.Println(gitUrl)
+	requestCase = "Task"
 
-	//hmwrkNum = 1
-
-	//msg, err := specifiedHomework(gitUrl, hmwrkNum)
-	msg := completedHomework(gitUrl)
-
-	if err != nil {
-		botMessage = ("There was an error: " + fmt.Sprint(err))
-	} else {
-		botMessage = ("List of completed homework: " + msg)
+	switch requestCase {
+	case "Git":
+		botMessage = ("Link to my repository: \nhttps://github.com/RainbowGravity/course")
+	case "Tasks":
+		msg = completedHomework(gitUrl)
+		botMessage = errorHandling(msg, err)
+	case "Task":
+		hmwrkNum = 1
+		msg, err = specifiedHomework(gitUrl, hmwrkNum)
+		botMessage = errorHandling(msg, err)
+	default:
+		err = errors.New("There is no '" + requestCase + "' command. \nTry one of these:\n- /git\n- /Tasks\n- /Task#")
+		botMessage = errorHandling(msg, err)
 	}
+
 	println(botMessage)
+
 }
 
 func getContents(gitUrl string) {
@@ -66,6 +74,7 @@ func getContents(gitUrl string) {
 	return
 }
 
+//all of the completed homeworks processing
 func completedHomework(gitUrl string) (hmwrkAll string) {
 
 	getContents(gitUrl)
@@ -79,6 +88,7 @@ func completedHomework(gitUrl string) (hmwrkAll string) {
 	return hmwrkAll
 }
 
+//specified homework processing
 func specifiedHomework(gitUrl string, hmwrkNum int) (hmwrkSpc string, err error) {
 
 	getContents(gitUrl)
@@ -95,6 +105,16 @@ func specifiedHomework(gitUrl string, hmwrkNum int) (hmwrkSpc string, err error)
 		}
 	}
 	return hmwrkSpc, err
+}
+
+//error gandling function
+func errorHandling(msg string, err error) (botMessage string) {
+	if err != nil {
+		botMessage = ("An error occurred: " + fmt.Sprint(err))
+	} else {
+		botMessage = ("List of completed homework: " + msg)
+	}
+	return
 }
 
 // func contentsParse(gitUrl string) (s []string) {
