@@ -6,6 +6,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -22,20 +23,26 @@ var reading []JsonData
 var err error
 
 func main() {
-	var msg string
 	var hmwrkNum int
+	var botMessage string
 
 	gitRepos := "https://api.github.com/repos/"
 	gitUser := "RainbowGravity/"
 	gitRepo := "course"
 	gitUrl := gitRepos + gitUser + gitRepo
 
-	hmwrkNum = 0
+	fmt.Println(gitUrl)
 
-	msg = specifiedHomework(gitUrl, hmwrkNum)
+	hmwrkNum = 1
+
+	msg, err := specifiedHomework(gitUrl, hmwrkNum)
 	//msg = completedHomework(gitUrl)
 
-	botMessage := ("List of completed homework: " + msg)
+	if err != nil {
+		botMessage = ("There was an error: " + fmt.Sprint(err))
+	} else {
+		botMessage = ("List of completed homework: " + msg)
+	}
 	println(botMessage)
 }
 
@@ -70,22 +77,24 @@ func completedHomework(gitUrl string) (hmwrkAll string) {
 		}
 	}
 	return hmwrkAll
-}
+} git config --global user.name
 
-func specifiedHomework(gitUrl string, hmwrkNum int) (hmwrkSpc string) {
+func specifiedHomework(gitUrl string, hmwrkNum int) (hmwrkSpc string, err error) {
 
 	getContents(gitUrl)
 
 	hmwrkNum = hmwrkNum - 1
 
-	if hmwrkNum < len(reading)-1 {
+	if hmwrkNum < len(reading)-1 && hmwrkNum > -1 {
 		hmwrkSpc = ("\n" + reading[hmwrkNum].Name + "\t" + reading[hmwrkNum].Html)
-		if err != nil {
-			hmwrkSpc = ("\nError!")
+	} else {
+		if hmwrkNum <= -1 {
+			err = errors.New("Task number cannot be less than 1")
+		} else {
+			err = errors.New("Task number cannot be more than " + fmt.Sprint(len(reading)-1))
 		}
 	}
-
-	return hmwrkSpc
+	return hmwrkSpc, err
 }
 
 // func contentsParse(gitUrl string) (s []string) {
