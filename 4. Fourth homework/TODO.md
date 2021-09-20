@@ -10,7 +10,7 @@ Deadline: 01 october 2021
 ### What to do:
 
 - [x] to find out api link with repository content (https://api.github.com/repos/RainbowGravity/course/contents/)
-- [ ] to parse it
+- [x] to parse it
 - [ ] to create a telegram bot and launch it
 
 ### Additional features to do:

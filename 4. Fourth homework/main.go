@@ -9,41 +9,37 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
-//"fmt"
-//"encoding/json"
-//"log"
-
-type JsonData []struct {
+type JsonData struct {
 	Name string `json:"name"`
-	// Html string `json:"html_url"`
+	Html string `json:"html_url"`
 }
 
-// type JsonData []struct {
-// 	Name        string      `json:"name"`
-// 	Path        string      `json:"path"`
-// 	Sha         string      `json:"sha"`
-// 	Size        int         `json:"size"`
-// 	URL         string      `json:"url"`
-// 	HTMLURL     string      `json:"html_url"`
-// 	GitURL      string      `json:"git_url"`
-// 	DownloadURL interface{} `json:"download_url"`
-// 	Type        string      `json:"type"`
-// 	Links       struct {
-// 		Self string `json:"self"`
-// 		Git  string `json:"git"`
-// 		HTML string `json:"html"`
-// 	} `json:"_links"`
-// }
+var hmwrk string
+var reading []JsonData
+var err error
 
 func main() {
-	fmt.Println("Hello World!")
+	var msg string
+	var hmwrkNum int
 
 	gitRepos := "https://api.github.com/repos/"
 	gitUser := "RainbowGravity/"
 	gitRepo := "course"
 	gitUrl := gitRepos + gitUser + gitRepo
+
+	hmwrkNum = 0
+
+	msg = specifiedHomework(gitUrl, hmwrkNum)
+	//msg = completedHomework(gitUrl)
+
+	botMessage := ("List of completed homework: " + msg)
+	println(botMessage)
+}
+
+func getContents(gitUrl string) {
 
 	resp, err := http.Get(gitUrl + "/contents/")
 	if err != nil {
@@ -56,24 +52,58 @@ func main() {
 		fmt.Println(err)
 	}
 
-	var reading JsonData
 	err = json.Unmarshal([]byte(jsonString), &reading)
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	fmt.Printf("%+v\n", reading)
+	return
 }
 
-//func gitData(gitUrl string) ([]JsonData, error) {
-//	resp, err := http.Get(gitUrl + "/contents/")
-//	if err != nil {
-//		return nil, err
-//	}
-//    defer resp.Body.Close()
-//    body, err := ioutil.ReadAll(resp.Body)
-//    if err != nil {
-//        return nil, err
-//    }
-//
+func completedHomework(gitUrl string) (hmwrkAll string) {
+
+	getContents(gitUrl)
+
+	for _, val := range reading {
+		if strings.Contains(val.Name+"\t"+val.Html, "homework") {
+			tmp := string("\n" + val.Name + "\t" + val.Html)
+			hmwrkAll = hmwrkAll + tmp
+		}
+	}
+	return hmwrkAll
+}
+
+func specifiedHomework(gitUrl string, hmwrkNum int) (hmwrkSpc string) {
+
+	getContents(gitUrl)
+
+	hmwrkNum = hmwrkNum - 1
+
+	if hmwrkNum < len(reading)-1 {
+		hmwrkSpc = ("\n" + reading[hmwrkNum].Name + "\t" + reading[hmwrkNum].Html)
+		if err != nil {
+			hmwrkSpc = ("\nError!")
+		}
+	}
+
+	return hmwrkSpc
+}
+
+// func contentsParse(gitUrl string) (s []string) {
+
+// 	getContents(gitUrl)
+
+//for _, val := range reading {	if strings.Contains(val.Name+"\t"+val.Html, "homework") {
+//	var s []string
+//	s = append(s, val.Name+"\t"+val.Html)
+///jsonResult := (val.Name + "\t" + val.Html)
+///fmt.Println(jsonResult)
+// for _, val := range s {
+// 	putin := val
+// 	return putin, s
+// }
+//	fmt.Println(s)
 //}
+
+// 	}
+// 	return s
+// }
