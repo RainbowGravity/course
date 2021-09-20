@@ -23,7 +23,7 @@ var reading []JsonData
 var err error
 
 func main() {
-	var hmwrkNum int
+	//var hmwrkNum int
 	var botMessage string
 
 	gitRepos := "https://api.github.com/repos/"
@@ -33,10 +33,10 @@ func main() {
 
 	fmt.Println(gitUrl)
 
-	hmwrkNum = 1
+	//hmwrkNum = 1
 
-	msg, err := specifiedHomework(gitUrl, hmwrkNum)
-	//msg = completedHomework(gitUrl)
+	//msg, err := specifiedHomework(gitUrl, hmwrkNum)
+	msg := completedHomework(gitUrl)
 
 	if err != nil {
 		botMessage = ("There was an error: " + fmt.Sprint(err))
@@ -71,7 +71,7 @@ func completedHomework(gitUrl string) (hmwrkAll string) {
 	getContents(gitUrl)
 
 	for _, val := range reading {
-		if strings.Contains(val.Name+"\t"+val.Html, "homework") {
+		if !strings.Contains(val.Name+"\t"+val.Html, "README.md") && !strings.Contains(val.Name+"\t"+val.Html, "WIP") {
 			tmp := string("\n" + val.Name + "\t" + val.Html)
 			hmwrkAll = hmwrkAll + tmp
 		}
