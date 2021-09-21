@@ -23,7 +23,7 @@ var reading []JsonData
 func main() {
 	var msgHmrwk string
 
-	bot, err := tgbotapi.NewBotAPI("_____________________TOKEN______________________")
+	bot, err := tgbotapi.NewBotAPI("____________________TOKEN_____________________")
 	if err != nil {
 		log.Panic(err)
 	}
