@@ -55,15 +55,16 @@ func main() {
 			case "Git":
 				msg.Text = "Link to my repository: \nhttps://github.com/RainbowGravity/course"
 			case "Tasks":
-				msgHmrwk = completedHomework(gitUrl)
+				msgHmrwk, err = completedHomework(gitUrl)
 				msg.Text = errorHandling(msgHmrwk, err)
 			case "Task":
 				hmwrkStr := (update.Message.CommandArguments())
 				msgHmrwk, err = specifiedHomework(gitUrl, hmwrkStr)
 				msg.Text = errorHandling(msgHmrwk, err)
 			default:
-				err = errors.New("There is no " + update.Message.Text + " command. \nTry one of these:\n- /Git\n- /Tasks\n- /Task")
+				err = errors.New("there is no " + update.Message.Text + " command. \nTry one of these:\n- /Git\n- /Tasks\n- /Task")
 				msg.Text = errorHandling(msgHmrwk, err)
+				err = nil
 			}
 			bot.Send(msg)
 		}
@@ -88,7 +89,7 @@ func getContents(gitUrl string) {
 	}
 }
 
-func completedHomework(gitUrl string) (hmwrkAll string) {
+func completedHomework(gitUrl string) (hmwrkAll string, err error) {
 
 	getContents(gitUrl)
 
@@ -96,10 +97,12 @@ func completedHomework(gitUrl string) (hmwrkAll string) {
 		if !strings.Contains(val.Name+"\t"+val.Html, "README.md") && !strings.Contains(val.Name+"\t"+val.Html, "WIP") {
 			tmp := string("\n" + val.Name + "\t" + val.Html)
 			hmwrkAll = hmwrkAll + tmp
-
+			if err != nil {
+				err = errors.New("there is no homework")
+			}
 		}
 	}
-	return hmwrkAll
+	return hmwrkAll, err
 }
 
 func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc string, err error) {
@@ -112,9 +115,9 @@ func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc string, err err
 		hmwrkSpc = ("\n" + reading[hmwrkNum].Name + "\t" + reading[hmwrkNum].Html)
 	} else {
 		if hmwrkNum <= -1 {
-			err = errors.New("task number cannot be less than 1")
+			err = errors.New("there is no homework with number less than 1")
 		} else {
-			err = errors.New("task number cannot be more than " + fmt.Sprint(len(reading)-1))
+			err = errors.New("there is no homework with number more than " + fmt.Sprint(len(reading)-1))
 		}
 	}
 	return hmwrkSpc, err
@@ -123,7 +126,7 @@ func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc string, err err
 //error handling function
 func errorHandling(msgHmrwk string, err error) (botMessage string) {
 	if err != nil {
-		botMessage = ("An error occurred: " + fmt.Sprint(err))
+		botMessage = ("An error occurred: " + fmt.Sprint(err) + ".")
 	} else {
 		botMessage = ("List of completed homework: " + msgHmrwk)
 	}
