@@ -23,7 +23,7 @@ var reading []JsonData
 func main() {
 	var msgHmrwk string
 
-	bot, err := tgbotapi.NewBotAPI("1961403382:AAE3FNO6HeZ-6fjNqAV1qEXCfAdBFhA-as8")
+	bot, err := tgbotapi.NewBotAPI("_____________________TOKEN______________________")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -52,17 +52,21 @@ func main() {
 		if update.Message.IsCommand() {
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 			switch update.Message.Command() {
-			case "Git":
-				msg.Text = "Link to my repository: \nhttps://github.com/RainbowGravity/course"
-			case "Tasks":
+			case "git":
+				msg.ParseMode = "markdown"
+				msg.Text = "*Here is the link to my repository:* \n\n[RainbowGravity/course](https://github.com/RainbowGravity/course)"
+			case "tasks":
+				msg.ParseMode = "markdown"
 				msgHmrwk, err = completedHomework(gitUrl)
 				msg.Text = errorHandling(msgHmrwk, err)
-			case "Task":
+			case "task":
+				msg.ParseMode = "markdown"
 				hmwrkStr := (update.Message.CommandArguments())
 				msgHmrwk, err = specifiedHomework(gitUrl, hmwrkStr)
 				msg.Text = errorHandling(msgHmrwk, err)
 			default:
-				err = errors.New("there is no " + update.Message.Text + " command. \nTry one of these:\n- /Git\n- /Tasks\n- /Task")
+				msg.ParseMode = "markdown"
+				err = errors.New("there is no *" + update.Message.Text + "* command. \n\n*Try one of these:*\n*/git* — Link to my Github repository;\n*/tasks* — List of my completed homework;\n*/task* — Specified homework (*e.g. /task 2*)")
 				msg.Text = errorHandling(msgHmrwk, err)
 				err = nil
 			}
@@ -94,8 +98,9 @@ func completedHomework(gitUrl string) (hmwrkAll string, err error) {
 	getContents(gitUrl)
 
 	for _, val := range reading {
-		if !strings.Contains(val.Name+"\t"+val.Html, "README.md") && !strings.Contains(val.Name+"\t"+val.Html, "WIP") {
-			tmp := string("\n" + val.Name + "\t" + val.Html)
+		if !strings.Contains(val.Name+" — "+val.Html, "README.md") && !strings.Contains(val.Name+" — "+val.Html, "WIP") {
+			//[RainbowGravity/course](https://github.com/RainbowGravity/course)
+			tmp := string("\n" + "[" + val.Name + "]" + "(" + val.Html + ")")
 			hmwrkAll = hmwrkAll + tmp
 			if err != nil {
 				err = errors.New("there is no homework")
@@ -112,7 +117,7 @@ func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc string, err err
 	hmwrkNum = hmwrkNum - 1
 
 	if hmwrkNum < len(reading)-1 && hmwrkNum > -1 {
-		hmwrkSpc = ("\n" + reading[hmwrkNum].Name + "\t" + reading[hmwrkNum].Html)
+		hmwrkSpc = ("\n" + "[" + reading[hmwrkNum].Name + "]" + "(" + reading[hmwrkNum].Html + ")")
 	} else {
 		if hmwrkNum <= -1 {
 			err = errors.New("there is no homework with number less than 1")
@@ -126,9 +131,9 @@ func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc string, err err
 //error handling function
 func errorHandling(msgHmrwk string, err error) (botMessage string) {
 	if err != nil {
-		botMessage = ("An error occurred: " + fmt.Sprint(err) + ".")
+		botMessage = ("*An error occurred: *" + fmt.Sprint(err) + ".")
 	} else {
-		botMessage = ("List of completed homework: " + msgHmrwk)
+		botMessage = ("*List of completed homework:* \n " + msgHmrwk)
 	}
 	return
 }
