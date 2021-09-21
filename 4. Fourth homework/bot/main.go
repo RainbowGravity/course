@@ -1,132 +1,136 @@
 package main
 
-//https://github.com/google/go-github
-
-//https://api.github.com/repos/RainbowGravity/course/contents/
-
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"strconv"
 	"strings"
+
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-var reading []JsonData
-var err error
-var botMessage string
-
-func main() {
-
-	processingRequest()
-	println(botMessage)
+type JsonData struct {
+	Name string `json:"name"`
+	Html string `json:"html_url"`
 }
 
-func processingRequest() string {
-	var hmwrkNum int
-	var msg string
-	var requestCase string
+var reading []JsonData
+
+func main() {
+	var msgHmrwk string
+
+	bot, err := tgbotapi.NewBotAPI("____________________TOKEN_____________________")
+	if err != nil {
+		log.Panic(err)
+	}
+
+	bot.Debug = true
 
 	gitRepos := "https://api.github.com/repos/"
 	gitUser := "RainbowGravity/"
 	gitRepo := "course"
 	gitUrl := gitRepos + gitUser + gitRepo
 
-	fmt.Println("Choose one of commands: \n- Git - link to my repository\n- Tasks - list of my completed homework\n- Task# - choose completed task")
+	log.Printf("Authorized on account %s", bot.Self.UserName)
 
-	fmt.Scan(&requestCase)
+	u := tgbotapi.NewUpdate(0)
+	u.Timeout = 60
 
-	switch requestCase {
-	case "Git":
-		botMessage = ("Link to my repository: \nhttps://github.com/RainbowGravity/course")
-	case "Tasks":
-		msg = completedHomework(gitUrl)
-		botMessage = errorHandling(msg, err)
-	case "Task#":
-		msg, err = specifiedHomework(gitUrl, hmwrkNum)
-		botMessage = errorHandling(msg, err)
-	default:
-		err = errors.New("There is no '" + requestCase + "' command. \nTry one of these:\n- /git\n- /Tasks\n- /Task#")
-		botMessage = errorHandling(msg, err)
+	updates, err := bot.GetUpdatesChan(u)
+
+	for update := range updates {
+		if update.Message == nil {
+			continue
+		}
+
+		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+
+		if update.Message.IsCommand() {
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+			msg.ParseMode = "markdown"
+			switch update.Message.Command() {
+			case "git":
+				msg.Text = "*Here is the link to my repository:* \n\n[RainbowGravity/course](https://github.com/RainbowGravity/course)"
+			case "tasks":
+				msgHmrwk, err = completedHomework(gitUrl)
+				msg.Text = errorHandling(msgHmrwk, err)
+			case "task":
+				hmwrkStr := (update.Message.CommandArguments())
+				msgHmrwk, err = specifiedHomework(gitUrl, hmwrkStr)
+				msg.Text = errorHandling(msgHmrwk, err)
+			default:
+				err = errors.New("there is no *" + update.Message.Text + "* command. \n\n*Try one of these:*\n*/git* — Link to my Github repository;\n*/tasks* — List of my completed homework;\n*/task* — Specified homework (*e.g. /task 2*)")
+				msg.Text = errorHandling(msgHmrwk, err)
+				err = nil
+			}
+			bot.Send(msg)
+		}
+
 	}
-	return botMessage
 }
 
-//reading information from Guthub API
 func getContents(gitUrl string) {
 
 	resp, err := http.Get(gitUrl + "/contents/")
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	defer resp.Body.Close()
 	jsonString, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	err = json.Unmarshal([]byte(jsonString), &reading)
 	if err != nil {
 		fmt.Println(err)
 	}
 }
 
-//all of the completed homeworks processing
-func completedHomework(gitUrl string) (hmwrkAll string) {
+func completedHomework(gitUrl string) (hmwrkAll string, err error) {
 
 	getContents(gitUrl)
 
 	for _, val := range reading {
-		if !strings.Contains(val.Name+"\t"+val.Html, "README.md") && !strings.Contains(val.Name+"\t"+val.Html, "WIP") {
-			tmp := string("\n" + val.Name + "\t" + val.Html)
+		if !strings.Contains(val.Name+" — "+val.Html, "README.md") && !strings.Contains(val.Name+" — "+val.Html, "WIP") {
+			//[RainbowGravity/course](https://github.com/RainbowGravity/course)
+			tmp := string("\n" + "[" + val.Name + "]" + "(" + val.Html + ")")
 			hmwrkAll = hmwrkAll + tmp
+			if err != nil {
+				err = errors.New("there is no homework")
+			}
 		}
 	}
-	return hmwrkAll
+	return hmwrkAll, err
 }
 
-//specified homework processing
-func specifiedHomework(gitUrl string, hmwrkNum int) (hmwrkSpc string, err error) {
+func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc string, err error) {
 
 	getContents(gitUrl)
-	hwmrkAmount := len(reading)
-	specifiedChoice(hwmrkAmount - 1)
-
-	fmt.Scan(&hmwrkNum)
+	hmwrkNum, err := strconv.Atoi(hmwrkStr)
 	hmwrkNum = hmwrkNum - 1
 
 	if hmwrkNum < len(reading)-1 && hmwrkNum > -1 {
-		hmwrkSpc = ("\n" + reading[hmwrkNum].Name + "\t" + reading[hmwrkNum].Html)
+		hmwrkSpc = ("\n" + "[" + reading[hmwrkNum].Name + "]" + "(" + reading[hmwrkNum].Html + ")")
 	} else {
 		if hmwrkNum <= -1 {
-			err = errors.New("task number cannot be less than 1")
+			err = errors.New("there is no homework with number less than 1")
 		} else {
-			err = errors.New("task number cannot be more than " + fmt.Sprint(len(reading)-1))
+			err = errors.New("there is no homework with number more than " + fmt.Sprint(len(reading)-1))
 		}
 	}
 	return hmwrkSpc, err
 }
 
-//prints amount of choises
-func specifiedChoice(hmwrkAmount int) (hmwrkNum int, botMessage string) {
-
-	s := []int{}
-	for i := 0; i < hmwrkAmount; i++ {
-		s = append(s, i+1)
-	}
-	botMessage = ("Choose completed homework: \n" + strings.Trim(fmt.Sprint(s), "[ ]"))
-	println(botMessage)
-	return
-}
-
 //error handling function
-func errorHandling(msg string, err error) (botMessage string) {
+func errorHandling(msgHmrwk string, err error) (botMessage string) {
 	if err != nil {
-		botMessage = ("An error occurred: " + fmt.Sprint(err))
+		botMessage = ("*An error occurred: *" + fmt.Sprint(err) + ".")
 	} else {
-		botMessage = ("List of completed homework: " + msg)
+		botMessage = ("*List of completed homework:* \n " + msgHmrwk)
 	}
 	return
 }
