@@ -2,7 +2,7 @@
 # defaults file for sequrity
 
 # set the username of the server user
-user: 'YOUR_USER'
+user: '----YOUR_USER----'
 
 # set the ssh daemon
 sshd: ssh
@@ -11,4 +11,4 @@ sshd: ssh
 sshd_config: /etc/ssh/sshd_config
 
 # set the location of your ssh key
-key_location: /home/rainbow/.ssh/id_rsa.pub
+key_location: /home/-----YOUR_ANSIBLE_MASTER_USER-----/.ssh/id_rsa.pub

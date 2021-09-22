@@ -1,5 +1,5 @@
 ---
-# tasks for sequring server 
+# tasks for securing server 
 
 # - name: Delete sources.list file
 #   file:

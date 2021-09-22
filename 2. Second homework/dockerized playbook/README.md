@@ -10,6 +10,7 @@ This playbook version is used to deploy app with Docker. Less commands and inter
    * Ansible, of course.
    * sshpass on Ansible-master machine. This ables Ansible to connect to the vm/server with password.
    * ssh on the targeted vm/server.
+   * community.crypto.openssl_privatekey.
 
 ### Configuring the playbook and setup targeted machine
 
