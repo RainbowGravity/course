@@ -11,6 +11,12 @@
     name: python3-pip 
     state: latest
   
+- name: Upgrade pip
+  pip:
+    name: pip
+    executable: pip3
+    state: latest
+
 - name: Install Docker
   pip: 
     name: docker 

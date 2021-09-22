@@ -23,6 +23,10 @@
     line: ''
   when: ansible_distribution == 'Debian' and ansible_distribution_version <= '10'
 
+- name: Update apt
+  apt: 
+    update_cache: yes
+
 - name: Add ssh key
   authorized_key:
     user: "{{ user }}"
