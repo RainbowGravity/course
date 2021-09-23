@@ -12,3 +12,6 @@ sshd_config: /etc/ssh/sshd_config
 
 # set the location of your ssh key
 key_location: /home/-----YOUR_ANSIBLE_MASTER_USER-----/.ssh/id_rsa.pub
+
+# source to sources.list file
+source: "/etc/apt/"

@@ -21,7 +21,6 @@
 - name: Generate an OpenSSL private key
   openssl_privatekey:
     path: /etc/nginx/ssl/jsonservice.key
-  register: generate_ssl_key
   when: 
     - auto_ssl == true
     - ssl_passphrase == false
@@ -42,7 +41,6 @@
     path: /etc/nginx/ssl/jsonservice.key
     passphrase: "{{ passphrase }}"
     cipher: "{{ cipher }}"
-  register: generate_ssl_key
   when: 
     - auto_ssl == true
     - ssl_passphrase == true

@@ -1,27 +1,43 @@
 ---
 # tasks for securing server 
 
-# - name: Delete sources.list file
-#   file:
-#     path: /etc/apt/sources.list
-#     state: absent
-# when: ansible_distribution == 'Debian' and ansible_distribution_version =< '10'
+# -----Debian 10 sources.list fixing-----
 
-# - name: Replace sources.list file
-#   copy:
-#     dest: /etc/apt/
-#     src: sources.list
-#     mode: '0550'
-#     owner: root
-#     group: root
-# when: ansible_distribution == 'Debian' and ansible_distribution_version =< '10'
+- name: Test for line in sources.list
+  command: grep -Fxq "deb http://deb.debian.org/debian/ buster main" "{{ source }}sources.list"
+  check_mode: no
+  ignore_errors: yes
+  changed_when: no
+  when:
+   - ansible_distribution == 'Debian'
+   - ansible_distribution_version <= '10'
+  register: source_check
 
 - name: Disable CDROM source
   lineinfile:
-    dest: "{{ source }}"
+    dest: "{{ source }}sources.list"
     regexp: '^deb cdrom:*'
     line: ''
-  when: ansible_distribution == 'Debian' and ansible_distribution_version <= '10'
+  when:
+   - source_check.rc == 0
+  register: cdrom_ok
+  
+- name: Replace sources.list file
+  copy:
+    dest: /etc/apt/
+    src: sources.list
+    mode: '0550'
+    owner: root
+    group: root
+    force: yes
+  when:
+   - cdrom_ok is skipped
+
+# -----End of sources.list fixing-----
+
+- name: Update apt
+  apt: 
+    update_cache: yes
 
 - name: Update apt
   apt: 
