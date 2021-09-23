@@ -5,6 +5,7 @@ server {
     
     ssl_certificate     /etc/nginx/ssl/jsonservice.crt;
     ssl_certificate_key /etc/nginx/ssl/jsonservice.key;
+    ssl_password_file   /etc/nginx/ssl/keys/ssl_password_file;
     
     location / {
         include uwsgi_params;

@@ -1,4 +1,15 @@
-## About
+# Ansible playbook homework
+## About playbooks
+I've created two versions of playbooks: 
+
+* __*[This one](dockerized%20playbook)*__ is using docker for app deployment: copying the app files, building the app and Nginx server containers and runs them. 
+* __*[And this one](playbook)*__ is installing uWSGI, Nginx and virtualenv for the app, then configuring systemd and runs Nginx server.
+
+All of them support the SSL and the HTTPS on the 443 port. Also using the UFW for port securing and SSH publickeys which you must generate for authentification.
+
+Contanct me if you've found some bugs in the playbooks or the app.
+
+## About app
 
 Very simple service that reading your JSON request in following manner: <br>
 ```

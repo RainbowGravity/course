@@ -2,12 +2,12 @@
 # defaults file for deploy
 
 # set the username of the server user
-user: YOUR_USER
+user: ----YOUR_USER----
 
 app_dest: jsonservice
 
 # set a domain name of the server or an IP address
-address: 'YOUR_IP'
+address: '----TARGET_MACHINE_ADDRESS-----'
 
 # set an SSL key params
 size: 4096
@@ -15,5 +15,8 @@ size: 4096
 # sources file source
 source: /etc/apt/sources.list
 
-# set SLL mode
-auto_ssl: true #false
+# set SSL mode and/or passphrase
+auto_ssl: false          #can be true or false
+ssl_passphrase: false  #can be true or false
+passphrase: "R@Inb0wGr@v1ty"            #enter your passphrase here
+cipher: aes256

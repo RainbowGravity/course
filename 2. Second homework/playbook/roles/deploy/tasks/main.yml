@@ -1,23 +1,15 @@
 ---
 # tasks for deploy jsonservice
 
-- name: Creates app directory
-  file:
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    mode: '0760'
-    path: "{{ app_dest }}/app"
-    state: directory
-  
 - name: Copy app files to the Virtual Machine
+  become: no
   copy:
     owner: "{{ user }}"
     group: "{{ user }}"
-    dest: "{{ app_dest }}"
+    dest: "~/{{ app_dest }}"
     src: "app"
   
 - name: Install virtualenv via pip
-  become: no
   pip:
     name: virtualenv
     executable: pip3
@@ -26,7 +18,6 @@
   become: no
   pip: 
     virtualenv: "~/{{ app_dest }}/app/env"
-    virtualenv_command: 'python3 -m venv'
     requirements: "~/{{ app_dest }}/app/requirements.txt"
   
 - name: Copy Nginx config file
@@ -43,31 +34,89 @@
     regexp: '"IP"'
     replace: "{{ address }}"
 
+# -----------SSL CONFIGURATION------------
+
 - name: Create directory for SSL
   file:
     path: /etc/nginx/ssl
     state: directory
 
+# -------AUTO SSL WITHOUT PASSPHRASE------
+
 - name: Generate an OpenSSL private key
-  community.crypto.openssl_privatekey:
+  openssl_privatekey:
     path: /etc/nginx/ssl/jsonservice.key
-    size: "{{ size }}"
-  when: auto_ssl == true
+  register: generate_ssl_key
+  when: 
+    - auto_ssl == true
+    - ssl_passphrase == false
 
 - name: Generate an SSL certificate on the Virual Machine
   community.crypto.x509_certificate:
     path: /etc/nginx/ssl/jsonservice.crt
     privatekey_path: /etc/nginx/ssl/jsonservice.key
     provider: selfsigned
+  when: 
+    - auto_ssl == true
+    - ssl_passphrase == false
+
+# ---------AUTO SSL WITH PASSPHRASE--------
+
+- name: Generate an OpenSSL private key with passphrase
+  openssl_privatekey:
+    path: /etc/nginx/ssl/jsonservice.key
+    passphrase: "{{ passphrase }}"
+    cipher: "{{ cipher }}"
+  register: generate_ssl_key
+  when: 
+    - auto_ssl == true
+    - ssl_passphrase == true
+
+- name: Generate an SSL certificate with passphrase on the Virual Machine
+  community.crypto.x509_certificate:
+    path: /etc/nginx/ssl/jsonservice.crt
+    privatekey_passphrase: "{{ passphrase }}"
+    privatekey_path: /etc/nginx/ssl/jsonservice.key
+    provider: selfsigned
+  when: 
+    - auto_ssl == true
+    - ssl_passphrase == true
+
+# -------AUTO SSL PASSPHRASE CONFIG-------
+
+- name: Create directory for ssl_password_file
+  file:
+    path: "/etc/nginx/ssl/keys/"
+    state: directory
   when: auto_ssl == true
+
+- name: Create an empty ssl_password_file
+  file:
+    path: "/etc/nginx/ssl/keys/ssl_password_file"
+    state: touch
+    owner: root
+    group: root
+    mode: '0400'
+  when: auto_ssl == true
+
+- name: Write an SSL passphrase to the ssl_password_file
+  copy: 
+    content: "{{ passphrase }}"
+    dest: "/etc/nginx/ssl/keys/ssl_password_file"
+  when: 
+    - auto_ssl == true
+    - ssl_passphrase == true
 
 - name: Copy SSL key and certificate files to the Virtual Machine
   copy:
     owner: root
     group: root
+    mode: '0400'
     dest: "/etc/nginx/"
     src: "ssl"
   when: auto_ssl == false
+
+#  -------END OF SSL CONFIGURATION-------
 
 - name: Copy jsonservie config file
   copy:
