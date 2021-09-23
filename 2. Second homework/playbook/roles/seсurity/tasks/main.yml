@@ -39,10 +39,6 @@
   apt: 
     update_cache: yes
 
-- name: Update apt
-  apt: 
-    update_cache: yes
-
 - name: Add ssh key
   authorized_key:
     user: "{{ user }}"
