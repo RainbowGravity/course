@@ -17,6 +17,11 @@ var reading []JsonData
 var err error
 var botMessage string
 
+type JsonData struct {
+	Name string `json:"name"`
+	Html string `json:"html_url"`
+}
+
 func main() {
 
 	processingRequest()
