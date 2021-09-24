@@ -19,6 +19,7 @@
     regexp: '^deb cdrom:*'
     line: ''
   when:
+   - not source_check is skipped
    - source_check.rc == 0
   register: cdrom_ok
   
@@ -31,6 +32,7 @@
     group: root
     force: yes
   when:
+   - not source_check is skipped
    - cdrom_ok is skipped
 
 # -----End of sources.list fixing-----
