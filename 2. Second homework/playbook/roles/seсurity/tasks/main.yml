@@ -4,7 +4,7 @@
 # -----Debian 10 sources.list fixing-----
 
 - name: Test for line in sources.list
-  command: grep -Fxq "deb http://deb.debian.org/debian/ buster main" "{{ source }}sources.list"
+  command: grep -Fxq "deb http://deb.debian.org/debian/ buster main" "{{ source }}sources.list" 
   check_mode: no
   ignore_errors: yes
   changed_when: no
@@ -19,9 +19,10 @@
     regexp: '^deb cdrom:*'
     line: ''
   when:
+   - not source_check is skipped
    - source_check.rc == 0
   register: cdrom_ok
-  
+
 - name: Replace sources.list file
   copy:
     dest: /etc/apt/
@@ -31,6 +32,7 @@
     group: root
     force: yes
   when:
+   - not source_check is skipped
    - cdrom_ok is skipped
 
 # -----End of sources.list fixing-----
