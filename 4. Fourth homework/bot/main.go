@@ -22,12 +22,16 @@ type JsonData struct {
 
 var reading []JsonData
 var botMode bool
+var msg tgbotapi.MessageConfig
 
 func main() {
-	var msgHmrwk string
 	r, _ := regexp.Compile("[0-9]+")
-
-	bot, err := tgbotapi.NewBotAPI("------ТОКЕН ЗДЕСЬ-------")
+	botMode = true
+	startCommand := true
+	commandsList := "*/git* — Link to RG's Github course repository;\n*/tasks* — List of completed homework;\n*/task* — Specified homework (*e.g. /task 2*)"
+	var msgHmrwk string
+	//-------TOKEN--------
+	bot, err := tgbotapi.NewBotAPI("-------TOKEN--------")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -45,78 +49,96 @@ func main() {
 	u.Timeout = 60
 
 	updates, err := bot.GetUpdatesChan(u)
-	botMode = true
+	if err != nil {
+		log.Fatalln("No updates:", err)
+	}
 
 	//here I've tired of commenting
 	for update := range updates {
 		if update.Message == nil {
 			continue
 		}
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+		msg = tgbotapi.NewMessage(update.Message.Chat.ID, "")
 		msg.ParseMode = "markdown"
-
+		msgHmrwk = ("\nYou can open the homework link via button!")
 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
-		if botMode == true {
+		if botMode {
 			if update.Message.IsCommand() {
 				switch update.Message.Command() {
+				case "start":
+					msg.DisableWebPagePreview = true
+					if startCommand {
+						msg.Text = "Hi, I'm a Homework bot. I can help you to know about completed [RainbowGravity's](https://t.me/RainbowGravity) homework via these commands:\n\n" + commandsList
+						startCommand = false
+					} else {
+						msg.Text = "What are you trying to start? I'm working already! \nBut, fine, I can remind you about commands once again: \n\n" + commandsList
+					}
+				case "cancel":
+					msg.Text = "There is nothing to /cancel now, I wasn't do anything. Waiting for your commands.\n\n*Nya!*"
 				case "git":
 					msg.Text = "*Here is the link to my repository:* \n\n[RainbowGravity/course](https://github.com/RainbowGravity/course)"
 				case "tasks":
-					msgHmrwk, err = completedHomework(gitUrl)
+					msg.ReplyMarkup, err = completedHomework(gitUrl)
+					msgHmrwk = ("\nYou can open one of the homework links via button!")
 					msg.Text = errorHandling(msgHmrwk, err)
 				case "task":
-					if r.MatchString(update.Message.CommandArguments()) == true {
-						msgHmrwk, err = specifiedHomework(gitUrl, update.Message.CommandArguments())
+					if r.MatchString(update.Message.CommandArguments()) {
+						msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.CommandArguments())
 					} else {
 						err = errors.New("an argument for the */task* command can't be empty or letter.\n\n*You can choose one of these:*\n" + rangeError(gitUrl))
 						botMode = false
 					}
 					msg.Text = errorHandling(msgHmrwk, err)
 				default:
-					err = errors.New("there is no *" + update.Message.Text + "* command. \n\n*Try one of these:*\n*/git* — Link to my Github repository;\n*/tasks* — List of my completed homework;\n*/task* — Specified homework (*e.g. /task 2*)")
+					err = errors.New("there is no *" + update.Message.Text + "* command. \n\n" + commandsList)
 					msg.Text = errorHandling(msgHmrwk, err)
 					err = nil
 				}
 				bot.Send(msg)
-				if botMode == false {
+				if !botMode {
 					msg.Text = ("Initialising */task* choosing mode.")
 					bot.Send(msg)
 				}
+			} else {
+				switch update.Message.Text {
+				case "кошка-жена":
+					msg.Text = "Nya!"
+				default:
+					msg.Text = "Nothing to say about that, try using commands instead of trying to talk to me. "
+				}
+				bot.Send(msg)
 			}
-
 		} else {
 			if update.Message.IsCommand() {
 				switch update.Message.Command() {
 				case "cancel":
 					botMode = true
 				case "task":
-					if r.MatchString(update.Message.CommandArguments()) == true {
-						msgHmrwk, err = specifiedHomework(gitUrl, update.Message.CommandArguments())
+					if r.MatchString(update.Message.CommandArguments()) {
+						msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.CommandArguments())
 					} else {
 						err = errors.New("an argument for the */task* command can't be empty or letter.\n\n*You can choose one of these:*\n" + rangeError(gitUrl))
-						botMode = false
 					}
 					msg.Text = errorHandling(msgHmrwk, err)
 				default:
 					err = errors.New("there is no *" + update.Message.Text + "* command in */task* choosing mode. \n\n*Try one of these:*\n*/cancel* — Exit */task* choosing mode;\n*/task* — Specified homework (*e.g. /task 2*)")
 					msg.Text = errorHandling(msgHmrwk, err)
 					err = nil
-					botMode = false
 				}
 				bot.Send(msg)
 			} else {
-				if r.MatchString(update.Message.Text) == true {
-					msgHmrwk, err = specifiedHomework(gitUrl, update.Message.Text)
+				if r.MatchString(update.Message.Text) {
+					msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.Text)
 					msg.Text = errorHandling(msgHmrwk, err)
 				} else {
 					err = errors.New("an argument for the */task* command can't be empty or letter.\n\n*You can choose one of these:*\n" + rangeError(gitUrl))
 					msg.Text = errorHandling(msgHmrwk, err)
-					botMode = false
 				}
 				bot.Send(msg)
 			}
-			if botMode == true {
+			if botMode {
+				msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
 				msg.Text = ("Exiting */task* choosing mode.")
 				bot.Send(msg)
 			}
@@ -143,32 +165,36 @@ func getContents(gitUrl string) {
 }
 
 //processing the list of all homeworks
-func completedHomework(gitUrl string) (hmwrkAll string, err error) {
+func completedHomework(gitUrl string) (hmwrkAll tgbotapi.InlineKeyboardMarkup, err error) {
 
 	getContents(gitUrl)
 
 	for _, val := range reading {
-		if !strings.Contains(val.Name+" — "+val.Html, "README.md") && !strings.Contains(val.Name+" — "+val.Html, "WIP") {
-
-			tmp := string("\n" + "[" + val.Name + "]" + "(" + val.Html + ")")
-			hmwrkAll = hmwrkAll + tmp
-			if err != nil {
-				err = errors.New("there is no homework")
-			}
+		if !strings.Contains(val.Name, "README.md") && !strings.Contains(val.Name, "WIP") {
+			var tmpBtn []tgbotapi.InlineKeyboardButton
+			tmp := tgbotapi.NewInlineKeyboardButtonURL(val.Name, val.Html)
+			tmpBtn = append(tmpBtn, tmp)
+			hmwrkAll.InlineKeyboard = append(hmwrkAll.InlineKeyboard, tmpBtn)
+		}
+		if err != nil {
+			err = errors.New("there is no homework")
 		}
 	}
 	return hmwrkAll, err
 }
 
 //processing a specified homework
-func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc string, err error) {
+func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc tgbotapi.InlineKeyboardMarkup, err error) {
 
 	getContents(gitUrl)
 	hmwrkNum, err := strconv.Atoi(hmwrkStr)
 	hmwrkNum = hmwrkNum - 1
 
 	if hmwrkNum < len(reading)-1 && hmwrkNum > -1 {
-		hmwrkSpc = ("\n" + "[" + reading[hmwrkNum].Name + "]" + "(" + reading[hmwrkNum].Html + ")")
+		var tmpBtn []tgbotapi.InlineKeyboardButton
+		tmp := tgbotapi.NewInlineKeyboardButtonURL(reading[hmwrkNum].Name, reading[hmwrkNum].Html)
+		tmpBtn = append(tmpBtn, tmp)
+		hmwrkSpc.InlineKeyboard = append(hmwrkSpc.InlineKeyboard, tmpBtn)
 		botMode = true
 	} else {
 		if hmwrkNum <= -1 {
@@ -176,7 +202,7 @@ func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc string, err err
 		} else {
 			err = errors.New("there is no homework with number more than " + fmt.Sprint(len(reading)-1))
 		}
-		if botMode == false {
+		if !botMode {
 			err = errors.New(fmt.Sprint(err) + "\n\n*You can choose one of these:*\n" + rangeError(gitUrl))
 		}
 	}
@@ -197,9 +223,10 @@ func rangeError(gitUrl string) string {
 //error handling function
 func errorHandling(msgHmrwk string, err error) (botMessage string) {
 	if err != nil {
-		botMessage = ("*An error occurred: *" + fmt.Sprint(err) + ".")
+		msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
+		botMessage = ("*You're doing something wrong: *" + fmt.Sprint(err) + ".")
 	} else {
-		botMessage = ("*List of completed homework:* \n " + msgHmrwk)
+		botMessage = ("*Done!* \n " + msgHmrwk)
 	}
 	return
 }
