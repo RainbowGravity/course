@@ -20,6 +20,13 @@ type JsonData struct {
 	Html string `json:"html_url"`
 }
 
+type BotStateID struct {
+	ChatID       int64
+	BotMode      bool
+	StartCommand bool
+}
+
+var userStateID []BotStateID
 var reading []JsonData
 var botMode bool
 var msg tgbotapi.MessageConfig
@@ -63,6 +70,7 @@ func main() {
 		msgHmrwk = ("\nYou can open the homework link via button!")
 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
+		botMode, userStateID = getUserState(update.Message.Chat.ID, userStateID)
 		if botMode {
 			if update.Message.IsCommand() {
 				switch update.Message.Command() {
@@ -84,10 +92,10 @@ func main() {
 					msg.Text = errorHandling(msgHmrwk, err)
 				case "task":
 					if r.MatchString(update.Message.CommandArguments()) {
-						msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.CommandArguments())
+						msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.CommandArguments(), update.Message.Chat.ID, userStateID)
 					} else {
 						err = errors.New("an argument for the */task* command can't be empty or letter.\n\n*You can choose one of these:*\n" + rangeError(gitUrl))
-						botMode = false
+						setFalseState(update.Message.Chat.ID, userStateID)
 					}
 					msg.Text = errorHandling(msgHmrwk, err)
 				default:
@@ -96,6 +104,7 @@ func main() {
 					err = nil
 				}
 				bot.Send(msg)
+				botMode, userStateID = getUserState(update.Message.Chat.ID, userStateID)
 				if !botMode {
 					msg.Text = ("Initialising */task* choosing mode.")
 					bot.Send(msg)
@@ -113,10 +122,10 @@ func main() {
 			if update.Message.IsCommand() {
 				switch update.Message.Command() {
 				case "cancel":
-					botMode = true
+					setTrueState(update.Message.Chat.ID, userStateID)
 				case "task":
 					if r.MatchString(update.Message.CommandArguments()) {
-						msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.CommandArguments())
+						msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.CommandArguments(), update.Message.Chat.ID, userStateID)
 					} else {
 						err = errors.New("an argument for the */task* command can't be empty or letter.\n\n*You can choose one of these:*\n" + rangeError(gitUrl))
 					}
@@ -129,7 +138,7 @@ func main() {
 				bot.Send(msg)
 			} else {
 				if r.MatchString(update.Message.Text) {
-					msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.Text)
+					msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.Text, update.Message.Chat.ID, userStateID)
 					msg.Text = errorHandling(msgHmrwk, err)
 				} else {
 					err = errors.New("an argument for the */task* command can't be empty or letter.\n\n*You can choose one of these:*\n" + rangeError(gitUrl))
@@ -137,6 +146,7 @@ func main() {
 				}
 				bot.Send(msg)
 			}
+			botMode, userStateID = getUserState(update.Message.Chat.ID, userStateID)
 			if botMode {
 				msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
 				msg.Text = ("Exiting */task* choosing mode.")
@@ -184,7 +194,7 @@ func completedHomework(gitUrl string) (hmwrkAll tgbotapi.InlineKeyboardMarkup, e
 }
 
 //processing a specified homework
-func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc tgbotapi.InlineKeyboardMarkup, err error) {
+func specifiedHomework(gitUrl string, hmwrkStr string, chatID int64, userStateID []BotStateID) (hmwrkSpc tgbotapi.InlineKeyboardMarkup, err error) {
 
 	getContents(gitUrl)
 	hmwrkNum, err := strconv.Atoi(hmwrkStr)
@@ -195,7 +205,7 @@ func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc tgbotapi.Inline
 		tmp := tgbotapi.NewInlineKeyboardButtonURL(reading[hmwrkNum].Name, reading[hmwrkNum].Html)
 		tmpBtn = append(tmpBtn, tmp)
 		hmwrkSpc.InlineKeyboard = append(hmwrkSpc.InlineKeyboard, tmpBtn)
-		botMode = true
+		setTrueState(chatID, userStateID)
 	} else {
 		if hmwrkNum <= -1 {
 			err = errors.New("there is no homework with number less than 1")
@@ -229,4 +239,47 @@ func errorHandling(msgHmrwk string, err error) (botMessage string) {
 		botMessage = ("*Done!* \n " + msgHmrwk)
 	}
 	return
+}
+
+func getUserState(chatID int64, userStateID []BotStateID) (bool, []BotStateID) {
+
+	found := false
+
+	for i := range userStateID {
+		if userStateID[i].ChatID == chatID {
+			botMode = userStateID[i].BotMode
+			found = true
+			break
+		}
+	}
+	if !found {
+		userStateID = append(userStateID, BotStateID{ChatID: chatID, BotMode: true, StartCommand: true})
+		botMode = userStateID[len(userStateID)-1].BotMode
+	}
+	fmt.Println("QWERT", userStateID, "QWERT")
+	return botMode, userStateID
+}
+
+func setFalseState(chatID int64, userStateID []BotStateID) []BotStateID {
+
+	for i := range userStateID {
+		if userStateID[i].ChatID == chatID {
+			userStateID[i].BotMode = false
+			break
+		}
+	}
+	fmt.Println("QWERTYFALSE", userStateID, "QWERTYFALSE")
+	return userStateID
+}
+
+func setTrueState(chatID int64, userStateID []BotStateID) []BotStateID {
+
+	for i := range userStateID {
+		if userStateID[i].ChatID == chatID {
+			userStateID[i].BotMode = true
+			break
+		}
+	}
+	fmt.Println("QWERTYTRUE", userStateID, "QWERTYTRUE")
+	return userStateID
 }
