@@ -28,6 +28,7 @@ You can switch between days and weeks via simple navigation. You can also return
 
 * <b> Yeah! I've deployed my bot on the AWS EC2 instance! </b>
    * So after the last lession I've decided to deploy my first Telegram bot on the AWS EC2. There was no problem with that. But next time I'll create my bot with the webhooks and deploy it with AWS Lambda, instead of EC2. There is no point of running the virtual machine for some simple telegram bot.
+   * Also I've created an external file with bot and Github API token inside. There is no need to keep the token inside the code now. 
 
 </p>
 
@@ -37,6 +38,7 @@ You can switch between days and weeks via simple navigation. You can also return
 
 * <b> Find out an interesting issue with my bot </b>
    * So, my bot have the state switching feature. Problem is with it. If one of the users will enter the "_/task choosing mode_" it will lead for another user to get in it too. Because of that I need to remember the state of bot mode for every user individually. For start command too.
+   * And there is the problem with a Github API rate limit. I need to add an HTTP authentication method with OAuth token for my bot's API requests.   
 * <b> And here is the solution! </b>
    * With every new update my bot will check for the user in my weird slice-based database (yeah). If there is no user bot will add him to the database and set for him **true botMode** status which means that the user is not in the "_/task choosing mode_" and **false startCommand** status which means that reply for the **/start** command will be different now for him. But if user in the database already bot will read the **botMode** bool value, same for the **startCommand**.
    * Also there is special functions for **botMode** status switching.
