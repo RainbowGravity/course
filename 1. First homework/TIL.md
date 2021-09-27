@@ -4,17 +4,109 @@
 This is my personal TIL. Here you can check my progress and something about my new knowledges.  
 You can switch between days and weeks via simple navigation. You can also return to the first page by clicking on the week, and to the week from the name of the day.
 
-* ### [First week](#first-week)
-* ### [Second week](#second-week)
-* ### [Third week](#third-week)
-* ### [Second week](#second-week)
+* ### [I. First week](#first-week)
+* ### [II. Second week](#second-week)
+* ### [III. Third week](#third-week)
+* ### [IV. Fourth week](#fourth-week)
 
+
+## [Fourth week](#today-ive-learned) 
+
+| Day   | Date |
+| :-----------: | :-----------: |
+|[Monday](#monday-20092021)| 20.09.2021 |
+|[Tuesday](#tuesday-21092021)| 21.09.2021 |
+|[Wednesday](#wednesday-22092021)| 22.09.2021 |
+|[Thursday](#thursday-23092021)| 23.09.2021 |
+|[Friday](#friday-24092021)| 24.09.2021 |
+|[Saturday](#saturday-25092021)| 25.09.2021 |
+|[Sunday](#sunday-26092021)| 26.09.2021 |
+
+### [Sunday, 26.09.2021](#fourth-week)
+
+<p>
+
+* <b> Yeah! I've deployed my bot on the AWS EC2 instance! </b>
+   * So after the last lession I've decided to deploy my first Telegram bot on the AWS EC2. There was no problem with that. But next time I'll create my bot with the webhooks and deploy it with AWS Lambda, instead of EC2. There is no point of running the virtual machine for some simple telegram bot.
+   * Also I've created an external file with bot and Github API token inside. There is no need to keep the token inside the code now. 
+
+</p>
+
+### [Saturday, 25.09.2021](#fourth-week)
+
+<p>
+
+* <b> Find out an interesting issue with my bot </b>
+   * So, my bot have the state switching feature. Problem is with it. If one of the users will enter the "_/task choosing mode_" it will lead for another user to get in it too. Because of that I need to remember the state of bot mode for every user individually. For start command too.
+   * And there is the problem with a Github API rate limit. I need to add an HTTP authentication method with OAuth token for my bot's API requests.   
+* <b> And here is the solution! </b>
+   * With every new update my bot will check for the user in my weird slice-based database (yeah). If there is no user bot will add him to the database and set for him **true botMode** status which means that the user is not in the "_/task choosing mode_" and **false startCommand** status which means that reply for the **/start** command will be different now for him. But if user in the database already bot will read the **botMode** bool value, same for the **startCommand**.
+   * Also there is special functions for **botMode** status switching.
+
+</p>
+
+### [Friday, 24.09.2021](#fourth-week)
+
+<p>
+
+* <b> And problems with the playbooks again!</b>
+   * My new _improved_ and _optimized_ algorith brokes the sources.list files on the Debian 11 and Ubuntu 20.04 beause of incorrect when conditions. Fixed it for sure now and tested on every disto.
+* <b> Added the /start command for bot and some more:</b>
+   * My bot now have the **/start** command. Even after the start you can use it, but my bot will not be happy about it, however he will remind you about commands.
+
+
+</p>
+
+### [Thursday, 23.09.2021](#fourth-week)
+
+<p>
+
+* <b> Some problems with the playbooks: </b>
+   * Started to test my playbooks for sure again, but got an error on the Debian 10: I need to update the python3-pip package after installing it. Don't know why there is this error, because everything works fine until today. **Fixed it.**
+   * Also I've improved and optimized the sources.list fixing algorithm. 
+* <b> State switching for bot:</b>
+   * So, I've decided to add an _"/task choosing mode"_ for my bot. The idea is that if you've sent the **/task** command without arguments, bot will able you to just enter the correct number of the homework and also will display possible variants in following manner: 
+   ```You can choose one of these: 1,  2,  3,  4, ...``` You can exit this mode only by choose the correct number, or by using the **/cancel** command.
+
+
+
+</p>
+
+### [Wednesday, 22.09.2021](#fourth-week)
+
+<p>
+
+* <b> Working with Ansible and learning it again </b>
+   * Added feature for my playbooks which allows you to generate an SSL keys aoutomatically with passphrace or without it, or just use your own keys and certs with and without passphrases. You need only to choose the right options and maybe add some files.
+* <b> Started my Telegram bot! </b>
+   * Finally I've registred my own bot with BotFather and for the first time I've launched it. Every of the commands works great, but I need to add some more features and interaction.
+
+</p>
+
+### [Tuesday, 21.09.2021](#fourth-week)
+
+<p>
+
+* <b> Learned about Golang cases </b>
+   * Started to using the Golang switch with cases. For today there is only three: /git, /tasks, /task and default case with error of incorrect command. In future I will add some more and make my bot with more interesting interaction.
+
+</p>
+
+### [Monday, 20.09.2021](#fourth-week)
+
+<p>
+
+* <b> Finally! Good progress in bot development. </b>
+   * Learned how to work with  Go slices and how to append to them, now I can create a slice list of my homework and links to them and print it.
+   * Also progress in slice search and error handling. If you for some reason will enter an incorrect number of homework, my script will print an error and you will exactly know what is you doing wrong.
+
+</p>
 
 ## [Third week](#today-ive-learned) 
 
 | Day   | Date |
 | :-----------: | :-----------: |
-|[Monday](#monday-13092021)| 11.09.2021 |
+|[Monday](#monday-13092021)| 13.09.2021 |
 |[Tuesday](#tuesday-14092021)| 14.09.2021 |
 |[Wednesday](#wednesday-15092021)| 15.09.2021 |
 |[Thursday](#thursday-16092021)| 16.09.2021 |
@@ -23,7 +115,28 @@ You can switch between days and weeks via simple navigation. You can also return
 |[Sunday](#sunday-19092021)| 19.09.2021 |
 
 
-### [Friday, 17.09.2021](#second-week)
+### [Sunday, 19.09.2021](#third-week)
+
+<p>
+
+* <b> Small progress in Golang </b>
+   * Tried to get a correct homework output, get some progress, but not much.
+
+</p>
+
+### [Saturday, 18.09.2021](#third-week)
+
+<p>
+
+* <b> Tested my playbook on Debian 11 and Ubuntu 20.04 </b> 
+   * My playbooks is deploying correctly on these two OS. I've added checks for OS Distro and versions. 
+* <b> Started on working on my HomeworkBot: </b>
+   * Learned some Golang things. First time using this language, but undestand something.
+   * Created a main logic of the bot and algorithms. Found out how to work with the Github API and read json from repos.
+
+</p>
+
+### [Friday, 17.09.2021](#third-week)
 
 <p>
 
@@ -35,7 +148,7 @@ You can switch between days and weeks via simple navigation. You can also return
 
 </p>
 
-### [Thursday, 16.09.2021](#second-week)
+### [Thursday, 16.09.2021](#third-week)
 
 <p>
  
@@ -43,7 +156,7 @@ You can switch between days and weeks via simple navigation. You can also return
    * So, as I expected, Gunicorn was the only choise. Container with my app and Gunicorn inside weights about 47.5 MB, not 90+ MB like before when I tried to put uWSGI inside.
    * Created a container with Nginx server inside and successfully launched it. Now my plan is to figure out the best way to use SSL with it.  
 
-### [Wednesday, 15.09.2021](#second-week)
+### [Wednesday, 15.09.2021](#third-week)
 
 <p>
 
@@ -52,7 +165,7 @@ You can switch between days and weeks via simple navigation. You can also return
 
 </p>
 
-### [Tuesday, 14.09.2021](#second-week)
+### [Tuesday, 14.09.2021](#third-week)
 
 <p>
 
@@ -65,7 +178,7 @@ You can switch between days and weeks via simple navigation. You can also return
 </p>
 
 
-### [Monday, 13.09.2021](#Third-week)
+### [Monday, 13.09.2021](#third-week)
 
 <p>
 

@@ -7,11 +7,13 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	godotenv "github.com/joho/godotenv"
 )
 
 //declaring the fields from API Json respond
@@ -20,33 +22,50 @@ type JsonData struct {
 	Html string `json:"html_url"`
 }
 
+type BotStateID struct {
+	ChatID       int64
+	BotMode      bool
+	StartCommand bool
+}
+
+var userStateID []BotStateID
 var reading []JsonData
 var botMode bool
+var startCommand bool
 var msg tgbotapi.MessageConfig
+var botToken string
+var apiToken string
 
 func main() {
-	var msgHmrwk string
 	r, _ := regexp.Compile("[0-9]+")
+	botMode = true
+	gitUrl := "https://api.github.com/repos/RainbowGravity/course/contents/"
+	commandsList := "*/git* — Link to RG's Github course repository;\n*/tasks* — List of completed homework;\n*/task* — Specified homework (*e.g. /task 2*)"
+	var msgHmrwk string
 
-	bot, err := tgbotapi.NewBotAPI("------ТОКЕН ЗДЕСЬ-------")
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+	botToken = os.Getenv("BOT_TOKEN")
+	apiToken = os.Getenv("API_TOKEN")
+
+	bot, err := tgbotapi.NewBotAPI(botToken)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	bot.Debug = true
-	//dunno why I've done this
-	gitRepos := "https://api.github.com/repos/"
-	gitUser := "RainbowGravity/"
-	gitRepo := "course"
-	gitUrl := gitRepos + gitUser + gitRepo
+	//bot.Debug = true
 
-	log.Printf("Authorized on account %s", bot.Self.UserName)
+	//log.Printf("Authorized on account %s", bot.Self.UserName)
 
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
 	updates, err := bot.GetUpdatesChan(u)
-	botMode = true
+	if err != nil {
+		log.Fatalln("No updates:", err)
+	}
 
 	//here I've tired of commenting
 	for update := range updates {
@@ -55,73 +74,85 @@ func main() {
 		}
 		msg = tgbotapi.NewMessage(update.Message.Chat.ID, "")
 		msg.ParseMode = "markdown"
+		msgHmrwk = ("\nYou can open the homework link via button!")
+		//log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
-		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-
-		if botMode == true {
+		botMode, userStateID, startCommand = getUserState(update.Message.Chat.ID, userStateID)
+		if botMode {
 			if update.Message.IsCommand() {
 				switch update.Message.Command() {
+				case "start":
+					msg.DisableWebPagePreview = true
+					if startCommand {
+						msg.Text = "Hi, I'm a Homework bot. I can help you to know about completed [RainbowGravity's](https://t.me/RainbowGravity) homework via these commands:\n\n" + commandsList
+						getUserState(update.Message.Chat.ID, userStateID)
+					} else {
+						msg.Text = "What are you trying to start? I'm working already! \nBut, fine, I can remind you about commands once again: \n\n" + commandsList
+					}
+				case "cancel":
+					msg.Text = "There is nothing to /cancel now, I wasn't do anything. Waiting for your commands.\n\n*Nya!*"
 				case "git":
-					msg.Text = "*Here is the link to my repository:* \n\n[RainbowGravity/course](https://github.com/RainbowGravity/course)"
+					msg.Text = "*Here is the link to repository:* \n\n[RainbowGravity/course](https://github.com/RainbowGravity/course)"
 				case "tasks":
 					msg.ReplyMarkup, err = completedHomework(gitUrl)
 					msgHmrwk = ("\nYou can open one of the homework links via button!")
 					msg.Text = errorHandling(msgHmrwk, err)
 				case "task":
-					if r.MatchString(update.Message.CommandArguments()) == true {
-						msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.CommandArguments())
-						msgHmrwk = ("\nYou can open the homework link via button!")
+					if r.MatchString(update.Message.CommandArguments()) {
+						msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.CommandArguments(), update.Message.Chat.ID, userStateID)
 					} else {
 						err = errors.New("an argument for the */task* command can't be empty or letter.\n\n*You can choose one of these:*\n" + rangeError(gitUrl))
-						botMode = false
+						botMode, userStateID = setFalseState(update.Message.Chat.ID, userStateID)
 					}
 					msg.Text = errorHandling(msgHmrwk, err)
 				default:
-					err = errors.New("there is no *" + update.Message.Text + "* command. \n\n*Try one of these:*\n*/git* — Link to my Github repository;\n*/tasks* — List of my completed homework;\n*/task* — Specified homework (*e.g. /task 2*)")
+					err = errors.New("there is no *" + update.Message.Text + "* command. \n\n" + commandsList)
 					msg.Text = errorHandling(msgHmrwk, err)
 					err = nil
 				}
 				bot.Send(msg)
-				if botMode == false {
+				if !botMode {
 					msg.Text = ("Initialising */task* choosing mode.")
 					bot.Send(msg)
 				}
+			} else {
+				switch update.Message.Text {
+				case "кошка-жена":
+					msg.Text = "Nya!"
+				default:
+					msg.Text = "Nothing to say about that, try using commands instead of trying to talk to me. "
+				}
+				bot.Send(msg)
 			}
-
 		} else {
 			if update.Message.IsCommand() {
 				switch update.Message.Command() {
 				case "cancel":
-					botMode = true
+					botMode, userStateID = setTrueState(update.Message.Chat.ID, userStateID)
 				case "task":
-					if r.MatchString(update.Message.CommandArguments()) == true {
-						msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.CommandArguments())
-						msgHmrwk = ("\nYou can open the homework link via button!")
+					if r.MatchString(update.Message.CommandArguments()) {
+						msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.CommandArguments(), update.Message.Chat.ID, userStateID)
 					} else {
 						err = errors.New("an argument for the */task* command can't be empty or letter.\n\n*You can choose one of these:*\n" + rangeError(gitUrl))
-						botMode = false
 					}
 					msg.Text = errorHandling(msgHmrwk, err)
 				default:
 					err = errors.New("there is no *" + update.Message.Text + "* command in */task* choosing mode. \n\n*Try one of these:*\n*/cancel* — Exit */task* choosing mode;\n*/task* — Specified homework (*e.g. /task 2*)")
 					msg.Text = errorHandling(msgHmrwk, err)
 					err = nil
-					botMode = false
 				}
 				bot.Send(msg)
 			} else {
-				if r.MatchString(update.Message.Text) == true {
-					msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.Text)
-					msgHmrwk = ("\nYou can open the homework link via button!")
+				if r.MatchString(update.Message.Text) {
+					msg.ReplyMarkup, err = specifiedHomework(gitUrl, update.Message.Text, update.Message.Chat.ID, userStateID)
 					msg.Text = errorHandling(msgHmrwk, err)
 				} else {
 					err = errors.New("an argument for the */task* command can't be empty or letter.\n\n*You can choose one of these:*\n" + rangeError(gitUrl))
 					msg.Text = errorHandling(msgHmrwk, err)
-					botMode = false
 				}
 				bot.Send(msg)
 			}
-			if botMode == true {
+			if botMode {
 				msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
 				msg.Text = ("Exiting */task* choosing mode.")
 				bot.Send(msg)
@@ -133,7 +164,8 @@ func main() {
 //processing the API Json respond
 func getContents(gitUrl string) {
 
-	resp, err := http.Get(gitUrl + "/contents/")
+	resp, err := http.Get(gitUrl)
+	resp.Header.Add("Authorization", "token: "+apiToken)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -168,7 +200,7 @@ func completedHomework(gitUrl string) (hmwrkAll tgbotapi.InlineKeyboardMarkup, e
 }
 
 //processing a specified homework
-func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc tgbotapi.InlineKeyboardMarkup, err error) {
+func specifiedHomework(gitUrl string, hmwrkStr string, chatID int64, userStateID []BotStateID) (hmwrkSpc tgbotapi.InlineKeyboardMarkup, err error) {
 
 	getContents(gitUrl)
 	hmwrkNum, err := strconv.Atoi(hmwrkStr)
@@ -179,14 +211,14 @@ func specifiedHomework(gitUrl string, hmwrkStr string) (hmwrkSpc tgbotapi.Inline
 		tmp := tgbotapi.NewInlineKeyboardButtonURL(reading[hmwrkNum].Name, reading[hmwrkNum].Html)
 		tmpBtn = append(tmpBtn, tmp)
 		hmwrkSpc.InlineKeyboard = append(hmwrkSpc.InlineKeyboard, tmpBtn)
-		botMode = true
+		setTrueState(chatID, userStateID)
 	} else {
 		if hmwrkNum <= -1 {
 			err = errors.New("there is no homework with number less than 1")
 		} else {
 			err = errors.New("there is no homework with number more than " + fmt.Sprint(len(reading)-1))
 		}
-		if botMode == false {
+		if !botMode {
 			err = errors.New(fmt.Sprint(err) + "\n\n*You can choose one of these:*\n" + rangeError(gitUrl))
 		}
 	}
@@ -208,9 +240,57 @@ func rangeError(gitUrl string) string {
 func errorHandling(msgHmrwk string, err error) (botMessage string) {
 	if err != nil {
 		msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
-		botMessage = ("*An error occurred: *" + fmt.Sprint(err) + ".")
+		botMessage = ("*You're doing something wrong: *" + fmt.Sprint(err) + ".")
 	} else {
-		botMessage = ("*Here is the result:* \n " + msgHmrwk)
+		botMessage = ("*Done!* \n " + msgHmrwk)
 	}
 	return
+}
+
+//checking for user state. If there is no user, then add one
+func getUserState(chatID int64, userStateID []BotStateID) (bool, []BotStateID, bool) {
+
+	found := false
+
+	for i := range userStateID {
+		if userStateID[i].ChatID == chatID {
+			userStateID[i].StartCommand = false
+			botMode = userStateID[i].BotMode
+			startCommand = userStateID[i].StartCommand
+			found = true
+			break
+		}
+	}
+	if !found {
+		userStateID = append(userStateID, BotStateID{ChatID: chatID, BotMode: true, StartCommand: true})
+		botMode = userStateID[len(userStateID)-1].BotMode
+		startCommand = userStateID[len(userStateID)-1].StartCommand
+	}
+	return botMode, userStateID, startCommand
+}
+
+//set a false botMode state for user
+func setFalseState(chatID int64, userStateID []BotStateID) (bool, []BotStateID) {
+
+	for i := range userStateID {
+		if userStateID[i].ChatID == chatID {
+			botMode = false
+			userStateID[i].BotMode = botMode
+			break
+		}
+	}
+	return botMode, userStateID
+}
+
+//set a true botMode state for user
+func setTrueState(chatID int64, userStateID []BotStateID) (bool, []BotStateID) {
+
+	for i := range userStateID {
+		if userStateID[i].ChatID == chatID {
+			botMode = true
+			userStateID[i].BotMode = botMode
+			break
+		}
+	}
+	return botMode, userStateID
 }
