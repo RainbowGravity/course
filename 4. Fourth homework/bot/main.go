@@ -7,11 +7,13 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	godotenv "github.com/joho/godotenv"
 )
 
 //declaring the fields from API Json respond
@@ -31,29 +33,35 @@ var reading []JsonData
 var botMode bool
 var startCommand bool
 var msg tgbotapi.MessageConfig
+var botToken string
+var apiToken string
 
 func main() {
 	r, _ := regexp.Compile("[0-9]+")
 	botMode = true
+	gitUrl := "https://api.github.com/repos/RainbowGravity/course/contents/"
 	commandsList := "*/git* — Link to RG's Github course repository;\n*/tasks* — List of completed homework;\n*/task* — Specified homework (*e.g. /task 2*)"
 	var msgHmrwk string
-	//-------TOKEN--------
-	bot, err := tgbotapi.NewBotAPI("-------TOKEN--------")
+
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+	botToken = os.Getenv("BOT_TOKEN")
+	apiToken = os.Getenv("API_TOKEN")
+
+	bot, err := tgbotapi.NewBotAPI(botToken)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	bot.Debug = true
-	//dunno why I've done this
-	gitRepos := "https://api.github.com/repos/"
-	gitUser := "RainbowGravity/"
-	gitRepo := "course"
-	gitUrl := gitRepos + gitUser + gitRepo
+	//bot.Debug = true
 
-	log.Printf("Authorized on account %s", bot.Self.UserName)
+	//log.Printf("Authorized on account %s", bot.Self.UserName)
 
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
+
 	updates, err := bot.GetUpdatesChan(u)
 	if err != nil {
 		log.Fatalln("No updates:", err)
@@ -67,7 +75,7 @@ func main() {
 		msg = tgbotapi.NewMessage(update.Message.Chat.ID, "")
 		msg.ParseMode = "markdown"
 		msgHmrwk = ("\nYou can open the homework link via button!")
-		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+		//log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
 		botMode, userStateID, startCommand = getUserState(update.Message.Chat.ID, userStateID)
 		if botMode {
@@ -84,7 +92,7 @@ func main() {
 				case "cancel":
 					msg.Text = "There is nothing to /cancel now, I wasn't do anything. Waiting for your commands.\n\n*Nya!*"
 				case "git":
-					msg.Text = "*Here is the link to my repository:* \n\n[RainbowGravity/course](https://github.com/RainbowGravity/course)"
+					msg.Text = "*Here is the link to repository:* \n\n[RainbowGravity/course](https://github.com/RainbowGravity/course)"
 				case "tasks":
 					msg.ReplyMarkup, err = completedHomework(gitUrl)
 					msgHmrwk = ("\nYou can open one of the homework links via button!")
@@ -156,7 +164,8 @@ func main() {
 //processing the API Json respond
 func getContents(gitUrl string) {
 
-	resp, err := http.Get(gitUrl + "/contents/")
+	resp, err := http.Get(gitUrl)
+	resp.Header.Add("Authorization", "token: "+apiToken)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -202,7 +211,7 @@ func specifiedHomework(gitUrl string, hmwrkStr string, chatID int64, userStateID
 		tmp := tgbotapi.NewInlineKeyboardButtonURL(reading[hmwrkNum].Name, reading[hmwrkNum].Html)
 		tmpBtn = append(tmpBtn, tmp)
 		hmwrkSpc.InlineKeyboard = append(hmwrkSpc.InlineKeyboard, tmpBtn)
-		botMode, userStateID = setTrueState(chatID, userStateID)
+		setTrueState(chatID, userStateID)
 	} else {
 		if hmwrkNum <= -1 {
 			err = errors.New("there is no homework with number less than 1")
@@ -238,6 +247,7 @@ func errorHandling(msgHmrwk string, err error) (botMessage string) {
 	return
 }
 
+//checking for user state. If there is no user, then add one
 func getUserState(chatID int64, userStateID []BotStateID) (bool, []BotStateID, bool) {
 
 	found := false
@@ -256,10 +266,10 @@ func getUserState(chatID int64, userStateID []BotStateID) (bool, []BotStateID, b
 		botMode = userStateID[len(userStateID)-1].BotMode
 		startCommand = userStateID[len(userStateID)-1].StartCommand
 	}
-	fmt.Println("QWERT", userStateID, "QWERT")
 	return botMode, userStateID, startCommand
 }
 
+//set a false botMode state for user
 func setFalseState(chatID int64, userStateID []BotStateID) (bool, []BotStateID) {
 
 	for i := range userStateID {
@@ -269,10 +279,10 @@ func setFalseState(chatID int64, userStateID []BotStateID) (bool, []BotStateID) 
 			break
 		}
 	}
-	fmt.Println("QWERTYFALSE", userStateID, "QWERTYFALSE")
 	return botMode, userStateID
 }
 
+//set a true botMode state for user
 func setTrueState(chatID int64, userStateID []BotStateID) (bool, []BotStateID) {
 
 	for i := range userStateID {
@@ -282,6 +292,5 @@ func setTrueState(chatID int64, userStateID []BotStateID) (bool, []BotStateID) {
 			break
 		}
 	}
-	fmt.Println("QWERTYTRUE", userStateID, "QWERTYTRUE")
 	return botMode, userStateID
 }
