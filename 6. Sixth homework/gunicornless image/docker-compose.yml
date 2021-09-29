@@ -1,0 +1,10 @@
+version: "3.3"
+
+services:
+
+  flask:
+    build: ./app
+    container_name: Flask-app
+    restart: always
+    expose:
+      - "8080"
