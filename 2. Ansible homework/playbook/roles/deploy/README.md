@@ -25,7 +25,7 @@ There are variables for this role in [<b>defaults/main.yml</b>](defaults/main.ym
 * <b>address</b> - line in the Nginx server config file. You must enter your domain name or IP address of the remote vm/server.
 * <b>size</b> - SSL key size.
 * <b>auto_ssl</b> - this option allows you to choose between automatically genereated SSL key and cert and 
-generated ones by yourself. Your key and cert must be located in [files/ssl](files/ssl) directory and named as **_jsonservice.crt_** and **_jsonservice.key_** and alse be passphraseless.
+generated ones by yourself. Your key and cert must be located in [files/ssl](files/ssl) directory and named as **_jsonservice.crt_** and **_jsonservice.key_**. If passphrase is presented, put it in [ssl_password_file](files/ssl/keys/ssl_password_file), if not, delete contents from it.
 * <b>ssl_passphrase</b> - you can choose this to enable automatic generation of the SSL key with passphrase. 
 * <b>passphrase</b> - this field is used for passphrase declaration. Cannot be empty when <b>ssl_passphrase</b> is <b>true</b>.
 * <b>cipher</b> - you can choose cipher for SSL key.
