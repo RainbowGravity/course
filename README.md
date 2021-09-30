@@ -1,8 +1,8 @@
 ## Andersen DevOps course repository
 
 Hello!  
-In this repository I'll be sharing my progress of learning 
-  things about DevOps-engineering (you can check it in my [TIL](1.%20First%20homework/TIL.md)) and uploading finished homework.  
+In this repository I'll be sharing my progress of learning things about DevOps-engineering (you can check it in my [TIL](1.%20First%20homework/TIL.md)) and uploading finished homework.  
+You also can get the list of my completed homework from my [telegram bot](https://t.me/RGHomeworkBot).
   
 ### About me
 My name is Ivan Marchenko.  
