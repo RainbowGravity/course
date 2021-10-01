@@ -17,3 +17,9 @@ This bot was created as one of the homework and it can display actual informatio
 * Currently the bot is running on the AWS EC2 and you don't need to launch it to test and the bot is available for now for 24/7. 
 * The bot is remember a state for the each user individually until it will not be restarted. Even if 2 or more users are able to use the bot at the same time it will reply to them individually, because the bot is storing information about each user state in the memory. With every new update bot is checking for the user id in a special slice and then reading information from it. If there is no user in the slice then bot will add him to it and then will set the false state for the ```/start``` command and the <b>/task choosing mode</b> state too.
 * Also the bot is authenticating to the Github api via the OAuth token, so there is no risks for the API rate limit exceeding. This was discovered during the bot testing.
+## Build and run
+To run the bot you need to install [tgbotapi](github.com/go-telegram-bot-api/telegram-bot-api) and [godotenv](github.com/joho/godotenv) packages and create the ```.env``` file with two tokens inside of it:
+ ```
+BOT_TOKEN=YOUR_BOT_TOKEN
+API_TOKEN=YOUR_GITHUB_API_TOKEN
+```
