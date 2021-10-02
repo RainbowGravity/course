@@ -12,9 +12,9 @@
                 echo ''
                 echo 'Options:'
                 echo ''
-                echo '-p -- page number for script to scan. Required to add because of the API Github limit for 100 PRs per page. Default is 1.'
+                echo '-p -- amount of pages for script to scan.'
                 echo -e 'To skip this in script use \u001B[1m-pn\u001B[0m for defaults or \u001B[1m-p NUMBER\u001B[0m.'
-                echo '-s -- amount of the open PRs per page that will bedisplayed, can be specified from 1 to 100. Default is 1.'
+                echo '-s -- amount of the open PRs per page that will be displayed, can be specified from 1 to 100. Default is 1.'
                 echo -e 'To skip this in script use \u001B[1m-cn\u001B[0m for defaults or \u001B[1m-c NUMBER\u001B[0m.'
                 echo '-t -- Github API token option. If there is no token provided, then maximum API request rate will be limited to 60'
                 echo 'per hour. With OAuth token provided the limit will be increased to 5000. '
@@ -22,6 +22,8 @@
                 echo '-r -- by this option you can set the link or username to skip questions about it during the script running'
                 echo '-a -- display titles for pull requests. '
                 echo '-b -- display descriptions of repositories.'
+                echo '-m -- Per Page Mode. Allows you to display PRs and best contributors per page.'
+                echo '-e -- diplay all PRs in repository. For this option Per Page Mode must be enabled.'
                 echo '_____________________________________________________________________________________'
                 echo
     }
@@ -49,9 +51,17 @@
 			printf '\033[1;31m Error! Incorrect option\033[0m\n\n'
 		}
 # Getting arguments
-while getopts "t:p:s:r:hab" option; do
+while getopts "t:p:s:r:habem" option; do
 	case $option in
-	# Additonal info for repositories
+	# Per Page Mode
+    m)
+        pageMode="True"
+        ;;
+    # All PRs displaying option
+    e)
+        prs="True"
+        ;;
+    # Additonal info for repositories 
     b)
         bdd="True"
         ;;
@@ -158,25 +168,36 @@ done
     }
     # Forming standard PRs info output
     StdPRs(){
-        b=$(curl -s -H "$auth" "$apiLink" | jq '.pulls_url + "?page='$page'&per_page='$perPage'"' | sed  "s|{.*}||" | xargs curl -s -H "$auth" | \
-        jq -r '.[] | "\u001B[1;32m" + .user.login + "\u001B[0m" + "|" + (if (.labels | length) !=0 then .labels | map("\u001b[33m" + .name + "\u001B[0m") | join (", ") else "\u001b[31mThere is no labels\u001B[0m" end ) + "|" + .html_url' )
+        b=$(echo $pullsTmp |jq -r '.[] | "\u001B[1;32m" + .user.login + "\u001B[0m" + "|" + (if (.labels | length) !=0 then .labels | map("\u001b[33m" + .name + "\u001B[0m") | join (", ") else "\u001b[31mThere is no labels\u001B[0m" end ) + "|" + .html_url' )
         table="Nickname:|Labels:|\n\n"
     }
     # Forming all PRs info output
     AllPRs(){
-        b=$(curl -s -H "$auth" "$apiLink" | jq '.pulls_url + "?page='$page'&per_page='$perPage'"' | sed  "s|{.*}||" | xargs curl -s -H "$auth" | \
-        jq -r '.[] | "\u001B[1;32m" + .user.login + "\u001B[0m" + "|" + .title + "|" + (if (.labels | length) !=0 then .labels | map("\u001b[33m" + .name + "\u001B[0m") | join (", ") else "\u001b[31mThere is no labels\u001B[0m" end ) + "|" + .html_url ' )
+        b=$(echo $pullsTmp|jq -r '.[] | "\u001B[1;32m" + .user.login + "\u001B[0m" + "|" + .title + "|" + (if (.labels | length) !=0 then .labels | map("\u001b[33m" + .name + "\u001B[0m") | join (", ") else "\u001b[31mThere is no labels\u001B[0m" end ) + "|" + .html_url '  )
         table="Nickname:|Title:|Labels:|Pull request link:\n\n"
     }
     # Forming standard repos info output
     StdREP(){
-        b=$(curl -s -H "$auth" "$userLink?page=$page&per_page=$perPage" | jq -r '.[] | "\u001B[1;34m" + .name + "\u001B[0m" + "|" + (.stargazers_count | tostring) ' | sort -nr -t '|' -k2,2)
+        b=$(cat /tmp/Github-script.tmp| jq -r '.[] | "\u001B[1;34m" + .name + "\u001B[0m" + "|" + (.stargazers_count | tostring) ' | sort -nr -t '|' -k2,2)
         tablerep=$"\u001B[1mRepository:|Stars:\u001B[0m\n\n"
     }
     # Forming all repos info output
     AllREP(){
-        b=$(curl -s -H "$auth" "$userLink?page=$page&per_page=$perPage" | jq -r '.[] | "\u001B[1;34m" + .name + "\u001B[0m" + "|" + (.stargazers_count | tostring)  + "|" + .description' | sort -nr -t '|' -k2,2)
+        b=$(cat /tmp/Github-script.tmp | jq -r '.[] | "\u001B[1;34m" + .name + "\u001B[0m" + "|" + (.stargazers_count | tostring)  + "|" + .description' | sort -nr -t '|' -k2,2)
         tablerep=$"\u001B[1mRepository:|Stars:|Description:\u001B[0m\n\n"
+    }
+    PullsOutput(){
+        echo $b | grep -q -i '[a-z]' && \
+        { echo -e "\033[0;32mDone!\033[0m Open pull requests list:\n";\
+        echo -e "$table$b" | column -e -t -s "|"; echo; } ||\
+        echo -e "\u001b[31mThere is no pull requests in this repository on $page page.\u001B[0m\n"
+    }
+    ContibOutput(){
+        echo $b | grep -q -i '[a-z]' && \
+        { echo -e "\033[0;32mDone!\033[0m Most productive contributors list:\n";\
+        echo -e "Nickname:|Pull requests:|Profile link:\n\n$b" | column -e -t -s "|"; } ||\
+        echo -e "\u001b[31mThere is no users with more than 1 pull request on $i page with $perPage per page results.\u001B[0m"  
+        echo -e "\n=========================================================================\n"      
     }
 # Checking for token skip
 if [ "$skipToken" != "True" ];
@@ -222,23 +243,11 @@ if [ $? -eq 0 ];
     else
         # Checking for user existance 
         userLink=$"https://api.github.com/users/$input/repos" 
-        curl --fail -s -H "$auth" "$userLink" > /dev/null
+        curl --fail -s -H "$auth" "$userLink?page=1&per_page=100" > /tmp/Github-script.tmp
         if [ $? -ne 22 ]
             # Displaying the list of the repos if user was found
             then
-                echo -e "\033[0;32mFound\033[1;32m $input\033[0;32m user!\033[0m\n"
-                # Checking for the lines per page skip
-                if [ "$skipPerPage" != "True" ];
-                    then
-                    PerPage
-                fi     
-                echo $perPage | grep -iq "[0-9]" && echo -n || perPage=$"30"
-                # Checking for the page number skip
-                if [ "$skipPage" != "True" ];
-                    then
-                        Page
-                fi        
-                echo $page | grep -iq "[0-9]" && echo -n || page=$"1"                   
+                echo -e "\033[0;32mFound\033[1;32m $input\033[0;32m user!\033[0m\n"                  
                 # Searching for repositories and forming the list of them
                 echo -e "\033[0;32mSearching for\033[1;32m $input\033[0;32m repositories...\033[0m\n" 
                 # Checking for additional fields
@@ -266,7 +275,7 @@ if [ $? -eq 0 ];
         fi
 fi
 # Checking for repository existance
-curl --fail -s -H  "$auth" "$apiLink" > /dev/null
+curl --fail -s -H  "$auth" "$apiLink?per_page=$perPage" > /tmp/github-script-repo.tmp
 if [ $? -ne 22 ];
     then
         echo -e "\033[0;32mFound\033[1;32m $repoLink\033[0;32m repository!\033[0m\n"
@@ -284,29 +293,47 @@ if [ $? -ne 22 ];
         echo $page | grep -iq "[0-9]" && echo -n || page=$"1"
         # Searching for the most productive contributors and forming the list of them
         echo -e "\033[0;32mWorking on\033[1;32m $repoLink\033[0;32m repository...\033[0m\n" 
-        b=$(curl -s -H "$auth" "$apiLink" | jq '.pulls_url + "?page='$page'&per_page='$perPage'"' | sed  "s|{.*}||" | xargs curl -s -H "$auth" | \
-        jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
-        # Displaying the list of the most productive contributors or an error message if there is no users with more tha 1 PRs 
-        echo $b | grep -q -i '[a-z]' && \
-        { echo -e "\033[0;32mDone!\033[0m Most productive contributors list:\n";\
-        echo -e "Nickname:|Pull requests:|Profile link:\n\n$b" | column -e -t -s "|"; } ||\
-        echo -e "\u001b[31mThere is no users with more than 1 pull request on $page page with $perPage per page results.\u001B[0m"  
-        echo -e "\n=========================================================================\n"
-        # Checking for additional fields
-        if [ $add == "True" ] 2>/dev/null
+        repoTmp=$(cat /tmp/github-script-repo.tmp)
+        echo > /tmp/github-script-pulls.tmp
+        i="0"
+        # Checking for Page Mode
+        if [ $pageMode == "True" ] 2>/dev/null
             then
-            AllPRs
-            else
-            StdPRs
+                while [ $i -ne $page ]
+                    do
+                        ((i++))
+                        echo -e "Page $i:\n==================================================================================================================================================\n"
+                        pullsTmp=$(echo $repoTmp | jq '.pulls_url + "?page='$i'&per_page='$perPage'"' | sed  "s|{.*}||" | xargs curl -s -H "$auth")               
+                        b=$(echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
+                        # Displaying the list of the most productive contributors or an error message if there is no users with more tha 1 PRs 
+                        ContibOutput
+                        # Checking for additional fields
+                        if [ $prs == "True" ] 2>/dev/null
+                            then
+                                if [ $add == "True" ] 2>/dev/null
+                                    then
+                                        AllPRs
+                                    else
+                                        StdPRs
+                                fi
+                                # Displaying the list of the open pull requests or an error message if there is no open PRs was found 
+                                PullsOutput
+                        fi
+                    done 
+            else 
+                while [ $i -ne $page ]
+                    do
+                        ((i++))
+                        echo $repoTmp | jq '.pulls_url + "?page='$i'&per_page='$perPage'"' | sed  "s|{.*}||" | xargs curl -s -H "$auth" >> /tmp/github-script-pulls.tmp
+                    done
+                pullsTmp=$(cat /tmp/github-script-pulls.tmp)
+                b=$(echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
+                ContibOutput
         fi
-        # Displaying the list of the open pull requests or an error message if there is no open PRs was found 
-        echo $b | grep -q -i '[a-z]' && \
-        { echo -e "\033[0;32mDone!\033[0m Open pull requests list:\n";\
-        echo -e "$table$b" | column -e -t -s "|"; echo; } ||\
-        echo -e "\u001b[31mThere is no pull requests in this repository on $page page.\u001B[0m\n"
-        
     else
         # Displaying an error message if no repository was found
         echo -e "\n\u001b[31m404. There is no \033[1;31m$repoLink\033[0;31m repository.\u001B[0m\n"
 fi
+rm /tmp/github-script-pulls.tmp 2>/dev/null
+rm /tmp/github-script-repo.tmp 2>/dev/null
 exit
