@@ -34,4 +34,4 @@ After installing requirements you must configure the playbook:
 ### Runnning the playbook
 
 You can run the playbook with ```ansible-playbook main.yml --ask-become-pass``` command (and with ```--ask-vault-pass``` if you have an ectrypted with Ansible vault data). If everything is succeded, 
-you will be able to open the service page in your browser on YOUR_ADDRESS:80 and YOUR_ADDRESS:443 and also curl to it.
+you will be able to open the service page in your browser on ```YOUR_ADDRESS``` for http and ```https://YOUR_ADDRESS``` for https and also curl to it.
