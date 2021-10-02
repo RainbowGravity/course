@@ -20,9 +20,9 @@ This script is used to read information about the process connections and displa
 
 ### Examples and how to use
 
-1. <b> An example of use</b>: if you want to display 2 connections of the Thunderbird process with the additional information field, you must type: 
+1. <b> An example of use</b>: if you want to display 2 connections of the Thunderbird process you must type: 
 ```
-script.sh  -n thunderbird -s 20 -f established
+script.sh  -n thunderbird -s 2 -f established
 ```
 Output: 
 
@@ -69,26 +69,7 @@ tcp      0         0             192.168.0.31:38988       13.33.246.68:https    
 tcp      0         0             192.168.0.31:38986       13.33.246.68:https     "thunderbird",pid=38414,fd=87                                        
 ____________________________________________
 
- Information from whois about 209.85.233.109:
-
-Country:        US
-Address:        1600 Amphitheatre Parkway
-NetName:        GOOGLE
-
-
-Information about IP from ss:
-
-tcp     0         0             192.168.0.31:58364       209.85.233.109:imaps    "thunderbird",pid=38414,fd=82                                        
-tcp     0         0             192.168.0.31:58398       209.85.233.109:imaps    "thunderbird",pid=38414,fd=68                                        
-tcp     0         0             192.168.0.31:58380       209.85.233.109:imaps    "thunderbird",pid=38414,fd=83                                        
-tcp     0         0             192.168.0.31:58402       209.85.233.109:imaps    "thunderbird",pid=38414,fd=120                                       
-tcp     0         0             192.168.0.31:58386       209.85.233.109:imaps    "thunderbird",pid=38414,fd=112                                       
-tcp     0         0             192.168.0.31:58368       209.85.233.109:imaps    "thunderbird",pid=38414,fd=89                                        
-tcp     0         0             192.168.0.31:58384       209.85.233.109:imaps    "thunderbird",pid=38414,fd=111                                       
-tcp     0         0             192.168.0.31:58382       209.85.233.109:imaps    "thunderbird",pid=38414,fd=79                                        
-____________________________________________
-
- Done! Displayed 3/3 connections for "thunderbird" process and "established" state.
+ Done! Displayed 2/3 connections for "thunderbird" process and "established" state.
 ```
 2. <b> Second example</b>: displaying an information of "organization","city","country" and "descr" paragraphs from whois for the telegram process, but using PID this time:
 ```
@@ -96,7 +77,6 @@ script.sh  -n 39518 -p organization,city,country,descr -s 20 -f all
 ```
 Output:
 ```
- bash script.sh  -n 39518 -p organization,city,country,descr -s 20 -f all
 ____________________________________________
 
  Information from whois about 149.154.167.51:
