@@ -10,11 +10,11 @@ Script is sending requests to the Github api and then parsing the json response 
 * <b>Not a requirement, but an advice</b>: use this script with a Github OAuth token. Every cycle is using from 2 (with repository given) to 3 (with searching by username) requests to Github API because of checks for an errors and users/repos existence. 
 ## Features 
 There are some useful features in this script:
-* Script can scan entire [google/it-cert-automation-practice/](https://github.com/google/it-cert-automation-practice/pull/16864) repository. Just add an ```-p150``` and ```s100``` flags, but it will take some time and 150 requests to the api, so use it with OAuth token.
-* Script can display not only best contributors, but all open PRs with labels and titles too. You can use it with ```-m``` and ```-e``` flags. ```-m``` - Per Page Mode displaying and ```-e``` is for PRs displaying. Without an ```-m``` flag ```-e``` will be ignored.
+* Script can scan the entire [google/it-cert-automation-practice/](https://github.com/google/it-cert-automation-practice/pull/16864) repository. Just add an ```-p150``` and ```-s100``` flags, but it will take some time and 150 requests to the api, so use it with OAuth token.
+* Script can display not only best contributors, but all the open PRs with the labels and titles too. You can use it with ```-m``` and ```-e``` flags. ```-m``` flag is for the Per Page Mode displaying and ```-e``` is for the PRs displaying. Without the ```-m``` flag the ```-e``` flag will be ignored.
 * Script can take and process not only links like ```https://github.com/jackfrued/Python-100-Days```, but you can enter it like ```jackfrued/Python-100-Days``` even with ```/``` at the begginning or at the end of the line or even in both cases at the same time. 
 * Script can take and process even only the username! For example, you can enter the ```spring-projects``` and you will get the list of repositories with stars and discriptions.
-* The script can take the number of repos displayed per page and the page number. You can skip it and use defaults for repository list and for PRs list by pressing the enter or by using options. 
+* The script can take the number of PRs displayed per page and the amount of pages. You can skip it and use defaults for for PRs list by pressing the enter or by using options. 
 * In repository PRs section you will be able to see information about most productive contributors and their profile links and open PRs with the titles, lables and links to them too.
 * Script can display descriptions of the repositories and titles of the PRs. You need to specify it by options. And you must open your terminal in full screen.
 ## Options
