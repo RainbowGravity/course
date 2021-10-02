@@ -18,7 +18,7 @@
 			echo '	-n -- process name or ist PID'
 			echo '	-p -- paragraphs from whois which you want to be displayed about the IP address that chosen process using.'
 			echo '	-s -- the amount of the IP addresses which will be processed. You can choose any amount, but script will display not more than actual connections is present.'
-			echo '	-a -- show additional info from ss about the ip address.'
+			echo '  -f -- filter by state, must be specified as for the ss: established, syn-sent, syn-recv, fin-wait-1, fin-wait-2, time-wait, closed, close-wait, last-ack, listening and closing '
 			echo '	_____________________________________________________________________________________'
 			echo
 		}
@@ -46,19 +46,17 @@
 	# Field of the additional information about IP
 		Additional()
 		{
-			if [ "$a" == "True" ];
-				then
-				ss -p dst $ip1 | grep -v "Netid" | grep -q -i -E '[a-z]|[0-9]' && \
-				{ printf ' Additional information:\n\nNetid:	State:	Local Address:				Peer Address:				Process:\n';   \
-				ss -p dst $ip1 | awk -v OFS='\t' '{print $1,$2,$5,"\t",$6,"\t",$7}' | grep -v "Netid" | sed -e 's/users:((//' -e 's/))//'; } ||\
+				ss state $state -p dst $ip1 | grep -v "Netid" | grep -q -i -E '[a-z]|[0-9]' && \
+				{ echo -e "\t\nInformation about IP from ss:\n" ;   \
+				ss state $state -p dst  $ip1 | awk -v OFS='|' '{print $0}' | grep -v "Netid" | sed -e 's/users:((//' -e 's/))//'; } ||\
 				{ printf ' Additional information:\n' ;\
 				printf '\n\033[1;31mUnfortunately, connection was closed or terminated while script was processing other connections. \nIt may be caused by the ping to whois or process was terminated too. \nNo information from ss to display.\033[0m\n\n'; }
-			fi
 		}
+		
 	# Checking for the paragraphs in the whois info
 		Gerror()
 		{
-			cat ./cache | grep -i ^$pa2 && echo -n ||\
+			cat /tmp/ss_script.tmp | grep -i ^$pa2 && echo -n ||\
 			echo -e '\033[0;31mThere is no information about "'$pa2'" for this IP address.\033[0m'
 		}
 	# Displaying information about amount of the connections displayed (yeah)
@@ -67,14 +65,26 @@
 			printf "____________________________________________\n\n"
 			ca=$(echo $ips | wc -w)
 			sa=$(echo $ips | awk '{NF='$sa'}1' | wc -w)
-			echo $na | grep -q -i -E '[a-z]|[0-9]' && printf '\033[1;32m Done! Displayed '$sa'/'$ca' connections for "'$na'" process. \033[0m\n\n' ||\
-			printf '\033[1;32m Done! Displayed '$sa'/'$ca' connections of all processes. \033[0m\n\n'
+			
+			ss -ptua state $state | awk '{print $'$qwe'}' | grep -v '0.0.0.0' | grep -q '[0-9]' && \
+			{ echo $na | grep -q -i -E '[a-z]|[0-9]' && printf '\033[1;32m Done! Displayed '$sa'/'$ca' connections for "'$na'" process and "'$state'" state. \033[0m\n\n' ||\
+			printf '\033[1;32m Done! Displayed '$sa'/'$ca' connections of all processes and "'$state'" state. \033[0m\n\n'; } || \
+			printf '\033[1;31m No connections was found for "'$na'" and "'$state'" state \033[0m\n\n'
 		}
 	# Default options
+qwe="6"
 pa=$(echo "netname,address,country")
 sa="5"
-while getopts "as:p:n:h" option; do
+state="all"
+while getopts "as:p:n:h:f:" option; do
 	case $option in
+	f)
+		state=$OPTARG
+		qwe="5"
+		if [ $state == "all" ] 2>/dev/null
+			then qwe="6"
+		fi
+		;;
 	h)
 		Help
 		exit;;
@@ -93,16 +103,13 @@ while getopts "as:p:n:h" option; do
 		Serror
 		;;
 	# Additional info from ss about socket connections
-	a)
-		a="True"
-		;;
     *)
 		Error
 		exit;;
 	esac
 done
 	# Counting the real amount of the IP adresses that in use by the process
-ips=$(ss -ptua | grep -i ''$na''| awk '{print $6}' | grep -oP '(\d+\.){3}\d+' | sort | uniq -c | sort -r |\
+ips=$(ss -ptua state $state | grep -i ''$na''| awk '{print $'$qwe'}' | grep -oP '(\d+\.){3}\d+' | sort | uniq -c | sort -r |\
 awk '{print $2}' | grep -v '0.0.0.0')
 ca=$(echo $ips | awk '{NF='$sa'}1' | wc -w)
 
@@ -110,12 +117,12 @@ ca=$(echo $ips | awk '{NF='$sa'}1' | wc -w)
 while [ $ca -gt 0 ]
 	do
 	ip1=$(echo $ips | awk '{NF='$sa'}1' | awk '{print $'$ca'}')
-    whois $ip1 > cache 
+    whois $ip1 > /tmp/ss_script.tmp 
 	# Checking for paragraphs chosen
 		if [ "$pa" == "all" ];
 			then
 			Header
-			cat ./cache
+			cat /tmp/ss_script.tmp
 			echo
 		else
 			Header
@@ -134,4 +141,4 @@ while [ $ca -gt 0 ]
 	((ca--))
 done
 Counter
-rm ./cache 2> /dev/null
+rm /tmp/ss_script.tmp 2> /dev/null
