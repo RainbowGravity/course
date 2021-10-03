@@ -147,7 +147,8 @@ while [ $ca -gt 0 ] && [ $sb -ne $sa ]
 						{ Header;	cat $temp_whois | grep -i "^.*:"; ((cb++)); cat $temp_whois | grep -i "^organization:" >> $temp_org && ((sb++)); echo; Additional; } || echo -n
 					else
 						Header
-						cat $temp_whois | grep -iq "^organization:"
+						cat $temp_whois | grep -i "^.*:"
+						cat $temp_whois | grep -i "^organization:" >> $temp_org
 						echo
 						Additional			
 						((cb++))
