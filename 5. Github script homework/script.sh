@@ -116,7 +116,7 @@ while getopts "t:p:s:r:habem" option; do
 done
     # Per page lines input function
     PerPage() {
-        echo -e "Enter the number of lines per page, default is 30, can't be more than 100:"
+        echo -e "Enter the amount of lines per page, default is 30, can't be more than 100:"
         read -e perPage
         echo "========================================================================="
         check=$"0"
@@ -125,8 +125,8 @@ done
             echo $perPage | grep -iq "[a-z]"
                 if [ $? -eq 0 ] || [ $perPage -gt 100 ] 2>/dev/null || [ $perPage -lt 1 ] 2>/dev/null
                     then 
-                        echo -e "\033[0;31mNumber of lines per page can't be less than 1 and more than 100 or a letter, try again.\u001B[0m"
-                        echo -e "\nEnter the number of lines per page, default is 30, can't me more than 100:"
+                        echo -e "\033[0;31mAmount of lines per page can't be less than 1 and more than 100 or a letter, try again.\u001B[0m"
+                        echo -e "\nEnter the amount of lines per page, default is 30, can't me more than 100:"
                         read -e perPage
                         echo "========================================================================="
                     else
@@ -178,19 +178,21 @@ done
     }
     # Forming standard repos info output
     StdREP(){
-        b=$(cat /tmp/Github-script.tmp| jq -r '.[] | "\u001B[1;34m" + .name + "\u001B[0m" + "|" + (.stargazers_count | tostring) ' | sort -nr -t '|' -k2,2)
+        b=$(cat $temp_repo| jq -r '.[] | "\u001B[1;34m" + .name + "\u001B[0m" + "|" + (.stargazers_count | tostring) ' | sort -nr -t '|' -k2,2)
+        rm $temp_repo
         tablerep=$"\u001B[1mRepository:|Stars:\u001B[0m\n\n"
     }
     # Forming all repos info output
     AllREP(){
-        b=$(cat /tmp/Github-script.tmp | jq -r '.[] | "\u001B[1;34m" + .name + "\u001B[0m" + "|" + (.stargazers_count | tostring)  + "|" + .description' | sort -nr -t '|' -k2,2)
+        b=$(cat $temp_repo | jq -r '.[] | "\u001B[1;34m" + .name + "\u001B[0m" + "|" + (.stargazers_count | tostring)  + "|" + .description' | sort -nr -t '|' -k2,2)
+        rm $temp_repo
         tablerep=$"\u001B[1mRepository:|Stars:|Description:\u001B[0m\n\n"
     }
     PullsOutput(){
         echo $b | grep -q -i '[a-z]' && \
         { echo -e "\033[0;32mDone!\033[0m Open pull requests list:\n";\
         echo -e "$table$b" | column -e -t -s "|"; echo; } ||\
-        echo -e "\u001b[31mThere is no pull requests in this repository on $page page.\u001B[0m\n"
+        echo -e "\u001b[31mThere is no pull requests in this repository on $i page.\u001B[0m\n"
     }
     ContibOutput(){
         echo $b | grep -q -i '[a-z]' && \
@@ -247,7 +249,7 @@ if [ $? -eq 0 ];
     else
         # Checking for user existance 
         userLink=$"https://api.github.com/users/$input/repos" 
-        curl --fail -s -H "$auth" "$userLink?page=1&per_page=100" > /tmp/Github-script.tmp
+        curl --fail -s -H "$auth" "$userLink?page=1&per_page=100" > $temp_repo
         if [ $? -ne 22 ]
             # Displaying the list of the repos if user was found
             then
