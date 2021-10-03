@@ -58,7 +58,7 @@
 	# Checking for the paragraphs in the whois info
 		Gerror()
 		{
-			cat /tmp/ss_script.tmp | grep -i ^$pa2 && echo -n ||\
+			cat $temp_whois | grep -i ^$pa2 && echo -n ||\
 			echo -e '\033[0;31mThere is no information about "'$pa2'" for this IP address.\033[0m'
 		}
 	# Displaying information about amount of the connections displayed (yeah)
@@ -79,7 +79,7 @@
                 	((p--))
 			done
 			echo
-			cat /tmp/ss_script.tmp | grep -i "^organization:" >> /tmp/ss_script_organizations.tmp && ((sb++))
+			cat $temp_whois | grep -i "^organization:" >> $temp_org && ((sb++))
 			Additional
 		}
 	# Default options
@@ -90,6 +90,10 @@ sb="0"
 pa=$"organization,netname"
 state="all"
 org="True"
+rm -r /tmp/whois_script.* 2>/dev/null
+rm -r /tmp/org_script.* 2>/dev/null
+temp_whois=$(mktemp /tmp/whois_script.XXXXXXXXXX)
+temp_org=$(mktemp /tmp/org_script.XXXXXXXXXX)
 while getopts "as:p:n:hf:a" option; do
 	case $option in
 	a)
@@ -129,24 +133,32 @@ done
 ips=$(ss -ptua state $state | grep -i ''$na''| awk '{print $'$qwe'}' | grep -oP '(\d+\.){3}\d+' | sort | uniq -c | sort -r |\
 awk '{print $2}' | grep -v '0.0.0.0')
 ca=$(echo $ips | wc -w)
-touch /tmp/ss_script_organizations.tmp
 	# Processing the information about the IP address
 while [ $ca -gt 0 ] && [ $sb -ne $sa ]
 	do
 	ip1=$(echo $ips | awk '{NF='$ca'}1' | awk '{print $'$ca'}')
-    whois $ip1 > /tmp/ss_script.tmp 
+    whois $ip1 > $temp_whois 
 	# Checking for paragraphs chosen
-		if [ "$pa" == "all" ];
-			then
-			Header
-			cat /tmp/ss_script.tmp
-			echo
+			if [ "$pa" == "all" ];
+				then
+					if [ $org == "True" ]
+					then 
+						cat $temp_whois | grep -iq "^organization:" && \
+						{ Header;	cat $temp_whois | grep -i "^.*:"; ((cb++)); cat $temp_whois | grep -i "^organization:" >> $temp_org && ((sb++)); echo; Additional; } || echo -n
+					else
+						Header
+						cat $temp_whois | grep -iq "^organization:"
+						echo
+						Additional			
+						((cb++))
+						((sb++))
+			fi
 		else
 			p=$(echo $pa | sed -e 's#,# #g' | wc -w)	
 	# Checking for errors in paragraps requests, responding with error if failed
 			if [ $org == "True" ] 2>/dev/null
 				then 
-					cat /tmp/ss_script.tmp | grep -iq "^organization:" && \
+					cat $temp_whois | grep -iq "^organization:" && \
 					{ Header;	Processing; ((cb++)); } || echo -n
 				else
 					Header
@@ -155,7 +167,6 @@ while [ $ca -gt 0 ] && [ $sb -ne $sa ]
 					((sb++))
 			fi
 		fi
-	# Calling the function that will be display or not the additional info
 	((cc++))
 	((ca--))
 done
@@ -165,10 +176,10 @@ echo
 echo "======================================"
 echo -e "№ Conn:\tOrganization name:"
 echo
-cat /tmp/ss_script_organizations.tmp | grep -iq "organization" && \
-{ cat /tmp/ss_script_organizations.tmp  | sed -e 's/organization:   //iI'| sort | uniq -c | sort -nr -k1,1; echo; } ||\
+cat $temp_org | grep -iq "organization" && \
+{ cat $temp_org  | sed -e 's/organization:   //iI'| sort | uniq -c | sort -nr -k1,1; echo; } ||\
 echo -e "\033[1;31mThere is no organizations was found.\033[0m\n" 
 echo "======================================"
 echo
-rm /tmp/ss_script.tmp 2> /dev/null
-rm /tmp/ss_script_organizations.tmp 2> /dev/null
+trap "rm -- $temp_whois && rm -- $temp_org" exit
+exit

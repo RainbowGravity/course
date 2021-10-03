@@ -199,6 +199,10 @@ done
         echo -e "\u001b[31mThere is no users with more than 1 pull request on $i page with $perPage per page results.\u001B[0m"  
         echo -e "\n=========================================================================\n"      
     }
+    rm -r /tmp/github_script.* 2>/dev/null
+    rm -r /tmp/github_repo.* 2>/dev/null
+    temp_pulls=$(mktemp /tmp/github_script.XXXXXXXXXX)
+    temp_repo=$(mktemp /tmp/github_repo.XXXXXXXXXX)
 # Checking for token skip
 if [ "$skipToken" != "True" ];
     then
@@ -211,7 +215,7 @@ if [ $? -eq 1 ];
     then
         b=$(curl -s -I https://api.github.com/users/octocat | grep -i "x-ratelimit-remaining:" | sed "s/x-ratelimit-//")
         echo $b | grep -iq "remaining: 0" && { echo -e "\n\033[0;31mYou can't work with Github API without OAuth token for now.\033[0m \n\033[0;33mCheck this out: https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\n\033[0m"; exit;} ||\
-        { auth=$""; echo -e "\033[0;33mWorking without Github API OAuth token. Rate limit $b\033[0m\n"; }
+        { echo -e "\033[0;33mWorking without Github API OAuth token. Rate limit $b\033[0m\n"; }
     # Checkin for token validaty if token was provided.
     else
         curl --fail -s -H "Authorization: token "$token"" "https://api.github.com" > /dev/null
@@ -274,10 +278,13 @@ if [ $? -eq 0 ];
                 exit
         fi
 fi
-# Checking for repository existance
-curl --fail -s -H  "$auth" "$apiLink?per_page=$perPage" > /tmp/github-script-repo.tmp
+# Checking for repository existance and adding output from curl to temp file
+curl --fail -s -H  "$auth" "$apiLink?per_page=$perPage" > $temp_repo
 if [ $? -ne 22 ];
     then
+        # Creating repo pulls link
+        repoTmp=$(cat $temp_repo| jq '.pulls_url' | sed  "s|{.*}||" )
+        rm $temp_repo
         echo -e "\033[0;32mFound\033[1;32m $repoLink\033[0;32m repository!\033[0m\n"
         # Checking for the lines per page skip
         if [ "$skipPerPage" != "True" ];
@@ -293,17 +300,18 @@ if [ $? -ne 22 ];
         echo $page | grep -iq "[0-9]" && echo -n || page=$"1"
         # Searching for the most productive contributors and forming the list of them
         echo -e "\033[0;32mWorking on\033[1;32m $repoLink\033[0;32m repository...\033[0m\n" 
-        repoTmp=$(cat /tmp/github-script-repo.tmp)
-        echo > /tmp/github-script-pulls.tmp
+        
+        echo > $temp_pulls
         i="0"
         # Checking for Page Mode
         if [ $pageMode == "True" ] 2>/dev/null
             then
+                # Creating link for pulls, removing temp file and processing best contibutos with all PRs
                 while [ $i -ne $page ]
                     do
                         ((i++))
                         echo -e "Page $i:\n==================================================================================================================================================\n"
-                        pullsTmp=$(echo $repoTmp | jq '.pulls_url + "?page='$i'&per_page='$perPage'"' | sed  "s|{.*}||" | xargs curl -s -H "$auth")               
+                        pullsTmp=$(echo "$repoTmp?page=$i&per_page=$perPage"  | xargs curl -s -H "$auth")         
                         b=$(echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
                         # Displaying the list of the most productive contributors or an error message if there is no users with more tha 1 PRs 
                         ContibOutput
@@ -321,19 +329,21 @@ if [ $? -ne 22 ];
                         fi
                     done 
             else 
+                # Creating link for pulls, removing temp file and processing best contibutos
                 while [ $i -ne $page ]
                     do
                         ((i++))
-                        echo $repoTmp | jq '.pulls_url + "?page='$i'&per_page='$perPage'"' | sed  "s|{.*}||" | xargs curl -s -H "$auth" >> /tmp/github-script-pulls.tmp
+                        echo "$repoTmp?page=$i&per_page=$perPage" | xargs curl -s -H "$auth" | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' >> $temp_pulls    
                     done
-                pullsTmp=$(cat /tmp/github-script-pulls.tmp)
-                b=$(echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
+                b=$(cat $temp_pulls | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
+                rm $temp_pulls
                 ContibOutput
         fi
     else
-        # Displaying an error message if no repository was found
+        # Displaying an error message if no repository was found and removing temp file
+        rm $temp_repo 
         echo -e "\n\u001b[31m404. There is no \033[1;31m$repoLink\033[0;31m repository.\u001B[0m\n"
 fi
-rm /tmp/github-script-pulls.tmp 2>/dev/null
-rm /tmp/github-script-repo.tmp 2>/dev/null
+# Removing files for sure
+trap "rm -- $temp_pulls 2>/dev/null rm -- $temp_repo 2>/dev/null" exit
 exit
