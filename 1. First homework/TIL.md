@@ -2,13 +2,107 @@
 #### Hello there! 
 
 This is my personal TIL. Here you can check my progress and something about my new knowledges.  
-You can switch between days and weeks via simple navigation. You can also return to the first page by clicking on the week, and to the week from the name of the day.
+You can switch between days and weeks via simple navigation. You can also return to the first page by clicking on the week, and to the week from the name of the day. 
 
 * ### [I. First week](#first-week)
 * ### [II. Second week](#second-week)
 * ### [III. Third week](#third-week)
 * ### [IV. Fourth week](#fourth-week)
+* ### [V. Fifth week](#fifth-week)
 
+## [Fifth week](#today-ive-learned) 
+
+| Day   | Date |
+| :-----------: | :-----------: |
+|[Monday](#monday-27092021)| 27.09.2021 |
+|[Tuesday](#tuesday-28092021)| 28.09.2021 |
+|[Wednesday](#wednesday-29092021)| 29.09.2021 |
+|[Thursday](#thursday-30092021)| 30.09.2021 |
+|[Friday](#friday-01102021)| 01.10.2021 |
+|[Saturday](#saturday-02102021)| 02.10.2021 |
+|[Sunday](#sunday-03102021)| 03.10.2021 |
+
+
+### [Sunday, 03.10.2021](#fifth-week)
+
+<p>
+  
+* <b> Successfully reworked 3rd homework: </b>
+   * Now it works so much better then before. I can make more and more features and enhancements, but it time to stop. Scrip is already works very good and it's the final version of him I've pushed today.
+* <b> Also I've improved my Github script: </b>
+   * Now script is exiting if there is no more pages to scan and I've secured my tmp files with the mktmp utility. Also did that for the Github script. There is no problems now with it. I can finnaly start to work on the 7th and 8th homework. 
+* <b> And continued conversation with my teammate: </b>
+   * We are talking about our task and reviewing each others code, but we have absolutely different realisations of  our tasks. It much easier to work on something with discussing and debating.
+  
+</p>
+
+### [Saturday, 02.10.2021](#fifth-week)
+
+<p>
+
+* <b> Completely reworked my 3rd homework: </b>
+   * I've added special filter for the organization field, changed output and added some more options. Now it works much better and cleaner. Maybe tomorrow I'll end with it and my Github script and then I'll start to work with  Terraform homework. This one is seems really interesting because of real DevOps stuff starting here.
+  
+</p>
+
+### [Friday, 01.10.2021](#fifth-week)
+
+<p>
+  
+* <b> Continued to working on my docker container again! </b>
+   * Instead of python:3.6-slim I've tried to use the python:3.6-alpine image for the first building stage and it worked out! Now my docker image is only 8.96 MB without the Gunicorn and 9.1 MB with it! 
+* <b> And also continued to working on my Github script: </b>
+   * I've almost completed my bash script and I've created the pull request and asked one of my collegue to review my code. I've also reviewed his. It was  very good collaboration, because we understood each other and started to discuss about our tasks. I've decided to rework my 3rd homewrok after it. It was incomplete, but I'll try to fix it.
+
+</p>
+
+
+### [Thursday, 30.09.2021](#fifth-week)
+
+<p>
+  
+* <b> Continued to working on my docker container: </b>
+   * Created the custom python app with my server and the Gunicorn server inside of it. Now I can compile my app up with the Gunicorn inside of it and put in the production. Size of my container slightly encreased from 9.63 MB to 9.76, but it doesn't really matter. 
+* <b> Started to work on my Github script: </b>
+   * Learned jq util and how to parse json with it. Very usable thing.
+</p>
+  
+### [Wednesday, 29.09.2021](#fifth-week)
+
+<p>
+
+* <b> Basic cloud management tools: </b>
+  * Learned about web UIs of the cloud consoles. They are very similar. Almost all of the features are available from the cloud consoles. Consoles allows to see logs, to monitoring and control services. 
+  * AWS Cloud9 allows to create instance and test terraform templates. 
+  * Programming CLI tools. They are allows to use tokens, env variables, to run commands in different formats and to parse results with the jq tool and create the output in json format. Or create a scripts to read and then remove snapshots and backups for example. 
+  * Learned about conditional expressions for Terraform. 
+
+</p>
+
+### [Tuesday, 28.09.2021](#fifth-week)
+
+<p>
+
+* <b> Started to work on my docker container:</b>
+  * I've achieved the 9.63 MB with building the app from python:3.9-slim and compiling it by pyinstaller and staticx. Now I want to create a version with the Gunicorn version inside it.
+
+</p>
+
+### [Monday, 27.09.2021](#fifth-week)
+
+<p>
+ 
+* <b>Learned about AWS networking:</b>
+  *   Learned about Amazon VPC. VPC is a private cloud with severals availability zones. Zones contains subnets: private ones and public ones. Public ones are opened to the internet via internet subway and private ones only via NAT subway. 
+  * Learned about VPC peering. It allows to connect VPCs one to another. Peereng can connect different VPC even between different accounts. For more than 2 VPCs you need to connect them one to another.
+  * Learned about AWS Endpoints. It allows to connect to the S3 bucket straight-forward throught endpoint avoiding the internet. By that you can reduce costs for data transfer.
+  * AWS Site-to-Site VPN. It allows to create connectivity between cloud and datacenter. You need to create a customer gateway for your router and virtual private gateway for a VPC, then create a VPN connection between them.
+  * Almost the same actions for AWS Client VPN.
+  * AWS Transit Gateway is created for big amounts of VPCs and clouds. It can connect all VPCs and datacenters. Also it can connect VPCs in different regions. 
+  * AWS Direct Connect allows to connect secured connections between infrastructure and cloud.
+  * AWS Route53 allows to register domains and to create hosted zones and connect them to the VPCs. Also it allows DNS routing between regions to the closest region for the requests and routing traffic to the healthy regions and latency-based routing. 
+
+</p>
 
 ## [Fourth week](#today-ive-learned) 
 
@@ -67,8 +161,6 @@ You can switch between days and weeks via simple navigation. You can also return
 * <b> State switching for bot:</b>
    * So, I've decided to add an _"/task choosing mode"_ for my bot. The idea is that if you've sent the **/task** command without arguments, bot will able you to just enter the correct number of the homework and also will display possible variants in following manner: 
    ```You can choose one of these: 1,  2,  3,  4, ...``` You can exit this mode only by choose the correct number, or by using the **/cancel** command.
-
-
 
 </p>
 
