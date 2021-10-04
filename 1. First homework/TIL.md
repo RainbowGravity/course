@@ -30,7 +30,7 @@ You can switch between days and weeks via simple navigation. You can also return
 * <b> Successfully reworked 3rd homework: </b>
    * Now it works so much better then before. I can make more and more features and enhancements, but it time to stop. Scrip is already works very good and it's the final version of him I've pushed today.
 * <b> Also I've improved my Github script: </b>
-   * Now script is exiting if there is no more pages to scan and I've secured my tmp files with the mktmp utility. Also did that for the Github script. There is no problems now with it. I can finnaly start to work on the 7th and 8th homework. 
+   * Now script is exiting if there is no more pages to scan and I've secured my tmp files with the mktmp utility. Also did that for the Whois script. There is no problems now with it. I can finnaly start to work on the 7th and 8th homework. 
 * <b> And continued conversation with my teammate: </b>
    * We are talking about our task and reviewing each others code, but we have absolutely different realisations of  our tasks. It much easier to work on something with discussing and debating.
   
