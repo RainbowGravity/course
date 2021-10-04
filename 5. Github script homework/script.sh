@@ -179,13 +179,11 @@ done
     # Forming standard repos info output
     StdREP(){
         b=$(cat $temp_repo| jq -r '.[] | "\u001B[1;34m" + .name + "\u001B[0m" + "|" + (.stargazers_count | tostring) ' | sort -nr -t '|' -k2,2)
-        rm $temp_repo
         tablerep=$"\u001B[1mRepository:|Stars:\u001B[0m\n\n"
     }
     # Forming all repos info output
     AllREP(){
         b=$(cat $temp_repo | jq -r '.[] | "\u001B[1;34m" + .name + "\u001B[0m" + "|" + (.stargazers_count | tostring)  + "|" + .description' | sort -nr -t '|' -k2,2)
-        rm $temp_repo
         tablerep=$"\u001B[1mRepository:|Stars:|Description:\u001B[0m\n\n"
     }
     PullsOutput(){
@@ -201,9 +199,7 @@ done
         echo -e "\u001b[31mThere is no users with more than 1 pull request on $i page with $perPage per page results.\u001B[0m"  
         echo -e "\n=========================================================================\n"      
     }
-    rm -r /tmp/github_script.* 2>/dev/null
     rm -r /tmp/github_repo.* 2>/dev/null
-    temp_pulls=$(mktemp /tmp/github_script.XXXXXXXXXX)
     temp_repo=$(mktemp /tmp/github_repo.XXXXXXXXXX)
 # Checking for token skip
 if [ "$skipToken" != "True" ];
@@ -263,6 +259,7 @@ if [ $? -eq 0 ];
                     else
                         StdREP
                 fi
+                rm $temp_repo
                 # Displaying the list or an error and exiting if no repositories for the user was found
                 echo $b | grep -q -i '[a-z]' && \
                 echo -e "$tablerep$b" | column -e -t -s "|" ||\
@@ -302,8 +299,6 @@ if [ $? -ne 22 ];
         echo $page | grep -iq "[0-9]" && echo -n || page=$"1"
         # Searching for the most productive contributors and forming the list of them
         echo -e "\033[0;32mWorking on\033[1;32m $repoLink\033[0;32m repository...\033[0m\n" 
-        
-        echo > $temp_pulls
         i="0"
         # Checking for Page Mode
         if [ $pageMode == "True" ] 2>/dev/null
@@ -337,12 +332,16 @@ if [ $? -ne 22 ];
                     do
                         ((i++))
                         pullsTmp=$(echo "$repoTmp?page=$i&per_page=$perPage"  | xargs curl -s -H "$auth")
-                        echo $pullsTmp | grep -iq "[a-z]" && echo -n || break
-                        echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' >> $temp_pulls 
+                        echo $pullsTmp | grep -iq "[a-z]" && echo -n || { nopulls=$"\u001b[31mThere is no pull requests in this repository on $i page and beyond it. Exiting process.\u001B[0m\n"; break;  }
+                        qwer=$(echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url + "\\n"')
+                        cache=$"$cache$qwer"
+                        #echo -e $qwer
+                        #echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url + "\n"' >> $temp_pulls 
+                        #cat $temp_pulls 
                     done
-                b=$(cat $temp_pulls | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
-                rm $temp_pulls
+                b=$( echo -e $cache | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
                 ContibOutput
+                echo -e $nopulls
         fi
     else
         # Displaying an error message if no repository was found and removing temp file
@@ -350,5 +349,5 @@ if [ $? -ne 22 ];
         echo -e "\n\u001b[31m404. There is no \033[1;31m$repoLink\033[0;31m repository.\u001B[0m\n"
 fi
 # Removing files for sure
-trap "rm -- $temp_pulls 2>/dev/null rm -- $temp_repo 2>/dev/null" exit
+trap "rm -- $temp_repo 2>/dev/null" exit
 exit
