@@ -12,7 +12,7 @@
                 echo ''
                 echo 'Options:'
                 echo ''
-                echo '-p -- amount of pages for script to scan.'
+                echo '-p -- amount of pages for script to scan. Script will process only existing amount of pages.' 
                 echo -e 'To skip this in script use \u001B[1m-pn\u001B[0m for defaults or \u001B[1m-p NUMBER\u001B[0m.'
                 echo '-s -- amount of the open PRs per page that will be displayed, can be specified from 1 to 100. Default is 1.'
                 echo -e 'To skip this in script use \u001B[1m-cn\u001B[0m for defaults or \u001B[1m-c NUMBER\u001B[0m.'
@@ -192,7 +192,7 @@ done
         echo $b | grep -q -i '[a-z]' && \
         { echo -e "\033[0;32mDone!\033[0m Open pull requests list:\n";\
         echo -e "$table$b" | column -e -t -s "|"; echo; } ||\
-        echo -e "\u001b[31mThere is no pull requests in this repository on $i page.\u001B[0m\n"
+        echo -e "\u001b[31mThere is no pull requests in this repository on $i page and beyond it. Exiting process.\u001B[0m\n"
     }
     ContibOutput(){
         echo $b | grep -q -i '[a-z]' && \
@@ -285,7 +285,7 @@ curl --fail -s -H  "$auth" "$apiLink?per_page=$perPage" > $temp_repo
 if [ $? -ne 22 ];
     then
         # Creating repo pulls link
-        repoTmp=$(cat $temp_repo| jq '.pulls_url' | sed  "s|{.*}||" )
+        repoTmp=$(cat $temp_repo| jq -r '.pulls_url' | sed  "s|{.*}||" )
         rm $temp_repo
         echo -e "\033[0;32mFound\033[1;32m $repoLink\033[0;32m repository!\033[0m\n"
         # Checking for the lines per page skip
@@ -313,7 +313,7 @@ if [ $? -ne 22 ];
                     do
                         ((i++))
                         echo -e "Page $i:\n==================================================================================================================================================\n"
-                        pullsTmp=$(echo "$repoTmp?page=$i&per_page=$perPage"  | xargs curl -s -H "$auth")         
+                        pullsTmp=$(echo "$repoTmp?page=$i&per_page=$perPage"  | xargs curl -s -H "$auth")      
                         b=$(echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
                         # Displaying the list of the most productive contributors or an error message if there is no users with more tha 1 PRs 
                         ContibOutput
@@ -329,13 +329,16 @@ if [ $? -ne 22 ];
                                 # Displaying the list of the open pull requests or an error message if there is no open PRs was found 
                                 PullsOutput
                         fi
+                        echo $pullsTmp | grep -iq "[a-z]" && echo -n || break
                     done 
             else 
                 # Creating link for pulls, removing temp file and processing best contibutos
                 while [ $i -ne $page ]
                     do
                         ((i++))
-                        echo "$repoTmp?page=$i&per_page=$perPage" | xargs curl -s -H "$auth" | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' >> $temp_pulls    
+                        pullsTmp=$(echo "$repoTmp?page=$i&per_page=$perPage"  | xargs curl -s -H "$auth")
+                        echo $pullsTmp | grep -iq "[a-z]" && echo -n || break
+                        echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' >> $temp_pulls 
                     done
                 b=$(cat $temp_pulls | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
                 rm $temp_pulls
