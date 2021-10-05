@@ -55,28 +55,22 @@ while getopts "t:p:s:r:habem" option; do
 	case $option in
 	# Per Page Mode
     m)
-        pageMode="True"
-        ;;
+        pageMode="True" ;;
     # All PRs displaying option
     e)
-        prs="True"
-        ;;
+        prs="True" ;;
     # Additonal info for repositories 
     b)
-        bdd="True"
-        ;;
+        bdd="True" ;;
     # Additional info for user
     a)
-        add="True"
-        ;;
+        add="True" ;;
     h)
-		Help
-		exit;;
+		Help exit ;;
 	# Repository name/link argument
     r)
         input=$OPTARG
-        skipInput="True"
-        ;;
+        skipInput="True" ;;
     # Page argument
 	p)
         page=$OPTARG
@@ -86,8 +80,7 @@ while getopts "t:p:s:r:habem" option; do
             else
                 ArgPage
         fi
-        skipPage="True"
-        ;;
+        skipPage="True" ;;
     # Line per page argument
     s)
         perPage=$OPTARG
@@ -97,8 +90,7 @@ while getopts "t:p:s:r:habem" option; do
             else
                 ArgPerPage
         fi
-        skipPerPage="True"
-        ;;
+        skipPerPage="True" ;;
     # Token argument
     t)
 		token=$OPTARG
@@ -106,12 +98,10 @@ while getopts "t:p:s:r:habem" option; do
             then 
                 token=""
         fi
-        skipToken="True"
-        ;;
+        skipToken="True" ;;
     # Error
     *)
-		Error
-		exit;;
+		Error exit ;;
 	esac
 done
     # Per page lines input function
@@ -214,14 +204,13 @@ if [ $? -eq 1 ];
         b=$(curl -s -I https://api.github.com/users/octocat | grep -i "x-ratelimit-remaining:" | sed "s/x-ratelimit-//")
         echo $b | grep -iq "remaining: 0" && { echo -e "\n\033[0;31mYou can't work with Github API without OAuth token for now.\033[0m \n\033[0;33mCheck this out: https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\n\033[0m"; exit;} ||\
         { echo -e "\033[0;33mWorking without Github API OAuth token. Rate limit $b\033[0m\n"; }
-    # Checkin for token validaty if token was provided.
+    # Checking for token validaty if token was provided.
     else
         curl --fail -s -H "Authorization: token "$token"" "https://api.github.com" > /dev/null
+        # Displaying a message about successfull check or an error message if incorrect token was provided.
         if [ $? -ne 22 ];
-            # Displaying a message about successfull check.
             then
                 auth=$"Authorization: token "$token""; echo -e "\033[0;32mWorking with Github API OAuth token\n\033[0m"
-            # Displaying an error message if incorrect token was provided.
             else
                 echo -e "\n\033[0;31m401. Incorrect token \033[1;31m$token\033[0;31m. Enter the correct token.\u001B[0m\n"
                 exit
@@ -250,7 +239,6 @@ if [ $? -eq 0 ];
             # Displaying the list of the repos if user was found
             then
                 echo -e "\033[0;32mFound\033[1;32m $input\033[0;32m user!\033[0m\n"                  
-                # Searching for repositories and forming the list of them
                 echo -e "\033[0;32mSearching for\033[1;32m $input\033[0;32m repositories...\033[0m\n" 
                 # Checking for additional fields
                 if [ $bdd == "True" ] 2>/dev/null
@@ -271,7 +259,6 @@ if [ $? -eq 0 ];
                 # Forming the links for next stage
                 repoLink=$(echo $repoLink | sed -e "s|/$||" -e "s|^/||")  
                 apiLink=$"https://api.github.com/repos/$input/$repoLink"
-            # Displaying an error message if no user was found and exiting
             else
                 echo -e "\n\033[0;31m404. Incorrect username or link \033[1;31m$input\033[0;31m.\u001B[0m\n"
                 exit
@@ -303,14 +290,13 @@ if [ $? -ne 22 ];
         # Checking for Page Mode
         if [ $pageMode == "True" ] 2>/dev/null
             then
-                # Creating link for pulls, removing temp file and processing best contibutos with all PRs
+                # Processing PRs per page
                 while [ $i -ne $page ]
                     do
                         ((i++))
                         echo -e "Page $i:\n==================================================================================================================================================\n"
                         pullsTmp=$(echo "$repoTmp?page=$i&per_page=$perPage"  | xargs curl -s -H "$auth")      
                         b=$(echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
-                        # Displaying the list of the most productive contributors or an error message if there is no users with more tha 1 PRs 
                         ContibOutput
                         # Checking for additional fields
                         if [ $prs == "True" ] 2>/dev/null
@@ -320,14 +306,13 @@ if [ $? -ne 22 ];
                                         AllPRs
                                     else
                                         StdPRs
-                                fi
-                                # Displaying the list of the open pull requests or an error message if there is no open PRs was found 
+                                fi 
                                 PullsOutput
                         fi
                         echo $pullsTmp | grep -iq "[a-z]" && echo -n || break
                     done 
             else 
-                # Creating link for pulls, removing temp file and processing best contibutos
+                # Processing and storing all pages with PRs, then displaying them
                 while [ $i -ne $page ]
                     do
                         ((i++))
@@ -335,9 +320,6 @@ if [ $? -ne 22 ];
                         echo $pullsTmp | grep -iq "[a-z]" && echo -n || { nopulls=$"\u001b[31mThere is no pull requests in this repository on $i page and beyond it. Exiting process.\u001B[0m\n"; break;  }
                         qwer=$(echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url + "\\n"')
                         cache=$"$cache$qwer"
-                        #echo -e $qwer
-                        #echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url + "\n"' >> $temp_pulls 
-                        #cat $temp_pulls 
                     done
                 b=$( echo -e $cache | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
                 ContibOutput
