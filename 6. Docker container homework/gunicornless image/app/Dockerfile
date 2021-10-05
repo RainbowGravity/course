@@ -1,4 +1,4 @@
-FROM python:3.9-slim AS builder
+FROM python:3.6-alpine AS builder
 
 # First layer of image building
 LABEL stage=builder
@@ -8,11 +8,16 @@ WORKDIR /app
 COPY requirements.txt .
 COPY src/ /app
 
-RUN apt update && \
-    apt-get install build-essential patchelf -y && \
-    pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir staticx pyinstaller && \
+RUN apk --update --no-cache add \
+    zlib-dev \
+    musl-dev \
+    gcc \
+    scons \
+    patchelf && \
+    pip install --upgrade pip --no-cache-dir \
+    -r requirements.txt \
+    staticx \
+    pyinstaller && \
     pyinstaller -F --add-data "static:static" --add-data "templates:templates" main.py && \ 
     staticx /app/dist/main /app/app && \
     mkdir /app/tmp
