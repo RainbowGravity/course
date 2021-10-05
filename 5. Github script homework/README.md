@@ -20,9 +20,9 @@ There are some useful features in this script:
 ## Options
 Script have many options which you can use:
 * <b>-p</b> - amount of pages for script to scan. Script will process only existing amount of pages. Example of use: ```-p10``` for 10 pages or ```-pn``` to skip questions about pages during script working and use the default number (1). Working only for repositories PRs, not for user repos.
-* <b>-s</b> - amount of open PRs to display per page. Can be used like in the previous example. ```-c10``` for 10 results or ```-cn``` to skip questions and use the default amount (30).
+* <b>-s</b> - amount of open PRs to process per page. Can be used like in the previous example. ```-c10``` for 10 results or ```-cn``` to skip questions and use the default amount (30). Can't be more than 100.
 * <b>-t</b> - token option. You can specify or skip token questions and run script without it by using this option. Example: ```-t TOKEN``` to use your token or ```-tn``` to skip token question and run the sctipt without it.
-* <b>-r</b> - by this option you can set the link or username to skip questions about it during the script running. Example: ```-r https://github.com/foo/bar``` or ```-r foo/bar``` or ```foo```.
+* <b>-r</b> - by this option you can set the link or username to skip questions about it during the script running. Example: ```-r https://github.com/foo/bar``` or ```-r foo/bar``` or ```-r foo```.
 * <b>-a</b> - display titles for pull requests. 
 * <b>-b</b> - display descriptions of repositories.
 * <b>-m</b> - Per Page Mode. Allows you to display PRs and best contributors per page.'
