@@ -12,7 +12,7 @@
                 echo ''
                 echo 'Options:'
                 echo ''
-                echo '-p -- amount of pages for script to scan.'
+                echo '-p -- amount of pages for script to scan. Script will process only existing amount of pages.' 
                 echo -e 'To skip this in script use \u001B[1m-pn\u001B[0m for defaults or \u001B[1m-p NUMBER\u001B[0m.'
                 echo '-s -- amount of the open PRs per page that will be displayed, can be specified from 1 to 100. Default is 1.'
                 echo -e 'To skip this in script use \u001B[1m-cn\u001B[0m for defaults or \u001B[1m-c NUMBER\u001B[0m.'
@@ -55,28 +55,22 @@ while getopts "t:p:s:r:habem" option; do
 	case $option in
 	# Per Page Mode
     m)
-        pageMode="True"
-        ;;
+        pageMode="True" ;;
     # All PRs displaying option
     e)
-        prs="True"
-        ;;
+        prs="True" ;;
     # Additonal info for repositories 
     b)
-        bdd="True"
-        ;;
+        bdd="True" ;;
     # Additional info for user
     a)
-        add="True"
-        ;;
+        add="True" ;;
     h)
-		Help
-		exit;;
+		Help exit ;;
 	# Repository name/link argument
     r)
         input=$OPTARG
-        skipInput="True"
-        ;;
+        skipInput="True" ;;
     # Page argument
 	p)
         page=$OPTARG
@@ -86,8 +80,7 @@ while getopts "t:p:s:r:habem" option; do
             else
                 ArgPage
         fi
-        skipPage="True"
-        ;;
+        skipPage="True" ;;
     # Line per page argument
     s)
         perPage=$OPTARG
@@ -97,8 +90,7 @@ while getopts "t:p:s:r:habem" option; do
             else
                 ArgPerPage
         fi
-        skipPerPage="True"
-        ;;
+        skipPerPage="True" ;;
     # Token argument
     t)
 		token=$OPTARG
@@ -106,12 +98,10 @@ while getopts "t:p:s:r:habem" option; do
             then 
                 token=""
         fi
-        skipToken="True"
-        ;;
+        skipToken="True" ;;
     # Error
     *)
-		Error
-		exit;;
+		Error exit ;;
 	esac
 done
     # Per page lines input function
@@ -179,20 +169,18 @@ done
     # Forming standard repos info output
     StdREP(){
         b=$(cat $temp_repo| jq -r '.[] | "\u001B[1;34m" + .name + "\u001B[0m" + "|" + (.stargazers_count | tostring) ' | sort -nr -t '|' -k2,2)
-        rm $temp_repo
         tablerep=$"\u001B[1mRepository:|Stars:\u001B[0m\n\n"
     }
     # Forming all repos info output
     AllREP(){
         b=$(cat $temp_repo | jq -r '.[] | "\u001B[1;34m" + .name + "\u001B[0m" + "|" + (.stargazers_count | tostring)  + "|" + .description' | sort -nr -t '|' -k2,2)
-        rm $temp_repo
         tablerep=$"\u001B[1mRepository:|Stars:|Description:\u001B[0m\n\n"
     }
     PullsOutput(){
         echo $b | grep -q -i '[a-z]' && \
         { echo -e "\033[0;32mDone!\033[0m Open pull requests list:\n";\
         echo -e "$table$b" | column -e -t -s "|"; echo; } ||\
-        echo -e "\u001b[31mThere is no pull requests in this repository on $i page.\u001B[0m\n"
+        echo -e "\u001b[31mThere is no pull requests in this repository on $i page and beyond it. Exiting process.\u001B[0m\n"
     }
     ContibOutput(){
         echo $b | grep -q -i '[a-z]' && \
@@ -201,9 +189,7 @@ done
         echo -e "\u001b[31mThere is no users with more than 1 pull request on $i page with $perPage per page results.\u001B[0m"  
         echo -e "\n=========================================================================\n"      
     }
-    rm -r /tmp/github_script.* 2>/dev/null
     rm -r /tmp/github_repo.* 2>/dev/null
-    temp_pulls=$(mktemp /tmp/github_script.XXXXXXXXXX)
     temp_repo=$(mktemp /tmp/github_repo.XXXXXXXXXX)
 # Checking for token skip
 if [ "$skipToken" != "True" ];
@@ -218,14 +204,13 @@ if [ $? -eq 1 ];
         b=$(curl -s -I https://api.github.com/users/octocat | grep -i "x-ratelimit-remaining:" | sed "s/x-ratelimit-//")
         echo $b | grep -iq "remaining: 0" && { echo -e "\n\033[0;31mYou can't work with Github API without OAuth token for now.\033[0m \n\033[0;33mCheck this out: https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\n\033[0m"; exit;} ||\
         { echo -e "\033[0;33mWorking without Github API OAuth token. Rate limit $b\033[0m\n"; }
-    # Checkin for token validaty if token was provided.
+    # Checking for token validaty if token was provided.
     else
         curl --fail -s -H "Authorization: token "$token"" "https://api.github.com" > /dev/null
+        # Displaying a message about successfull check or an error message if incorrect token was provided.
         if [ $? -ne 22 ];
-            # Displaying a message about successfull check.
             then
                 auth=$"Authorization: token "$token""; echo -e "\033[0;32mWorking with Github API OAuth token\n\033[0m"
-            # Displaying an error message if incorrect token was provided.
             else
                 echo -e "\n\033[0;31m401. Incorrect token \033[1;31m$token\033[0;31m. Enter the correct token.\u001B[0m\n"
                 exit
@@ -254,7 +239,6 @@ if [ $? -eq 0 ];
             # Displaying the list of the repos if user was found
             then
                 echo -e "\033[0;32mFound\033[1;32m $input\033[0;32m user!\033[0m\n"                  
-                # Searching for repositories and forming the list of them
                 echo -e "\033[0;32mSearching for\033[1;32m $input\033[0;32m repositories...\033[0m\n" 
                 # Checking for additional fields
                 if [ $bdd == "True" ] 2>/dev/null
@@ -263,6 +247,7 @@ if [ $? -eq 0 ];
                     else
                         StdREP
                 fi
+                rm $temp_repo
                 # Displaying the list or an error and exiting if no repositories for the user was found
                 echo $b | grep -q -i '[a-z]' && \
                 echo -e "$tablerep$b" | column -e -t -s "|" ||\
@@ -274,7 +259,6 @@ if [ $? -eq 0 ];
                 # Forming the links for next stage
                 repoLink=$(echo $repoLink | sed -e "s|/$||" -e "s|^/||")  
                 apiLink=$"https://api.github.com/repos/$input/$repoLink"
-            # Displaying an error message if no user was found and exiting
             else
                 echo -e "\n\033[0;31m404. Incorrect username or link \033[1;31m$input\033[0;31m.\u001B[0m\n"
                 exit
@@ -285,7 +269,7 @@ curl --fail -s -H  "$auth" "$apiLink?per_page=$perPage" > $temp_repo
 if [ $? -ne 22 ];
     then
         # Creating repo pulls link
-        repoTmp=$(cat $temp_repo| jq '.pulls_url' | sed  "s|{.*}||" )
+        repoTmp=$(cat $temp_repo| jq -r '.pulls_url' | sed  "s|{.*}||" )
         rm $temp_repo
         echo -e "\033[0;32mFound\033[1;32m $repoLink\033[0;32m repository!\033[0m\n"
         # Checking for the lines per page skip
@@ -302,20 +286,17 @@ if [ $? -ne 22 ];
         echo $page | grep -iq "[0-9]" && echo -n || page=$"1"
         # Searching for the most productive contributors and forming the list of them
         echo -e "\033[0;32mWorking on\033[1;32m $repoLink\033[0;32m repository...\033[0m\n" 
-        
-        echo > $temp_pulls
         i="0"
         # Checking for Page Mode
         if [ $pageMode == "True" ] 2>/dev/null
             then
-                # Creating link for pulls, removing temp file and processing best contibutos with all PRs
+                # Processing PRs per page
                 while [ $i -ne $page ]
                     do
                         ((i++))
                         echo -e "Page $i:\n==================================================================================================================================================\n"
-                        pullsTmp=$(echo "$repoTmp?page=$i&per_page=$perPage"  | xargs curl -s -H "$auth")         
+                        pullsTmp=$(echo "$repoTmp?page=$i&per_page=$perPage"  | xargs curl -s -H "$auth")      
                         b=$(echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
-                        # Displaying the list of the most productive contributors or an error message if there is no users with more tha 1 PRs 
                         ContibOutput
                         # Checking for additional fields
                         if [ $prs == "True" ] 2>/dev/null
@@ -325,21 +306,24 @@ if [ $? -ne 22 ];
                                         AllPRs
                                     else
                                         StdPRs
-                                fi
-                                # Displaying the list of the open pull requests or an error message if there is no open PRs was found 
+                                fi 
                                 PullsOutput
                         fi
+                        echo $pullsTmp | grep -iq "[a-z]" && echo -n || break
                     done 
             else 
-                # Creating link for pulls, removing temp file and processing best contibutos
+                # Processing and storing all pages with PRs, then displaying them
                 while [ $i -ne $page ]
                     do
                         ((i++))
-                        echo "$repoTmp?page=$i&per_page=$perPage" | xargs curl -s -H "$auth" | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url ' >> $temp_pulls    
+                        pullsTmp=$(echo "$repoTmp?page=$i&per_page=$perPage"  | xargs curl -s -H "$auth")
+                        echo $pullsTmp | grep -iq "[a-z]" && echo -n || { nopulls=$"\u001b[31mThere is no pull requests in this repository on $i page and beyond it. Exiting process.\u001B[0m\n"; break;  }
+                        qwer=$(echo $pullsTmp | jq -r '.[] | "\u001B[1;32m" + .user.login  + "\u001B[0m" + " " + .user.html_url + "\\n"')
+                        cache=$"$cache$qwer"
                     done
-                b=$(cat $temp_pulls | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
-                rm $temp_pulls
+                b=$( echo -e $cache | grep -v null | sort | uniq -dc | sed -e 's| *||'| awk -v OFS='|' '{print $2,$1,$3}' | sort -nr -t '|' -k2,2)
                 ContibOutput
+                echo -e $nopulls
         fi
     else
         # Displaying an error message if no repository was found and removing temp file
@@ -347,5 +331,5 @@ if [ $? -ne 22 ];
         echo -e "\n\u001b[31m404. There is no \033[1;31m$repoLink\033[0;31m repository.\u001B[0m\n"
 fi
 # Removing files for sure
-trap "rm -- $temp_pulls 2>/dev/null rm -- $temp_repo 2>/dev/null" exit
+trap "rm -- $temp_repo 2>/dev/null" exit
 exit
