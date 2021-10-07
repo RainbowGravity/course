@@ -19,11 +19,6 @@ resource "aws_route_table" "VPC_Gateway_Table" {
   }
 }
 
-resource "aws_route_table_association" "b" {
-  gateway_id     = aws_internet_gateway.VPC_Internet_Gateway.id
-  route_table_id = aws_route_table.VPC_Gateway_Table.id
-}
-
 resource "aws_route_table_association" "VPC_Gateway_Association_A" {
   subnet_id      = aws_subnet.VPC_Public_Subnet_A.id
   route_table_id = aws_route_table.VPC_Gateway_Table.id

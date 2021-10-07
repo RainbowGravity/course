@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------
 # Rainbow Gravity's CloudFormation Template homework
 # 
-# VPC Subnets, Gateway, NATs
+# VPC Subnets
 #----------------------------------------------------------------------
 
 resource "aws_subnet" "VPC_Public_Subnet_A" {

@@ -1,35 +1,26 @@
-# #----------------------------------------------------------------------
-# # Application Load Balancer
-# #----------------------------------------------------------------------
+#----------------------------------------------------------------------
+# Rainbow Gravity's CloudFormation Template homework
+#
+# Application Load Balancer, Listeners and Target Groups
+#----------------------------------------------------------------------
 
-# resource "aws_lb" "VPC_Load_Balancer" {
-#   name            = "VPC Load Balancer"
-#   vpc_id          = aws_vpc.Homework_VPC.id
-#   subnets         = [aws_subnet.VPC_Private_Subnet_A.id, aws_subnet.VPC_Private_Subnet_B.id]
-#   security_groups = [aws_security_group.Dynamic_Security_Group.id]
+resource "aws_lb" "VPC_Load_Balancer" {
 
-#   access_logs = {
-#     bucket = "my-alb-logs"
-#   }
+  internal           = false
+  load_balancer_type = "application"
+  subnets            = [aws_subnet.VPC_Public_Subnet_A.id, aws_subnet.VPC_Public_Subnet_B.id]
+  security_groups    = [aws_security_group.VPC_Dynamic_Security_Group.id]
 
+  tags = {
+    Name    = "VPC Load Balancer"
+    Owner   = "Rainbow Gravity"
+    Project = "Homework"
+  }
 
+  depends_on = [aws_vpc.Homework_VPC]
+}
 
-#   listener = [
-#     {
-#       lb_port               = 80
-#       lb_protocol           = "HTTP"
-#       instance_port               = 80
-#       instance_protocol           = "HTTP"
-#       target_group_index = 0
-#     }
-#   ]
-
-#   tags = {
-#     Environment = "Test"
-#   }
-# }
-
-resource "aws_lb_target_group" "homework-vpc-target-group" {
+resource "aws_lb_target_group" "VPC_Target_Group" {
   name     = "vpc-target-group"
   port     = 80
   protocol = "HTTP"
@@ -44,3 +35,42 @@ resource "aws_lb_target_group" "homework-vpc-target-group" {
     matcher             = "200"
   }
 }
+
+resource "aws_lb_target_group_attachment" "VPC_attachment_A" {
+  target_group_arn = aws_lb_target_group.VPC_Target_Group.arn
+  target_id        = aws_instance.Ubuntu_A.id
+  port             = 80
+}
+
+resource "aws_lb_target_group_attachment" "VPC_attachment_B" {
+  target_group_arn = aws_lb_target_group.VPC_Target_Group.arn
+  target_id        = aws_instance.Ubuntu_B.id
+  port             = 80
+}
+
+resource "aws_lb_listener" "VPC_Load_Balancer_Listener_80" {
+  load_balancer_arn = aws_lb.VPC_Load_Balancer.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.VPC_Target_Group.arn
+  }
+}
+
+# resource "aws_lb_listener" "VPC_Load_Balancer_Listener_443" {
+#   load_balancer_arn = aws_lb.VPC_Load_Balancer.arn
+#   port              = "443"
+#   protocol          = "HTTPS"
+
+#   default_action {
+#     type = "redirect"
+
+#     redirect {
+#       port        = "80"
+#       protocol    = "HTTP"
+#       status_code = "HTTP_301"
+#     }
+#   }
+# }
