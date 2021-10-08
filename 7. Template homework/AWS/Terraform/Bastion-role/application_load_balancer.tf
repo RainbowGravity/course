@@ -1,5 +1,5 @@
 #===========================================================================================
-# Rainbow Gravity's CloudFormation Template homework
+# Rainbow Gravity's Template homework
 #
 # Application Load Balancer, Listeners and Target Groups
 #===========================================================================================
@@ -12,11 +12,12 @@ resource "aws_lb" "VPC_Load_Balancer" {
   subnets            = [aws_subnet.VPC_Public_Subnet_A.id, aws_subnet.VPC_Public_Subnet_B.id]
   security_groups    = [aws_security_group.VPC_Load_Security_Group.id]
 
-  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]} VPC Load Balancer" })
+  tags = merge(var.Tags, { Name = "VPC Load Balancer" })
 }
 
 resource "aws_lb_target_group" "VPC_Target_Group" {
-  name     = "vpc-target-group"
+  name_prefix = "${var.Tags["Environment"]}-"
+
   vpc_id   = aws_vpc.Homework_VPC.id
   port     = 80
   protocol = "HTTP"
@@ -32,6 +33,7 @@ resource "aws_lb_target_group" "VPC_Target_Group" {
 }
 
 resource "aws_lb_listener" "VPC_Load_Balancer_Listener_80" {
+
   load_balancer_arn = aws_lb.VPC_Load_Balancer.arn
   port              = 80
   protocol          = "HTTP"

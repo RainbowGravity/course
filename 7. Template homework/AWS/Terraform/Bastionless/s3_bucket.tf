@@ -1,7 +1,7 @@
 #===========================================================================================
-# Rainbow Gravity's CloudFormation Template homework
+# Rainbow Gravity's Template homework
 # 
-# S3 Bucket
+# S3 Buckets
 #===========================================================================================
 
 resource "aws_s3_bucket" "VPC_Server_Files_Bucket" {

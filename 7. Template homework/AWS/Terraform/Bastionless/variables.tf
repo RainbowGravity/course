@@ -1,5 +1,5 @@
 #===========================================================================================
-# Rainbow Gravity's CloudFormation Template homework
+# Rainbow Gravity's Template homework
 # 
 # VPC Variables
 #===========================================================================================
@@ -16,18 +16,21 @@ variable "Instance_Type" {
 
 variable "Load_Security_Group_Ports" {
   type    = list(string)
-  default = ["80","443"]
+  default = ["80", "443"]
 }
 
 variable "Instances_Security_Group_Ports" {
   type    = list(string)
-  default = ["22","80","443"]
+  default = ["22", "80", "443"]
+}
+
+variable "S3_Bucket_Name" {
+  type    = string
+  default = "aws-server-files-rg"
 }
 
 locals {
-  S3_Bucket_Name = "aws-homework-server-rg-${data.aws_region.Current.name}"
-  SSH_Instances_Key = "${var.Tags["Environment"]}-instances-ssh-key"
-  SSH_Bastion_Key = "${var.Tags["Environment"]}-bastion-ssh-key"
+  S3_Bucket_Name = "${var.S3_Bucket_Name}-${data.aws_region.Current.name}"
 }
 
 variable "Monitoring" {
@@ -60,7 +63,7 @@ variable "Tags" {
   type = map(string)
   default = {
     Owner       = "Rainbow Gravity"
-    Project     = "CloudFormation Homework"
+    Project     = "Template Homework"
     Environment = "Dev"
   }
 }

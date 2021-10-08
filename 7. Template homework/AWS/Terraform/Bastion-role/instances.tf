@@ -1,15 +1,17 @@
 #===========================================================================================
-# Rainbow Gravity's CloudFormation Template homework
+# Rainbow Gravity's Template homework
 # 
 # VPC Instances
 #===========================================================================================
 
 resource "aws_launch_configuration" "VPC_EC2_Configuration" {
+  name = "${var.Tags["Environment"]}-VPC EC2 Configuration"
+
   key_name             = aws_key_pair.SSH_Public_Instances_Key.key_name
   image_id             = data.aws_ami.Amazon_Latest.id
   instance_type        = var.Instance_Type
   security_groups      = [aws_security_group.VPC_Instances_Security_Group.id]
-  iam_instance_profile = aws_iam_instance_profile.S3_Read_Instance_Profile.name
+  iam_instance_profile = aws_iam_instance_profile.Instance_S3_Read_Profile.name
   enable_monitoring    = var.Monitoring
 
   user_data = templatefile("templates/web-server.tpl", {
@@ -19,6 +21,8 @@ resource "aws_launch_configuration" "VPC_EC2_Configuration" {
 }
 
 resource "aws_autoscaling_group" "VPC_Autoscaling_Group" {
+  name = "${var.Tags["Environment"]}-VPC Autoscaling Group"
+
   launch_configuration = aws_launch_configuration.VPC_EC2_Configuration.id
   max_size             = var.Autoscaling.max_size
   min_size             = var.Autoscaling.min_size
@@ -34,7 +38,7 @@ resource "aws_autoscaling_group" "VPC_Autoscaling_Group" {
     [
       {
         key                   = "Name"
-        value                 = "${var.Tags["Environment"]}-EC2 Instance"
+        value                 = "${var.Tags["Environment"]}-EC2 Instance-${data.aws_region.Current.name}"
         "propagate_at_launch" = true
       },
       {

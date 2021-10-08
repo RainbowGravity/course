@@ -1,5 +1,5 @@
 #===========================================================================================
-# Rainbow Gravity's CloudFormation Template homework
+# Rainbow Gravity's Template homework
 # 
 # Security groups
 #===========================================================================================
@@ -37,7 +37,7 @@ resource "aws_security_group" "VPC_Load_Security_Group" {
       self            = null
     }
   ]
-  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]} Load Balancer security group" })
+  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}-Load Balancer security group" })
 }
 
 resource "aws_security_group" "VPC_Instances_Security_Group" {
@@ -73,17 +73,17 @@ resource "aws_security_group" "VPC_Instances_Security_Group" {
       self            = null
     }
   ]
-  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]} Instances security group" })
+  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}-Instances security group" })
 }
 
-resource "aws_security_group" "VPC_Bastion_Security_Group" {
+resource "aws_security_group" "VPC_SSM_Security_Group" {
   vpc_id = aws_vpc.Homework_VPC.id
 
   ingress = [
     {
-      description      = "Connections to Bastion"
-      from_port        = 22
-      to_port          = 22
+      description      = "Connections SSM instances"
+      from_port        = 443
+      to_port          = 443
       protocol         = "tcp"
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"]
@@ -91,7 +91,7 @@ resource "aws_security_group" "VPC_Bastion_Security_Group" {
       prefix_list_ids = null
       security_groups = null
       self            = null
-  }
+    }
   ]
   egress = [
     {
@@ -107,5 +107,5 @@ resource "aws_security_group" "VPC_Bastion_Security_Group" {
       self            = null
     }
   ]
-  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]} Bastion security group" })
+  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}-SSM security group" })
 }
