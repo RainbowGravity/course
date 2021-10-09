@@ -12,7 +12,7 @@ resource "aws_route_table" "VPC_Gateway_Table" {
     gateway_id = aws_internet_gateway.VPC_Internet_Gateway.id
   }
 
-  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}-VPC Internet Gateway Table" })
+  tags = merge(var.Tags, { Name = "${local.ENV_Tag}-VPC Internet Gateway Table" })
 }
 
 resource "aws_route_table_association" "VPC_Gateway_Association_A" {
@@ -33,7 +33,7 @@ resource "aws_route_table_association" "VPC_Gateway_Association_B" {
 #     cidr_block     = "0.0.0.0/0"
 #     nat_gateway_id = aws_nat_gateway.VPC_NAT_A.id
 #   }
-#   tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}-VPC NAT A Table" })
+#   tags = merge(var.Tags, { Name = "${local.ENV_Tag}-VPC NAT A Table" })
 # }
 
 # resource "aws_route_table_association" "VPC_NAT_Association_A" {
@@ -48,7 +48,7 @@ resource "aws_route_table_association" "VPC_Gateway_Association_B" {
 #     cidr_block     = "0.0.0.0/0"
 #     nat_gateway_id = aws_nat_gateway.VPC_NAT_B.id
 #   }
-#   tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}-VPC NAT B Table" })
+#   tags = merge(var.Tags, { Name = "${local.ENV_Tag}-VPC NAT B Table" })
 # }
 
 # resource "aws_route_table_association" "VPC_NAT_Association_B" {
@@ -61,7 +61,7 @@ resource "aws_route_table_association" "VPC_Gateway_Association_B" {
 resource "aws_route_table" "VPC_NAT_A_Table" {
   vpc_id = aws_vpc.Homework_VPC.id
 
-  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}-VPC NAT A Table" })
+  tags = merge(var.Tags, { Name = "${local.ENV_Tag}-VPC NAT A Table" })
 }
 
 resource "aws_route_table_association" "VPC_NAT_Association_A" {
@@ -72,7 +72,7 @@ resource "aws_route_table_association" "VPC_NAT_Association_A" {
 resource "aws_route_table" "VPC_NAT_B_Table" {
   vpc_id = aws_vpc.Homework_VPC.id
 
-  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}-VPC NAT B Table" })
+  tags = merge(var.Tags, { Name = "${local.ENV_Tag}-VPC NAT B Table" })
 }
 
 resource "aws_route_table_association" "VPC_NAT_Association_B" {

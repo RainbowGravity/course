@@ -7,7 +7,7 @@
 resource "aws_s3_bucket" "VPC_Server_Files_Bucket" {
   bucket = local.S3_Bucket_Name
   acl    = "private"
-  tags   = merge(var.Tags, { Name = "${var.Tags["Environment"]} VPC Server Files" })
+  tags   = merge(var.Tags, { Name = "${local.ENV_Tag} VPC Server Files" })
 }
 
 resource "aws_s3_bucket_object" "VPC_Upload" {

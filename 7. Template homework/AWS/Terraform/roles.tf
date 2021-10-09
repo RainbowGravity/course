@@ -1,16 +1,16 @@
 #----------------------------------------------------------------------
 # Rainbow Gravity's CloudFormation Template homework
 # 
-# SSM Bastion Role and S3 Read Role
+# Instances SSM Role
 #----------------------------------------------------------------------
 
-resource "aws_iam_instance_profile" "Bastion_SSM_Profile" {
-  name = "${var.Tags["Environment"]}BastionSSMProfile"
-  role = aws_iam_role.Bastion_SSM_Role.name
+resource "aws_iam_instance_profile" "Instances_SSM_Profile" {
+  name = "${local.ENV_Tag}InstancesSSMProfile"
+  role = aws_iam_role.Instances_SSM_Role.name
 }
 
-resource "aws_iam_role" "Bastion_SSM_Role" {
-  name = "${var.Tags["Environment"]}BastionSSMRole"
+resource "aws_iam_role" "Instances_SSM_Role" {
+  name = "${local.ENV_Tag}InstancesSSMRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -25,12 +25,12 @@ resource "aws_iam_role" "Bastion_SSM_Role" {
       },
     ]
   })
-  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}BastionSSMRole" })
+  tags = merge(var.Tags, { Name = "${local.ENV_Tag}InstancesSSMRole" })
 }
 
-resource "aws_iam_role_policy" "Bastion_SSM_Policy" {
-  name = "${var.Tags["Environment"]}BastionSSMPolicy"
-  role = aws_iam_role.Bastion_SSM_Role.id
+resource "aws_iam_role_policy" "Instances_SSM_Policy" {
+  name = "${local.ENV_Tag}InstancesSSMPolicy"
+  role = aws_iam_role.Instances_SSM_Role.id
 
   policy = jsonencode({
     "Version" = "2012-10-17",
@@ -89,53 +89,6 @@ resource "aws_iam_role_policy" "Bastion_SSM_Policy" {
     ]
   })
 }
-
-resource "aws_iam_instance_profile" "Instance_S3_Read_Profile" {
-  name = "${var.Tags["Environment"]}InstanceS3ReadProfile"
-  role = aws_iam_role.Instance_S3_Read_Role.name
-}
-
-resource "aws_iam_role" "Instance_S3_Read_Role" {
-  name = "${var.Tags["Environment"]}S3ReadRole"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = ""
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        }
-      },
-    ]
-  })
-  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}InstanceS3ReadProfile" })
-}
-
-resource "aws_iam_role_policy" "Instance_S3_Read_Policy" {
-  name = "${var.Tags["Environment"]}InstanceS3ReadPolicy"
-  role = aws_iam_role.Instance_S3_Read_Role.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "s3:Get*",
-          "s3:List*",
-          "s3-object-lambda:Get*",
-          "s3-object-lambda:List*",
-        ]
-        Effect   = "Allow"
-        Resource = "*"
-      },
-    ]
-  })
-}
-
-
 
 
 

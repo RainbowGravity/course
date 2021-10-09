@@ -1,0 +1,1200 @@
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_cloudwatch_metric_alarm.VPC_Instance_A_Auto_Recovery will be created
+  + resource "aws_cloudwatch_metric_alarm" "VPC_Instance_A_Auto_Recovery" {
+      + actions_enabled                       = true
+      + alarm_actions                         = [
+          + "arn:aws:automate:eu-central-1a:ec2:recover",
+        ]
+      + alarm_description                     = "Dev- Recovery of the EC2 Instance in eu-central-1a zone."
+      + alarm_name                            = "Dev-VPC Instance A Auto Recovery"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "StatusCheckFailed_System"
+      + namespace                             = "AWS/EC2"
+      + period                                = 60
+      + statistic                             = "Minimum"
+      + tags_all                              = (known after apply)
+      + threshold                             = 0
+      + treat_missing_data                    = "missing"
+    }
+
+  # aws_cloudwatch_metric_alarm.VPC_Instance_B_Auto_Recovery will be created
+  + resource "aws_cloudwatch_metric_alarm" "VPC_Instance_B_Auto_Recovery" {
+      + actions_enabled                       = true
+      + alarm_actions                         = [
+          + "arn:aws:automate:eu-central-1b:ec2:recover",
+        ]
+      + alarm_description                     = "Dev Recovery of the EC2 Instance in eu-central-1b zone."
+      + alarm_name                            = "DevVPC Instance B Auto Recovery"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "StatusCheckFailed_System"
+      + namespace                             = "AWS/EC2"
+      + period                                = 60
+      + statistic                             = "Minimum"
+      + tags_all                              = (known after apply)
+      + threshold                             = 0
+      + treat_missing_data                    = "missing"
+    }
+
+  # aws_iam_instance_profile.Instances_SSM_Profile will be created
+  + resource "aws_iam_instance_profile" "Instances_SSM_Profile" {
+      + arn         = (known after apply)
+      + create_date = (known after apply)
+      + id          = (known after apply)
+      + name        = "DevInstancesSSMProfile"
+      + path        = "/"
+      + role        = "DevInstancesSSMRole"
+      + tags_all    = (known after apply)
+      + unique_id   = (known after apply)
+    }
+
+  # aws_iam_role.Instances_SSM_Role will be created
+  + resource "aws_iam_role" "Instances_SSM_Role" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "ec2.amazonaws.com"
+                        }
+                      + Sid       = ""
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "DevInstancesSSMRole"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags                  = {
+          + "Environment" = "Dev"
+          + "Name"        = "DevInstancesSSMRole"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all              = {
+          + "Environment" = "Dev"
+          + "Name"        = "DevInstancesSSMRole"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy {
+          + name   = (known after apply)
+          + policy = (known after apply)
+        }
+    }
+
+  # aws_iam_role_policy.Instances_SSM_Policy will be created
+  + resource "aws_iam_role_policy" "Instances_SSM_Policy" {
+      + id     = (known after apply)
+      + name   = "DevInstancesSSMPolicy"
+      + policy = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = [
+                          + "ds:CreateComputer",
+                          + "ds:DescribeDirectories",
+                          + "ec2:DescribeInstanceStatus",
+                          + "logs:*",
+                          + "ssm:*",
+                          + "ec2messages:*",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                    },
+                  + {
+                      + Action    = "iam:CreateServiceLinkedRole"
+                      + Condition = {
+                          + StringLike = {
+                              + iam:AWSServiceName = "ssm.amazonaws.com"
+                            }
+                        }
+                      + Effect    = "Allow"
+                      + Resource  = "arn:aws:iam::*:role/aws-service-role/ssm.amazonaws.com/AWSServiceRoleForAmazonSSM*"
+                    },
+                  + {
+                      + Action   = [
+                          + "iam:DeleteServiceLinkedRole",
+                          + "iam:GetServiceLinkedRoleDeletionStatus",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "arn:aws:iam::*:role/aws-service-role/ssm.amazonaws.com/AWSServiceRoleForAmazonSSM*"
+                    },
+                  + {
+                      + Action   = [
+                          + "ssmmessages:CreateControlChannel",
+                          + "ssmmessages:CreateDataChannel",
+                          + "ssmmessages:OpenControlChannel",
+                          + "ssmmessages:OpenDataChannel",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                    },
+                  + {
+                      + Action   = [
+                          + "s3:Get*",
+                          + "s3:List*",
+                          + "s3-object-lambda:Get*",
+                          + "s3-object-lambda:List*",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role   = (known after apply)
+    }
+
+  # aws_instance.VPC_EC2_Instance_A will be created
+  + resource "aws_instance" "VPC_EC2_Instance_A" {
+      + ami                                  = "ami-058e6df85cfc7760b"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + cpu_core_count                       = (known after apply)
+      + cpu_threads_per_core                 = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + iam_instance_profile                 = "DevInstancesSSMProfile"
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t2.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = (known after apply)
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-EC2 Instance A"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all                             = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-EC2 Instance A"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = "12bfe28f899a18655645661e653adaf8e85b9336"
+      + user_data_base64                     = (known after apply)
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification {
+          + capacity_reservation_preference = (known after apply)
+
+          + capacity_reservation_target {
+              + capacity_reservation_id = (known after apply)
+            }
+        }
+
+      + ebs_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + snapshot_id           = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+
+      + enclave_options {
+          + enabled = (known after apply)
+        }
+
+      + ephemeral_block_device {
+          + device_name  = (known after apply)
+          + no_device    = (known after apply)
+          + virtual_name = (known after apply)
+        }
+
+      + metadata_options {
+          + http_endpoint               = (known after apply)
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = (known after apply)
+        }
+
+      + network_interface {
+          + delete_on_termination = (known after apply)
+          + device_index          = (known after apply)
+          + network_interface_id  = (known after apply)
+        }
+
+      + root_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+    }
+
+  # aws_instance.VPC_EC2_Instance_B will be created
+  + resource "aws_instance" "VPC_EC2_Instance_B" {
+      + ami                                  = "ami-058e6df85cfc7760b"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + cpu_core_count                       = (known after apply)
+      + cpu_threads_per_core                 = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + iam_instance_profile                 = "DevInstancesSSMProfile"
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t2.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = (known after apply)
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-EC2 Instance B"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all                             = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-EC2 Instance B"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = "12bfe28f899a18655645661e653adaf8e85b9336"
+      + user_data_base64                     = (known after apply)
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification {
+          + capacity_reservation_preference = (known after apply)
+
+          + capacity_reservation_target {
+              + capacity_reservation_id = (known after apply)
+            }
+        }
+
+      + ebs_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + snapshot_id           = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+
+      + enclave_options {
+          + enabled = (known after apply)
+        }
+
+      + ephemeral_block_device {
+          + device_name  = (known after apply)
+          + no_device    = (known after apply)
+          + virtual_name = (known after apply)
+        }
+
+      + metadata_options {
+          + http_endpoint               = (known after apply)
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = (known after apply)
+        }
+
+      + network_interface {
+          + delete_on_termination = (known after apply)
+          + device_index          = (known after apply)
+          + network_interface_id  = (known after apply)
+        }
+
+      + root_block_device {
+          + delete_on_termination = (known after apply)
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags                  = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = (known after apply)
+          + volume_type           = (known after apply)
+        }
+    }
+
+  # aws_internet_gateway.VPC_Internet_Gateway will be created
+  + resource "aws_internet_gateway" "VPC_Internet_Gateway" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + tags     = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Internet Gateway"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Internet Gateway"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id   = (known after apply)
+    }
+
+  # aws_lb.VPC_Load_Balancer will be created
+  + resource "aws_lb" "VPC_Load_Balancer" {
+      + arn                        = (known after apply)
+      + arn_suffix                 = (known after apply)
+      + dns_name                   = (known after apply)
+      + drop_invalid_header_fields = false
+      + enable_deletion_protection = false
+      + enable_http2               = true
+      + id                         = (known after apply)
+      + idle_timeout               = 60
+      + internal                   = false
+      + ip_address_type            = (known after apply)
+      + load_balancer_type         = "application"
+      + name                       = (known after apply)
+      + name_prefix                = "Dev-"
+      + security_groups            = (known after apply)
+      + subnets                    = (known after apply)
+      + tags                       = {
+          + "Environment" = "Dev"
+          + "Name"        = "VPC Load Balancer"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all                   = {
+          + "Environment" = "Dev"
+          + "Name"        = "VPC Load Balancer"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id                     = (known after apply)
+      + zone_id                    = (known after apply)
+
+      + subnet_mapping {
+          + allocation_id        = (known after apply)
+          + ipv6_address         = (known after apply)
+          + outpost_id           = (known after apply)
+          + private_ipv4_address = (known after apply)
+          + subnet_id            = (known after apply)
+        }
+    }
+
+  # aws_lb_listener.VPC_Load_Balancer_Listener_80 will be created
+  + resource "aws_lb_listener" "VPC_Load_Balancer_Listener_80" {
+      + arn               = (known after apply)
+      + id                = (known after apply)
+      + load_balancer_arn = (known after apply)
+      + port              = 80
+      + protocol          = "HTTP"
+      + ssl_policy        = (known after apply)
+      + tags_all          = (known after apply)
+
+      + default_action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+    }
+
+  # aws_lb_target_group.VPC_Target_Group will be created
+  + resource "aws_lb_target_group" "VPC_Target_Group" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + deregistration_delay               = "300"
+      + id                                 = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancing_algorithm_type      = (known after apply)
+      + name                               = (known after apply)
+      + name_prefix                        = "Dev-"
+      + port                               = 80
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "HTTP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + slow_start                         = 0
+      + tags_all                           = (known after apply)
+      + target_type                        = "instance"
+      + vpc_id                             = (known after apply)
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 3
+          + interval            = 5
+          + matcher             = "200"
+          + path                = (known after apply)
+          + port                = "80"
+          + protocol            = "HTTP"
+          + timeout             = 2
+          + unhealthy_threshold = 2
+        }
+
+      + stickiness {
+          + cookie_duration = (known after apply)
+          + cookie_name     = (known after apply)
+          + enabled         = (known after apply)
+          + type            = (known after apply)
+        }
+    }
+
+  # aws_lb_target_group_attachment.VPC_EC2_Instance_A_TG will be created
+  + resource "aws_lb_target_group_attachment" "VPC_EC2_Instance_A_TG" {
+      + id               = (known after apply)
+      + port             = 80
+      + target_group_arn = (known after apply)
+      + target_id        = (known after apply)
+    }
+
+  # aws_lb_target_group_attachment.VPC_EC2_Instance_B_TG will be created
+  + resource "aws_lb_target_group_attachment" "VPC_EC2_Instance_B_TG" {
+      + id               = (known after apply)
+      + port             = 80
+      + target_group_arn = (known after apply)
+      + target_id        = (known after apply)
+    }
+
+  # aws_route_table.VPC_Gateway_Table will be created
+  + resource "aws_route_table" "VPC_Gateway_Table" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = [
+          + {
+              + carrier_gateway_id         = ""
+              + cidr_block                 = "0.0.0.0/0"
+              + destination_prefix_list_id = ""
+              + egress_only_gateway_id     = ""
+              + gateway_id                 = (known after apply)
+              + instance_id                = ""
+              + ipv6_cidr_block            = ""
+              + local_gateway_id           = ""
+              + nat_gateway_id             = ""
+              + network_interface_id       = ""
+              + transit_gateway_id         = ""
+              + vpc_endpoint_id            = ""
+              + vpc_peering_connection_id  = ""
+            },
+        ]
+      + tags             = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Internet Gateway Table"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all         = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Internet Gateway Table"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table.VPC_NAT_A_Table will be created
+  + resource "aws_route_table" "VPC_NAT_A_Table" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = (known after apply)
+      + tags             = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC NAT A Table"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all         = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC NAT A Table"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table.VPC_NAT_B_Table will be created
+  + resource "aws_route_table" "VPC_NAT_B_Table" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = (known after apply)
+      + tags             = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC NAT B Table"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all         = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC NAT B Table"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table_association.VPC_Gateway_Association_A will be created
+  + resource "aws_route_table_association" "VPC_Gateway_Association_A" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_route_table_association.VPC_Gateway_Association_B will be created
+  + resource "aws_route_table_association" "VPC_Gateway_Association_B" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_route_table_association.VPC_NAT_Association_A will be created
+  + resource "aws_route_table_association" "VPC_NAT_Association_A" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_route_table_association.VPC_NAT_Association_B will be created
+  + resource "aws_route_table_association" "VPC_NAT_Association_B" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_s3_bucket.VPC_Server_Files_Bucket will be created
+  + resource "aws_s3_bucket" "VPC_Server_Files_Bucket" {
+      + acceleration_status         = (known after apply)
+      + acl                         = "private"
+      + arn                         = (known after apply)
+      + bucket                      = "aws-server-files-rg-eu-central-1"
+      + bucket_domain_name          = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + region                      = (known after apply)
+      + request_payer               = (known after apply)
+      + tags                        = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev VPC Server Files"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all                    = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev VPC Server Files"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + versioning {
+          + enabled    = (known after apply)
+          + mfa_delete = (known after apply)
+        }
+    }
+
+  # aws_s3_bucket_object.VPC_Upload will be created
+  + resource "aws_s3_bucket_object" "VPC_Upload" {
+      + acl                    = "private"
+      + bucket                 = (known after apply)
+      + bucket_key_enabled     = (known after apply)
+      + content_type           = (known after apply)
+      + etag                   = "4d81ef9d80bb5408d0ba63cb8a252d40"
+      + force_destroy          = false
+      + id                     = (known after apply)
+      + key                    = "index.html"
+      + kms_key_id             = (known after apply)
+      + server_side_encryption = (known after apply)
+      + source                 = "files/index.html"
+      + storage_class          = (known after apply)
+      + tags_all               = (known after apply)
+      + version_id             = (known after apply)
+    }
+
+  # aws_security_group.VPC_Instances_Security_Group will be created
+  + resource "aws_security_group" "VPC_Instances_Security_Group" {
+      + arn                    = (known after apply)
+      + description            = "Managed by Terraform"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "Egress from VPC"
+              + from_port        = 0
+              + ipv6_cidr_blocks = [
+                  + "::/0",
+                ]
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "Connections to VPC"
+              + from_port        = 22
+              + ipv6_cidr_blocks = [
+                  + "::/0",
+                ]
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 22
+            },
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "Connections to VPC"
+              + from_port        = 443
+              + ipv6_cidr_blocks = [
+                  + "::/0",
+                ]
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 443
+            },
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "Connections to VPC"
+              + from_port        = 80
+              + ipv6_cidr_blocks = [
+                  + "::/0",
+                ]
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 80
+            },
+        ]
+      + name                   = (known after apply)
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-Instances security group"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all               = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-Instances security group"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_security_group.VPC_Load_Security_Group will be created
+  + resource "aws_security_group" "VPC_Load_Security_Group" {
+      + arn                    = (known after apply)
+      + description            = "Managed by Terraform"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "Egress from VPC"
+              + from_port        = 0
+              + ipv6_cidr_blocks = [
+                  + "::/0",
+                ]
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "Connections to VPC"
+              + from_port        = 443
+              + ipv6_cidr_blocks = [
+                  + "::/0",
+                ]
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 443
+            },
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "Connections to VPC"
+              + from_port        = 80
+              + ipv6_cidr_blocks = [
+                  + "::/0",
+                ]
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 80
+            },
+        ]
+      + name                   = (known after apply)
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-Load Balancer security group"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all               = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-Load Balancer security group"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_security_group.VPC_SSM_Security_Group will be created
+  + resource "aws_security_group" "VPC_SSM_Security_Group" {
+      + arn                    = (known after apply)
+      + description            = "Managed by Terraform"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "Egress from VPC"
+              + from_port        = 0
+              + ipv6_cidr_blocks = [
+                  + "::/0",
+                ]
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "Connections SSM instances"
+              + from_port        = 443
+              + ipv6_cidr_blocks = [
+                  + "::/0",
+                ]
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 443
+            },
+        ]
+      + name                   = (known after apply)
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-SSM security group"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all               = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-SSM security group"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_subnet.VPC_Private_Subnet_A will be created
+  + resource "aws_subnet" "VPC_Private_Subnet_A" {
+      + arn                             = (known after apply)
+      + assign_ipv6_address_on_creation = false
+      + availability_zone               = "eu-central-1a"
+      + availability_zone_id            = (known after apply)
+      + cidr_block                      = "10.0.12.0/24"
+      + id                              = (known after apply)
+      + ipv6_cidr_block_association_id  = (known after apply)
+      + map_public_ip_on_launch         = false
+      + owner_id                        = (known after apply)
+      + tags                            = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Private Subnet A"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all                        = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Private Subnet A"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id                          = (known after apply)
+    }
+
+  # aws_subnet.VPC_Private_Subnet_B will be created
+  + resource "aws_subnet" "VPC_Private_Subnet_B" {
+      + arn                             = (known after apply)
+      + assign_ipv6_address_on_creation = false
+      + availability_zone               = "eu-central-1b"
+      + availability_zone_id            = (known after apply)
+      + cidr_block                      = "10.0.22.0/24"
+      + id                              = (known after apply)
+      + ipv6_cidr_block_association_id  = (known after apply)
+      + map_public_ip_on_launch         = false
+      + owner_id                        = (known after apply)
+      + tags                            = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Private Subnet B"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all                        = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Private Subnet B"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id                          = (known after apply)
+    }
+
+  # aws_subnet.VPC_Public_Subnet_A will be created
+  + resource "aws_subnet" "VPC_Public_Subnet_A" {
+      + arn                             = (known after apply)
+      + assign_ipv6_address_on_creation = false
+      + availability_zone               = "eu-central-1a"
+      + availability_zone_id            = (known after apply)
+      + cidr_block                      = "10.0.11.0/24"
+      + id                              = (known after apply)
+      + ipv6_cidr_block_association_id  = (known after apply)
+      + map_public_ip_on_launch         = true
+      + owner_id                        = (known after apply)
+      + tags                            = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Public Subnet A"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all                        = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Public Subnet A"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id                          = (known after apply)
+    }
+
+  # aws_subnet.VPC_Public_Subnet_B will be created
+  + resource "aws_subnet" "VPC_Public_Subnet_B" {
+      + arn                             = (known after apply)
+      + assign_ipv6_address_on_creation = false
+      + availability_zone               = "eu-central-1b"
+      + availability_zone_id            = (known after apply)
+      + cidr_block                      = "10.0.21.0/24"
+      + id                              = (known after apply)
+      + ipv6_cidr_block_association_id  = (known after apply)
+      + map_public_ip_on_launch         = true
+      + owner_id                        = (known after apply)
+      + tags                            = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Public Subnet B"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all                        = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Public Subnet B"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id                          = (known after apply)
+    }
+
+  # aws_vpc.Homework_VPC will be created
+  + resource "aws_vpc" "Homework_VPC" {
+      + arn                              = (known after apply)
+      + assign_generated_ipv6_cidr_block = false
+      + cidr_block                       = "10.0.0.0/16"
+      + default_network_acl_id           = (known after apply)
+      + default_route_table_id           = (known after apply)
+      + default_security_group_id        = (known after apply)
+      + dhcp_options_id                  = (known after apply)
+      + enable_classiclink               = (known after apply)
+      + enable_classiclink_dns_support   = (known after apply)
+      + enable_dns_hostnames             = true
+      + enable_dns_support               = true
+      + id                               = (known after apply)
+      + instance_tenancy                 = "default"
+      + ipv6_association_id              = (known after apply)
+      + ipv6_cidr_block                  = (known after apply)
+      + main_route_table_id              = (known after apply)
+      + owner_id                         = (known after apply)
+      + tags                             = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev VPC"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all                         = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev VPC"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+    }
+
+  # aws_vpc_endpoint.EC2_Messages will be created
+  + resource "aws_vpc_endpoint" "EC2_Messages" {
+      + arn                   = (known after apply)
+      + cidr_blocks           = (known after apply)
+      + dns_entry             = (known after apply)
+      + id                    = (known after apply)
+      + network_interface_ids = (known after apply)
+      + owner_id              = (known after apply)
+      + policy                = (known after apply)
+      + prefix_list_id        = (known after apply)
+      + private_dns_enabled   = true
+      + requester_managed     = (known after apply)
+      + route_table_ids       = (known after apply)
+      + security_group_ids    = (known after apply)
+      + service_name          = "com.amazonaws.eu-central-1.ec2messages"
+      + state                 = (known after apply)
+      + subnet_ids            = (known after apply)
+      + tags                  = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-EC2-Messages Endpoint"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all              = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-EC2-Messages Endpoint"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_endpoint_type     = "Interface"
+      + vpc_id                = (known after apply)
+    }
+
+  # aws_vpc_endpoint.Endpoint will be created
+  + resource "aws_vpc_endpoint" "Endpoint" {
+      + arn                   = (known after apply)
+      + cidr_blocks           = (known after apply)
+      + dns_entry             = (known after apply)
+      + id                    = (known after apply)
+      + network_interface_ids = (known after apply)
+      + owner_id              = (known after apply)
+      + policy                = (known after apply)
+      + prefix_list_id        = (known after apply)
+      + private_dns_enabled   = false
+      + requester_managed     = (known after apply)
+      + route_table_ids       = (known after apply)
+      + security_group_ids    = (known after apply)
+      + service_name          = "com.amazonaws.eu-central-1.s3"
+      + state                 = (known after apply)
+      + subnet_ids            = (known after apply)
+      + tags                  = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-S3 Endpoint"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all              = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-S3 Endpoint"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_endpoint_type     = "Gateway"
+      + vpc_id                = (known after apply)
+    }
+
+  # aws_vpc_endpoint.SSM will be created
+  + resource "aws_vpc_endpoint" "SSM" {
+      + arn                   = (known after apply)
+      + cidr_blocks           = (known after apply)
+      + dns_entry             = (known after apply)
+      + id                    = (known after apply)
+      + network_interface_ids = (known after apply)
+      + owner_id              = (known after apply)
+      + policy                = (known after apply)
+      + prefix_list_id        = (known after apply)
+      + private_dns_enabled   = true
+      + requester_managed     = (known after apply)
+      + route_table_ids       = (known after apply)
+      + security_group_ids    = (known after apply)
+      + service_name          = "com.amazonaws.eu-central-1.ssm"
+      + state                 = (known after apply)
+      + subnet_ids            = (known after apply)
+      + tags                  = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-SSM Endpoint"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all              = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-SSM Endpoint"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_endpoint_type     = "Interface"
+      + vpc_id                = (known after apply)
+    }
+
+  # aws_vpc_endpoint.SSM_Messages will be created
+  + resource "aws_vpc_endpoint" "SSM_Messages" {
+      + arn                   = (known after apply)
+      + cidr_blocks           = (known after apply)
+      + dns_entry             = (known after apply)
+      + id                    = (known after apply)
+      + network_interface_ids = (known after apply)
+      + owner_id              = (known after apply)
+      + policy                = (known after apply)
+      + prefix_list_id        = (known after apply)
+      + private_dns_enabled   = true
+      + requester_managed     = (known after apply)
+      + route_table_ids       = (known after apply)
+      + security_group_ids    = (known after apply)
+      + service_name          = "com.amazonaws.eu-central-1.ssmmessages"
+      + state                 = (known after apply)
+      + subnet_ids            = (known after apply)
+      + tags                  = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-SSM-Messages Endpoint"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all              = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-SSM-Messages Endpoint"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_endpoint_type     = "Interface"
+      + vpc_id                = (known after apply)
+    }
+
+Plan: 34 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + Available_zones     = [
+      + "eu-central-1a",
+      + "eu-central-1b",
+      + "eu-central-1c",
+    ]
+  + Current_bucket      = "aws-server-files-rg-eu-central-1"
+  + Current_bucket_name = "aws-server-files-rg-eu-central-1"
+  + Current_region      = "eu-central-1"
+  + User_data           = <<-EOT
+        #!/bin/bash
+        sudo yum update -y
+        sudo amazon-linux-extras install nginx1 -y
+        sudo aws s3 cp s3://aws-server-files-rg-eu-central-1/index.html /usr/share/nginx/html/index.html --endpoint-url https://s3.eu-central-1.amazonaws.com
+        sudo sudo yum install -y https://s3.eu-central-1.amazonaws.com/amazon-ssm-eu-central-1/latest/linux_amd64/amazon-ssm-agent.rpm
+        sudo systemctl start nginx
+        sudo systemctl enable nginx
+    EOT
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.

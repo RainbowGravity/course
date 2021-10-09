@@ -12,7 +12,7 @@ resource "aws_lb" "VPC_Load_Balancer" {
   subnets            = [aws_subnet.VPC_Public_Subnet_A.id, aws_subnet.VPC_Public_Subnet_B.id]
   security_groups    = [aws_security_group.VPC_Load_Security_Group.id]
 
-  tags = merge(var.Tags, { Name = "VPC Load Balancer" })
+  tags = local.ALB_Tags
 }
 
 resource "aws_lb_target_group" "VPC_Target_Group" {

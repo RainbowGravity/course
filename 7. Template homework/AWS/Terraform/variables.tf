@@ -50,15 +50,6 @@ variable "Health_Check" {
   }
 }
 
-variable "Autoscaling" {
-  type = map(number)
-  default = {
-    max_size         = 2
-    min_size         = 2
-    desired_capacity = 2
-  }
-}
-
 variable "Tags" {
   type = map(string)
   default = {

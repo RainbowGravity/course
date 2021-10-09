@@ -37,7 +37,7 @@ resource "aws_security_group" "VPC_Load_Security_Group" {
       self            = null
     }
   ]
-  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}-Load Balancer security group" })
+  tags = merge(var.Tags, { Name = "${local.ENV_Tag}-Load Balancer security group" })
 }
 
 resource "aws_security_group" "VPC_Instances_Security_Group" {
@@ -73,7 +73,7 @@ resource "aws_security_group" "VPC_Instances_Security_Group" {
       self            = null
     }
   ]
-  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}-Instances security group" })
+  tags = merge(var.Tags, { Name = "${local.ENV_Tag}-Instances security group" })
 }
 
 resource "aws_security_group" "VPC_SSM_Security_Group" {
@@ -107,5 +107,5 @@ resource "aws_security_group" "VPC_SSM_Security_Group" {
       self            = null
     }
   ]
-  tags = merge(var.Tags, { Name = "${var.Tags["Environment"]}-SSM security group" })
+  tags = merge(var.Tags, { Name = "${local.ENV_Tag}-SSM security group" })
 }
