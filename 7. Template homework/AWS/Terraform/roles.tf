@@ -25,7 +25,7 @@ resource "aws_iam_role" "Instances_SSM_Role" {
       },
     ]
   })
-  tags = merge(var.Tags, { Name = "${local.ENV_Tag}InstancesSSMRole" })
+  tags = local.SSM_Role
 }
 
 resource "aws_iam_role_policy" "Instances_SSM_Policy" {

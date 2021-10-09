@@ -24,3 +24,6 @@ output "User_data" {
   })
 }
 
+output "Load_Balancer_DNS_name" {
+  value = aws_lb.VPC_Load_Balancer.dns_name
+}

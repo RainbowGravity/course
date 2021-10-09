@@ -7,10 +7,11 @@
 resource "aws_security_group" "VPC_Load_Security_Group" {
   vpc_id = aws_vpc.Homework_VPC.id
 
+  description = "Load balancer ports"
+
   dynamic "ingress" {
     for_each = var.Load_Security_Group_Ports
     content {
-      description      = "Connections to VPC"
       from_port        = ingress.value
       to_port          = ingress.value
       protocol         = "tcp"
@@ -37,7 +38,7 @@ resource "aws_security_group" "VPC_Load_Security_Group" {
       self            = null
     }
   ]
-  tags = merge(var.Tags, { Name = "${local.ENV_Tag}-Load Balancer security group" })
+  tags = local.Load_Security_Group
 }
 
 resource "aws_security_group" "VPC_Instances_Security_Group" {
@@ -46,7 +47,7 @@ resource "aws_security_group" "VPC_Instances_Security_Group" {
   dynamic "ingress" {
     for_each = var.Instances_Security_Group_Ports
     content {
-      description      = "Connections to VPC"
+      description      = "EC2 Instances ports"
       from_port        = ingress.value
       to_port          = ingress.value
       protocol         = "tcp"
@@ -73,7 +74,7 @@ resource "aws_security_group" "VPC_Instances_Security_Group" {
       self            = null
     }
   ]
-  tags = merge(var.Tags, { Name = "${local.ENV_Tag}-Instances security group" })
+  tags = local.Instances_Security_Group
 }
 
 resource "aws_security_group" "VPC_SSM_Security_Group" {
@@ -81,7 +82,7 @@ resource "aws_security_group" "VPC_SSM_Security_Group" {
 
   ingress = [
     {
-      description      = "Connections SSM instances"
+      description      = "Ports for SSM"
       from_port        = 443
       to_port          = 443
       protocol         = "tcp"
@@ -107,5 +108,5 @@ resource "aws_security_group" "VPC_SSM_Security_Group" {
       self            = null
     }
   ]
-  tags = merge(var.Tags, { Name = "${local.ENV_Tag}-SSM security group" })
+  tags = local.SSM_Security_Group
 }

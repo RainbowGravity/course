@@ -4,37 +4,21 @@
 # VPC CloudWatch Alarm & Auto Recovery
 #===========================================================================================
 
-resource "aws_cloudwatch_metric_alarm" "VPC_Instance_A_Auto_Recovery" {
-  alarm_name          = "${local.ENV_Tag}-VPC Instance A Auto Recovery"
+resource "aws_cloudwatch_metric_alarm" "VPC_Instance_Auto_Recovery" {
+  count = (var.EC2_Per_Zone * var.Amount_of_Zones)
+
+  alarm_name          = "${local.ENV_Tag}-VPC Instance #${tostring(count.index + 1)} ${local.Availability_zone[count.index % var.Amount_of_Zones]}"
   namespace           = "AWS/EC2"
   evaluation_periods  = "1"
   period              = "60"
-  alarm_description   = "${local.ENV_Tag}- Recovery of the EC2 Instance in ${local.Availability_zone_A} zone."
-  alarm_actions       = ["arn:aws:automate:${local.Availability_zone_A}:ec2:recover"]
+  alarm_description   = "Recovery of the EC2 #${tostring(count.index + 1)} Instance in ${local.Availability_zone[count.index % var.Amount_of_Zones]} zone."
+  alarm_actions       = ["arn:aws:automate:${local.Current_region}:ec2:recover"]
   statistic           = "Minimum"
   comparison_operator = "GreaterThanThreshold"
   threshold           = "0"
   metric_name         = "StatusCheckFailed_System"
 
   dimensions = {
-    InstanceId = aws_instance.VPC_EC2_Instance_A.id
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "VPC_Instance_B_Auto_Recovery" {
-  alarm_name = "${local.ENV_Tag}VPC Instance B Auto Recovery"
-
-  namespace           = "AWS/EC2"
-  evaluation_periods  = "1"
-  period              = "60"
-  alarm_description   = "${local.ENV_Tag} Recovery of the EC2 Instance in ${local.Availability_zone_B} zone."
-  alarm_actions       = ["arn:aws:automate:${local.Availability_zone_B}:ec2:recover"]
-  statistic           = "Minimum"
-  comparison_operator = "GreaterThanThreshold"
-  threshold           = "0"
-  metric_name         = "StatusCheckFailed_System"
-
-  dimensions = {
-    InstanceId = aws_instance.VPC_EC2_Instance_B.id
+    InstanceId = aws_instance.VPC_EC2_Instance[count.index].id
   }
 }

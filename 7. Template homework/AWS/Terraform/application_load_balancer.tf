@@ -5,11 +5,12 @@
 #===========================================================================================
 
 resource "aws_lb" "VPC_Load_Balancer" {
+
   name_prefix = "${var.Tags["Environment"]}-"
 
   internal           = false
   load_balancer_type = "application"
-  subnets            = [aws_subnet.VPC_Public_Subnet_A.id, aws_subnet.VPC_Public_Subnet_B.id]
+  subnets            = aws_subnet.VPC_Public_Subnet.*.id
   security_groups    = [aws_security_group.VPC_Load_Security_Group.id]
 
   tags = local.ALB_Tags
