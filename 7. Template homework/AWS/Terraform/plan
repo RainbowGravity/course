@@ -11,7 +11,7 @@ Terraform will perform the following actions:
       + alarm_actions                         = [
           + "arn:aws:automate:eu-central-1:ec2:recover",
         ]
-      + alarm_description                     = "Recovery of the EC2 #1 Instance in eu-central-1a zone."
+      + alarm_description                     = "Recovery of the EC2 Instance #1 in eu-central-1a zone."
       + alarm_name                            = "Dev-VPC Instance #1 eu-central-1a"
       + arn                                   = (known after apply)
       + comparison_operator                   = "GreaterThanThreshold"
@@ -34,100 +34,8 @@ Terraform will perform the following actions:
       + alarm_actions                         = [
           + "arn:aws:automate:eu-central-1:ec2:recover",
         ]
-      + alarm_description                     = "Recovery of the EC2 #2 Instance in eu-central-1b zone."
+      + alarm_description                     = "Recovery of the EC2 Instance #2 in eu-central-1b zone."
       + alarm_name                            = "Dev-VPC Instance #2 eu-central-1b"
-      + arn                                   = (known after apply)
-      + comparison_operator                   = "GreaterThanThreshold"
-      + dimensions                            = (known after apply)
-      + evaluate_low_sample_count_percentiles = (known after apply)
-      + evaluation_periods                    = 1
-      + id                                    = (known after apply)
-      + metric_name                           = "StatusCheckFailed_System"
-      + namespace                             = "AWS/EC2"
-      + period                                = 60
-      + statistic                             = "Minimum"
-      + tags_all                              = (known after apply)
-      + threshold                             = 0
-      + treat_missing_data                    = "missing"
-    }
-
-  # aws_cloudwatch_metric_alarm.VPC_Instance_Auto_Recovery[2] will be created
-  + resource "aws_cloudwatch_metric_alarm" "VPC_Instance_Auto_Recovery" {
-      + actions_enabled                       = true
-      + alarm_actions                         = [
-          + "arn:aws:automate:eu-central-1:ec2:recover",
-        ]
-      + alarm_description                     = "Recovery of the EC2 #3 Instance in eu-central-1c zone."
-      + alarm_name                            = "Dev-VPC Instance #3 eu-central-1c"
-      + arn                                   = (known after apply)
-      + comparison_operator                   = "GreaterThanThreshold"
-      + dimensions                            = (known after apply)
-      + evaluate_low_sample_count_percentiles = (known after apply)
-      + evaluation_periods                    = 1
-      + id                                    = (known after apply)
-      + metric_name                           = "StatusCheckFailed_System"
-      + namespace                             = "AWS/EC2"
-      + period                                = 60
-      + statistic                             = "Minimum"
-      + tags_all                              = (known after apply)
-      + threshold                             = 0
-      + treat_missing_data                    = "missing"
-    }
-
-  # aws_cloudwatch_metric_alarm.VPC_Instance_Auto_Recovery[3] will be created
-  + resource "aws_cloudwatch_metric_alarm" "VPC_Instance_Auto_Recovery" {
-      + actions_enabled                       = true
-      + alarm_actions                         = [
-          + "arn:aws:automate:eu-central-1:ec2:recover",
-        ]
-      + alarm_description                     = "Recovery of the EC2 #4 Instance in eu-central-1a zone."
-      + alarm_name                            = "Dev-VPC Instance #4 eu-central-1a"
-      + arn                                   = (known after apply)
-      + comparison_operator                   = "GreaterThanThreshold"
-      + dimensions                            = (known after apply)
-      + evaluate_low_sample_count_percentiles = (known after apply)
-      + evaluation_periods                    = 1
-      + id                                    = (known after apply)
-      + metric_name                           = "StatusCheckFailed_System"
-      + namespace                             = "AWS/EC2"
-      + period                                = 60
-      + statistic                             = "Minimum"
-      + tags_all                              = (known after apply)
-      + threshold                             = 0
-      + treat_missing_data                    = "missing"
-    }
-
-  # aws_cloudwatch_metric_alarm.VPC_Instance_Auto_Recovery[4] will be created
-  + resource "aws_cloudwatch_metric_alarm" "VPC_Instance_Auto_Recovery" {
-      + actions_enabled                       = true
-      + alarm_actions                         = [
-          + "arn:aws:automate:eu-central-1:ec2:recover",
-        ]
-      + alarm_description                     = "Recovery of the EC2 #5 Instance in eu-central-1b zone."
-      + alarm_name                            = "Dev-VPC Instance #5 eu-central-1b"
-      + arn                                   = (known after apply)
-      + comparison_operator                   = "GreaterThanThreshold"
-      + dimensions                            = (known after apply)
-      + evaluate_low_sample_count_percentiles = (known after apply)
-      + evaluation_periods                    = 1
-      + id                                    = (known after apply)
-      + metric_name                           = "StatusCheckFailed_System"
-      + namespace                             = "AWS/EC2"
-      + period                                = 60
-      + statistic                             = "Minimum"
-      + tags_all                              = (known after apply)
-      + threshold                             = 0
-      + treat_missing_data                    = "missing"
-    }
-
-  # aws_cloudwatch_metric_alarm.VPC_Instance_Auto_Recovery[5] will be created
-  + resource "aws_cloudwatch_metric_alarm" "VPC_Instance_Auto_Recovery" {
-      + actions_enabled                       = true
-      + alarm_actions                         = [
-          + "arn:aws:automate:eu-central-1:ec2:recover",
-        ]
-      + alarm_description                     = "Recovery of the EC2 #6 Instance in eu-central-1c zone."
-      + alarm_name                            = "Dev-VPC Instance #6 eu-central-1c"
       + arn                                   = (known after apply)
       + comparison_operator                   = "GreaterThanThreshold"
       + dimensions                            = (known after apply)
@@ -210,6 +118,7 @@ Terraform will perform the following actions:
               + Statement = [
                   + {
                       + Action   = [
+                          + "cloudwatch:PutMetricData",
                           + "ds:CreateComputer",
                           + "ds:DescribeDirectories",
                           + "ec2:DescribeInstanceStatus",
@@ -285,7 +194,7 @@ Terraform will perform the following actions:
       + ipv6_address_count                   = (known after apply)
       + ipv6_addresses                       = (known after apply)
       + key_name                             = (known after apply)
-      + monitoring                           = (known after apply)
+      + monitoring                           = true
       + outpost_arn                          = (known after apply)
       + password_data                        = (known after apply)
       + placement_group                      = (known after apply)
@@ -311,7 +220,7 @@ Terraform will perform the following actions:
           + "Project"     = "Template Homework"
         }
       + tenancy                              = (known after apply)
-      + user_data                            = "204b63ba9a77c24cb16cbd62c7ea3273302e855f"
+      + user_data                            = "e110285e4841e0171cb7d0f22ba8987b817d03ff"
       + user_data_base64                     = (known after apply)
       + vpc_security_group_ids               = (known after apply)
 
@@ -393,7 +302,7 @@ Terraform will perform the following actions:
       + ipv6_address_count                   = (known after apply)
       + ipv6_addresses                       = (known after apply)
       + key_name                             = (known after apply)
-      + monitoring                           = (known after apply)
+      + monitoring                           = true
       + outpost_arn                          = (known after apply)
       + password_data                        = (known after apply)
       + placement_group                      = (known after apply)
@@ -419,439 +328,7 @@ Terraform will perform the following actions:
           + "Project"     = "Template Homework"
         }
       + tenancy                              = (known after apply)
-      + user_data                            = "204b63ba9a77c24cb16cbd62c7ea3273302e855f"
-      + user_data_base64                     = (known after apply)
-      + vpc_security_group_ids               = (known after apply)
-
-      + capacity_reservation_specification {
-          + capacity_reservation_preference = (known after apply)
-
-          + capacity_reservation_target {
-              + capacity_reservation_id = (known after apply)
-            }
-        }
-
-      + ebs_block_device {
-          + delete_on_termination = (known after apply)
-          + device_name           = (known after apply)
-          + encrypted             = (known after apply)
-          + iops                  = (known after apply)
-          + kms_key_id            = (known after apply)
-          + snapshot_id           = (known after apply)
-          + tags                  = (known after apply)
-          + throughput            = (known after apply)
-          + volume_id             = (known after apply)
-          + volume_size           = (known after apply)
-          + volume_type           = (known after apply)
-        }
-
-      + enclave_options {
-          + enabled = (known after apply)
-        }
-
-      + ephemeral_block_device {
-          + device_name  = (known after apply)
-          + no_device    = (known after apply)
-          + virtual_name = (known after apply)
-        }
-
-      + metadata_options {
-          + http_endpoint               = (known after apply)
-          + http_put_response_hop_limit = (known after apply)
-          + http_tokens                 = (known after apply)
-        }
-
-      + network_interface {
-          + delete_on_termination = (known after apply)
-          + device_index          = (known after apply)
-          + network_interface_id  = (known after apply)
-        }
-
-      + root_block_device {
-          + delete_on_termination = (known after apply)
-          + device_name           = (known after apply)
-          + encrypted             = (known after apply)
-          + iops                  = (known after apply)
-          + kms_key_id            = (known after apply)
-          + tags                  = (known after apply)
-          + throughput            = (known after apply)
-          + volume_id             = (known after apply)
-          + volume_size           = (known after apply)
-          + volume_type           = (known after apply)
-        }
-    }
-
-  # aws_instance.VPC_EC2_Instance[2] will be created
-  + resource "aws_instance" "VPC_EC2_Instance" {
-      + ami                                  = "ami-058e6df85cfc7760b"
-      + arn                                  = (known after apply)
-      + associate_public_ip_address          = (known after apply)
-      + availability_zone                    = (known after apply)
-      + cpu_core_count                       = (known after apply)
-      + cpu_threads_per_core                 = (known after apply)
-      + disable_api_termination              = (known after apply)
-      + ebs_optimized                        = (known after apply)
-      + get_password_data                    = false
-      + host_id                              = (known after apply)
-      + iam_instance_profile                 = "DevInstancesSSMProfile"
-      + id                                   = (known after apply)
-      + instance_initiated_shutdown_behavior = (known after apply)
-      + instance_state                       = (known after apply)
-      + instance_type                        = "t2.micro"
-      + ipv6_address_count                   = (known after apply)
-      + ipv6_addresses                       = (known after apply)
-      + key_name                             = (known after apply)
-      + monitoring                           = (known after apply)
-      + outpost_arn                          = (known after apply)
-      + password_data                        = (known after apply)
-      + placement_group                      = (known after apply)
-      + primary_network_interface_id         = (known after apply)
-      + private_dns                          = (known after apply)
-      + private_ip                           = (known after apply)
-      + public_dns                           = (known after apply)
-      + public_ip                            = (known after apply)
-      + secondary_private_ips                = (known after apply)
-      + security_groups                      = (known after apply)
-      + source_dest_check                    = true
-      + subnet_id                            = (known after apply)
-      + tags                                 = {
-          + "Environment" = "Dev"
-          + "Name"        = "Dev-EC2 Instance #3 eu-central-1c"
-          + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
-        }
-      + tags_all                             = {
-          + "Environment" = "Dev"
-          + "Name"        = "Dev-EC2 Instance #3 eu-central-1c"
-          + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
-        }
-      + tenancy                              = (known after apply)
-      + user_data                            = "204b63ba9a77c24cb16cbd62c7ea3273302e855f"
-      + user_data_base64                     = (known after apply)
-      + vpc_security_group_ids               = (known after apply)
-
-      + capacity_reservation_specification {
-          + capacity_reservation_preference = (known after apply)
-
-          + capacity_reservation_target {
-              + capacity_reservation_id = (known after apply)
-            }
-        }
-
-      + ebs_block_device {
-          + delete_on_termination = (known after apply)
-          + device_name           = (known after apply)
-          + encrypted             = (known after apply)
-          + iops                  = (known after apply)
-          + kms_key_id            = (known after apply)
-          + snapshot_id           = (known after apply)
-          + tags                  = (known after apply)
-          + throughput            = (known after apply)
-          + volume_id             = (known after apply)
-          + volume_size           = (known after apply)
-          + volume_type           = (known after apply)
-        }
-
-      + enclave_options {
-          + enabled = (known after apply)
-        }
-
-      + ephemeral_block_device {
-          + device_name  = (known after apply)
-          + no_device    = (known after apply)
-          + virtual_name = (known after apply)
-        }
-
-      + metadata_options {
-          + http_endpoint               = (known after apply)
-          + http_put_response_hop_limit = (known after apply)
-          + http_tokens                 = (known after apply)
-        }
-
-      + network_interface {
-          + delete_on_termination = (known after apply)
-          + device_index          = (known after apply)
-          + network_interface_id  = (known after apply)
-        }
-
-      + root_block_device {
-          + delete_on_termination = (known after apply)
-          + device_name           = (known after apply)
-          + encrypted             = (known after apply)
-          + iops                  = (known after apply)
-          + kms_key_id            = (known after apply)
-          + tags                  = (known after apply)
-          + throughput            = (known after apply)
-          + volume_id             = (known after apply)
-          + volume_size           = (known after apply)
-          + volume_type           = (known after apply)
-        }
-    }
-
-  # aws_instance.VPC_EC2_Instance[3] will be created
-  + resource "aws_instance" "VPC_EC2_Instance" {
-      + ami                                  = "ami-058e6df85cfc7760b"
-      + arn                                  = (known after apply)
-      + associate_public_ip_address          = (known after apply)
-      + availability_zone                    = (known after apply)
-      + cpu_core_count                       = (known after apply)
-      + cpu_threads_per_core                 = (known after apply)
-      + disable_api_termination              = (known after apply)
-      + ebs_optimized                        = (known after apply)
-      + get_password_data                    = false
-      + host_id                              = (known after apply)
-      + iam_instance_profile                 = "DevInstancesSSMProfile"
-      + id                                   = (known after apply)
-      + instance_initiated_shutdown_behavior = (known after apply)
-      + instance_state                       = (known after apply)
-      + instance_type                        = "t2.micro"
-      + ipv6_address_count                   = (known after apply)
-      + ipv6_addresses                       = (known after apply)
-      + key_name                             = (known after apply)
-      + monitoring                           = (known after apply)
-      + outpost_arn                          = (known after apply)
-      + password_data                        = (known after apply)
-      + placement_group                      = (known after apply)
-      + primary_network_interface_id         = (known after apply)
-      + private_dns                          = (known after apply)
-      + private_ip                           = (known after apply)
-      + public_dns                           = (known after apply)
-      + public_ip                            = (known after apply)
-      + secondary_private_ips                = (known after apply)
-      + security_groups                      = (known after apply)
-      + source_dest_check                    = true
-      + subnet_id                            = (known after apply)
-      + tags                                 = {
-          + "Environment" = "Dev"
-          + "Name"        = "Dev-EC2 Instance #4 eu-central-1a"
-          + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
-        }
-      + tags_all                             = {
-          + "Environment" = "Dev"
-          + "Name"        = "Dev-EC2 Instance #4 eu-central-1a"
-          + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
-        }
-      + tenancy                              = (known after apply)
-      + user_data                            = "204b63ba9a77c24cb16cbd62c7ea3273302e855f"
-      + user_data_base64                     = (known after apply)
-      + vpc_security_group_ids               = (known after apply)
-
-      + capacity_reservation_specification {
-          + capacity_reservation_preference = (known after apply)
-
-          + capacity_reservation_target {
-              + capacity_reservation_id = (known after apply)
-            }
-        }
-
-      + ebs_block_device {
-          + delete_on_termination = (known after apply)
-          + device_name           = (known after apply)
-          + encrypted             = (known after apply)
-          + iops                  = (known after apply)
-          + kms_key_id            = (known after apply)
-          + snapshot_id           = (known after apply)
-          + tags                  = (known after apply)
-          + throughput            = (known after apply)
-          + volume_id             = (known after apply)
-          + volume_size           = (known after apply)
-          + volume_type           = (known after apply)
-        }
-
-      + enclave_options {
-          + enabled = (known after apply)
-        }
-
-      + ephemeral_block_device {
-          + device_name  = (known after apply)
-          + no_device    = (known after apply)
-          + virtual_name = (known after apply)
-        }
-
-      + metadata_options {
-          + http_endpoint               = (known after apply)
-          + http_put_response_hop_limit = (known after apply)
-          + http_tokens                 = (known after apply)
-        }
-
-      + network_interface {
-          + delete_on_termination = (known after apply)
-          + device_index          = (known after apply)
-          + network_interface_id  = (known after apply)
-        }
-
-      + root_block_device {
-          + delete_on_termination = (known after apply)
-          + device_name           = (known after apply)
-          + encrypted             = (known after apply)
-          + iops                  = (known after apply)
-          + kms_key_id            = (known after apply)
-          + tags                  = (known after apply)
-          + throughput            = (known after apply)
-          + volume_id             = (known after apply)
-          + volume_size           = (known after apply)
-          + volume_type           = (known after apply)
-        }
-    }
-
-  # aws_instance.VPC_EC2_Instance[4] will be created
-  + resource "aws_instance" "VPC_EC2_Instance" {
-      + ami                                  = "ami-058e6df85cfc7760b"
-      + arn                                  = (known after apply)
-      + associate_public_ip_address          = (known after apply)
-      + availability_zone                    = (known after apply)
-      + cpu_core_count                       = (known after apply)
-      + cpu_threads_per_core                 = (known after apply)
-      + disable_api_termination              = (known after apply)
-      + ebs_optimized                        = (known after apply)
-      + get_password_data                    = false
-      + host_id                              = (known after apply)
-      + iam_instance_profile                 = "DevInstancesSSMProfile"
-      + id                                   = (known after apply)
-      + instance_initiated_shutdown_behavior = (known after apply)
-      + instance_state                       = (known after apply)
-      + instance_type                        = "t2.micro"
-      + ipv6_address_count                   = (known after apply)
-      + ipv6_addresses                       = (known after apply)
-      + key_name                             = (known after apply)
-      + monitoring                           = (known after apply)
-      + outpost_arn                          = (known after apply)
-      + password_data                        = (known after apply)
-      + placement_group                      = (known after apply)
-      + primary_network_interface_id         = (known after apply)
-      + private_dns                          = (known after apply)
-      + private_ip                           = (known after apply)
-      + public_dns                           = (known after apply)
-      + public_ip                            = (known after apply)
-      + secondary_private_ips                = (known after apply)
-      + security_groups                      = (known after apply)
-      + source_dest_check                    = true
-      + subnet_id                            = (known after apply)
-      + tags                                 = {
-          + "Environment" = "Dev"
-          + "Name"        = "Dev-EC2 Instance #5 eu-central-1b"
-          + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
-        }
-      + tags_all                             = {
-          + "Environment" = "Dev"
-          + "Name"        = "Dev-EC2 Instance #5 eu-central-1b"
-          + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
-        }
-      + tenancy                              = (known after apply)
-      + user_data                            = "204b63ba9a77c24cb16cbd62c7ea3273302e855f"
-      + user_data_base64                     = (known after apply)
-      + vpc_security_group_ids               = (known after apply)
-
-      + capacity_reservation_specification {
-          + capacity_reservation_preference = (known after apply)
-
-          + capacity_reservation_target {
-              + capacity_reservation_id = (known after apply)
-            }
-        }
-
-      + ebs_block_device {
-          + delete_on_termination = (known after apply)
-          + device_name           = (known after apply)
-          + encrypted             = (known after apply)
-          + iops                  = (known after apply)
-          + kms_key_id            = (known after apply)
-          + snapshot_id           = (known after apply)
-          + tags                  = (known after apply)
-          + throughput            = (known after apply)
-          + volume_id             = (known after apply)
-          + volume_size           = (known after apply)
-          + volume_type           = (known after apply)
-        }
-
-      + enclave_options {
-          + enabled = (known after apply)
-        }
-
-      + ephemeral_block_device {
-          + device_name  = (known after apply)
-          + no_device    = (known after apply)
-          + virtual_name = (known after apply)
-        }
-
-      + metadata_options {
-          + http_endpoint               = (known after apply)
-          + http_put_response_hop_limit = (known after apply)
-          + http_tokens                 = (known after apply)
-        }
-
-      + network_interface {
-          + delete_on_termination = (known after apply)
-          + device_index          = (known after apply)
-          + network_interface_id  = (known after apply)
-        }
-
-      + root_block_device {
-          + delete_on_termination = (known after apply)
-          + device_name           = (known after apply)
-          + encrypted             = (known after apply)
-          + iops                  = (known after apply)
-          + kms_key_id            = (known after apply)
-          + tags                  = (known after apply)
-          + throughput            = (known after apply)
-          + volume_id             = (known after apply)
-          + volume_size           = (known after apply)
-          + volume_type           = (known after apply)
-        }
-    }
-
-  # aws_instance.VPC_EC2_Instance[5] will be created
-  + resource "aws_instance" "VPC_EC2_Instance" {
-      + ami                                  = "ami-058e6df85cfc7760b"
-      + arn                                  = (known after apply)
-      + associate_public_ip_address          = (known after apply)
-      + availability_zone                    = (known after apply)
-      + cpu_core_count                       = (known after apply)
-      + cpu_threads_per_core                 = (known after apply)
-      + disable_api_termination              = (known after apply)
-      + ebs_optimized                        = (known after apply)
-      + get_password_data                    = false
-      + host_id                              = (known after apply)
-      + iam_instance_profile                 = "DevInstancesSSMProfile"
-      + id                                   = (known after apply)
-      + instance_initiated_shutdown_behavior = (known after apply)
-      + instance_state                       = (known after apply)
-      + instance_type                        = "t2.micro"
-      + ipv6_address_count                   = (known after apply)
-      + ipv6_addresses                       = (known after apply)
-      + key_name                             = (known after apply)
-      + monitoring                           = (known after apply)
-      + outpost_arn                          = (known after apply)
-      + password_data                        = (known after apply)
-      + placement_group                      = (known after apply)
-      + primary_network_interface_id         = (known after apply)
-      + private_dns                          = (known after apply)
-      + private_ip                           = (known after apply)
-      + public_dns                           = (known after apply)
-      + public_ip                            = (known after apply)
-      + secondary_private_ips                = (known after apply)
-      + security_groups                      = (known after apply)
-      + source_dest_check                    = true
-      + subnet_id                            = (known after apply)
-      + tags                                 = {
-          + "Environment" = "Dev"
-          + "Name"        = "Dev-EC2 Instance #6 eu-central-1c"
-          + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
-        }
-      + tags_all                             = {
-          + "Environment" = "Dev"
-          + "Name"        = "Dev-EC2 Instance #6 eu-central-1c"
-          + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
-        }
-      + tenancy                              = (known after apply)
-      + user_data                            = "204b63ba9a77c24cb16cbd62c7ea3273302e855f"
+      + user_data                            = "e110285e4841e0171cb7d0f22ba8987b817d03ff"
       + user_data_base64                     = (known after apply)
       + vpc_security_group_ids               = (known after apply)
 
@@ -1047,38 +524,6 @@ Terraform will perform the following actions:
       + target_id        = (known after apply)
     }
 
-  # aws_lb_target_group_attachment.VPC_EC2_Instance_TG[2] will be created
-  + resource "aws_lb_target_group_attachment" "VPC_EC2_Instance_TG" {
-      + id               = (known after apply)
-      + port             = 80
-      + target_group_arn = (known after apply)
-      + target_id        = (known after apply)
-    }
-
-  # aws_lb_target_group_attachment.VPC_EC2_Instance_TG[3] will be created
-  + resource "aws_lb_target_group_attachment" "VPC_EC2_Instance_TG" {
-      + id               = (known after apply)
-      + port             = 80
-      + target_group_arn = (known after apply)
-      + target_id        = (known after apply)
-    }
-
-  # aws_lb_target_group_attachment.VPC_EC2_Instance_TG[4] will be created
-  + resource "aws_lb_target_group_attachment" "VPC_EC2_Instance_TG" {
-      + id               = (known after apply)
-      + port             = 80
-      + target_group_arn = (known after apply)
-      + target_id        = (known after apply)
-    }
-
-  # aws_lb_target_group_attachment.VPC_EC2_Instance_TG[5] will be created
-  + resource "aws_lb_target_group_attachment" "VPC_EC2_Instance_TG" {
-      + id               = (known after apply)
-      + port             = 80
-      + target_group_arn = (known after apply)
-      + target_id        = (known after apply)
-    }
-
   # aws_route_table.VPC_Gateway_Table will be created
   + resource "aws_route_table" "VPC_Gateway_Table" {
       + arn              = (known after apply)
@@ -1117,8 +562,8 @@ Terraform will perform the following actions:
       + vpc_id           = (known after apply)
     }
 
-  # aws_route_table.VPC_NAT_Table will be created
-  + resource "aws_route_table" "VPC_NAT_Table" {
+  # aws_route_table.VPC_Private_Subnet_Table[0] will be created
+  + resource "aws_route_table" "VPC_Private_Subnet_Table" {
       + arn              = (known after apply)
       + id               = (known after apply)
       + owner_id         = (known after apply)
@@ -1126,13 +571,35 @@ Terraform will perform the following actions:
       + route            = (known after apply)
       + tags             = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-VPC NAT B Table"
+          + "Name"        = "Dev-VPC Private Subnet Table #1 eu-central-1a"
           + "Owner"       = "Rainbow Gravity"
           + "Project"     = "Template Homework"
         }
       + tags_all         = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-VPC NAT B Table"
+          + "Name"        = "Dev-VPC Private Subnet Table #1 eu-central-1a"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table.VPC_Private_Subnet_Table[1] will be created
+  + resource "aws_route_table" "VPC_Private_Subnet_Table" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = (known after apply)
+      + tags             = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Private Subnet Table #2 eu-central-1b"
+          + "Owner"       = "Rainbow Gravity"
+          + "Project"     = "Template Homework"
+        }
+      + tags_all         = {
+          + "Environment" = "Dev"
+          + "Name"        = "Dev-VPC Private Subnet Table #2 eu-central-1b"
           + "Owner"       = "Rainbow Gravity"
           + "Project"     = "Template Homework"
         }
@@ -1153,29 +620,15 @@ Terraform will perform the following actions:
       + subnet_id      = (known after apply)
     }
 
-  # aws_route_table_association.VPC_Gateway_Association[2] will be created
-  + resource "aws_route_table_association" "VPC_Gateway_Association" {
+  # aws_route_table_association.VPC_Private_Subnet_Association[0] will be created
+  + resource "aws_route_table_association" "VPC_Private_Subnet_Association" {
       + id             = (known after apply)
       + route_table_id = (known after apply)
       + subnet_id      = (known after apply)
     }
 
-  # aws_route_table_association.VPC_NAT_Association[0] will be created
-  + resource "aws_route_table_association" "VPC_NAT_Association" {
-      + id             = (known after apply)
-      + route_table_id = (known after apply)
-      + subnet_id      = (known after apply)
-    }
-
-  # aws_route_table_association.VPC_NAT_Association[1] will be created
-  + resource "aws_route_table_association" "VPC_NAT_Association" {
-      + id             = (known after apply)
-      + route_table_id = (known after apply)
-      + subnet_id      = (known after apply)
-    }
-
-  # aws_route_table_association.VPC_NAT_Association[2] will be created
-  + resource "aws_route_table_association" "VPC_NAT_Association" {
+  # aws_route_table_association.VPC_Private_Subnet_Association[1] will be created
+  + resource "aws_route_table_association" "VPC_Private_Subnet_Association" {
       + id             = (known after apply)
       + route_table_id = (known after apply)
       + subnet_id      = (known after apply)
@@ -1221,7 +674,7 @@ Terraform will perform the following actions:
       + bucket                 = (known after apply)
       + bucket_key_enabled     = (known after apply)
       + content_type           = (known after apply)
-      + etag                   = "4d81ef9d80bb5408d0ba63cb8a252d40"
+      + etag                   = "0f85264085def28c04acdee60b7882af"
       + force_destroy          = false
       + id                     = (known after apply)
       + key                    = "index.html"
@@ -1309,7 +762,7 @@ Terraform will perform the following actions:
   # aws_security_group.VPC_Load_Security_Group will be created
   + resource "aws_security_group" "VPC_Load_Security_Group" {
       + arn                    = (known after apply)
-      + description            = "Load balancer ports"
+      + description            = "Managed by Terraform"
       + egress                 = [
           + {
               + cidr_blocks      = [
@@ -1474,32 +927,6 @@ Terraform will perform the following actions:
       + vpc_id                          = (known after apply)
     }
 
-  # aws_subnet.VPC_Private_Subnet[2] will be created
-  + resource "aws_subnet" "VPC_Private_Subnet" {
-      + arn                             = (known after apply)
-      + assign_ipv6_address_on_creation = false
-      + availability_zone               = "eu-central-1c"
-      + availability_zone_id            = (known after apply)
-      + cidr_block                      = "10.0.23.0/24"
-      + id                              = (known after apply)
-      + ipv6_cidr_block_association_id  = (known after apply)
-      + map_public_ip_on_launch         = false
-      + owner_id                        = (known after apply)
-      + tags                            = {
-          + "Environment" = "Dev"
-          + "Name"        = "Dev-Private Subnet eu-central-1c"
-          + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
-        }
-      + tags_all                        = {
-          + "Environment" = "Dev"
-          + "Name"        = "Dev-Private Subnet eu-central-1c"
-          + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
-        }
-      + vpc_id                          = (known after apply)
-    }
-
   # aws_subnet.VPC_Public_Subnet[0] will be created
   + resource "aws_subnet" "VPC_Public_Subnet" {
       + arn                             = (known after apply)
@@ -1552,32 +979,6 @@ Terraform will perform the following actions:
       + vpc_id                          = (known after apply)
     }
 
-  # aws_subnet.VPC_Public_Subnet[2] will be created
-  + resource "aws_subnet" "VPC_Public_Subnet" {
-      + arn                             = (known after apply)
-      + assign_ipv6_address_on_creation = false
-      + availability_zone               = "eu-central-1c"
-      + availability_zone_id            = (known after apply)
-      + cidr_block                      = "10.0.13.0/24"
-      + id                              = (known after apply)
-      + ipv6_cidr_block_association_id  = (known after apply)
-      + map_public_ip_on_launch         = true
-      + owner_id                        = (known after apply)
-      + tags                            = {
-          + "Environment" = "Dev"
-          + "Name"        = "Dev-Public Subnet eu-central-1c"
-          + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
-        }
-      + tags_all                        = {
-          + "Environment" = "Dev"
-          + "Name"        = "Dev-Public Subnet eu-central-1c"
-          + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
-        }
-      + vpc_id                          = (known after apply)
-    }
-
   # aws_vpc.Homework_VPC will be created
   + resource "aws_vpc" "Homework_VPC" {
       + arn                              = (known after apply)
@@ -1611,8 +1012,8 @@ Terraform will perform the following actions:
         }
     }
 
-  # aws_vpc_endpoint.EC2_Messages will be created
-  + resource "aws_vpc_endpoint" "EC2_Messages" {
+  # aws_vpc_endpoint.EC2_Messages_Endpoint will be created
+  + resource "aws_vpc_endpoint" "EC2_Messages_Endpoint" {
       + arn                   = (known after apply)
       + cidr_blocks           = (known after apply)
       + dns_entry             = (known after apply)
@@ -1644,8 +1045,8 @@ Terraform will perform the following actions:
       + vpc_id                = (known after apply)
     }
 
-  # aws_vpc_endpoint.Endpoint will be created
-  + resource "aws_vpc_endpoint" "Endpoint" {
+  # aws_vpc_endpoint.S3_Endpoint will be created
+  + resource "aws_vpc_endpoint" "S3_Endpoint" {
       + arn                   = (known after apply)
       + cidr_blocks           = (known after apply)
       + dns_entry             = (known after apply)
@@ -1677,8 +1078,8 @@ Terraform will perform the following actions:
       + vpc_id                = (known after apply)
     }
 
-  # aws_vpc_endpoint.SSM will be created
-  + resource "aws_vpc_endpoint" "SSM" {
+  # aws_vpc_endpoint.SSM_Endpoint will be created
+  + resource "aws_vpc_endpoint" "SSM_Endpoint" {
       + arn                   = (known after apply)
       + cidr_blocks           = (known after apply)
       + dns_entry             = (known after apply)
@@ -1710,8 +1111,8 @@ Terraform will perform the following actions:
       + vpc_id                = (known after apply)
     }
 
-  # aws_vpc_endpoint.SSM_Messages will be created
-  + resource "aws_vpc_endpoint" "SSM_Messages" {
+  # aws_vpc_endpoint.SSM_Messages_Endpoint will be created
+  + resource "aws_vpc_endpoint" "SSM_Messages_Endpoint" {
       + arn                   = (known after apply)
       + cidr_blocks           = (known after apply)
       + dns_entry             = (known after apply)
@@ -1743,14 +1144,10 @@ Terraform will perform the following actions:
       + vpc_id                = (known after apply)
     }
 
-Plan: 49 to add, 0 to change, 0 to destroy.
+Plan: 34 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
-  + Available_zones        = [
-      + "eu-central-1a",
-      + "eu-central-1b",
-      + "eu-central-1c",
-    ]
+  + Available_zones        = 3
   + Current_bucket         = "aws-server-files-rg-eu-central-1"
   + Current_bucket_name    = "aws-server-files-rg-eu-central-1"
   + Current_region         = "eu-central-1"
@@ -1761,7 +1158,7 @@ Changes to Outputs:
         sudo amazon-linux-extras install nginx1 -y
         sudo aws s3 cp s3://aws-server-files-rg-eu-central-1/index.html /usr/share/nginx/html/index.html --endpoint-url https://s3.eu-central-1.amazonaws.com
         sudo sudo yum install -y https://s3.eu-central-1.amazonaws.com/amazon-ssm-eu-central-1/latest/linux_amd64/amazon-ssm-agent.rpm
-        sudo hostname -I >> /usr/share/nginx/html/index.html
+        EC2=$(hostname -I); sudo sed -i "s/'IP'/$EC2/" /usr/share/nginx/html/index.html
         sudo systemctl start nginx
         sudo systemctl enable nginx
     EOT

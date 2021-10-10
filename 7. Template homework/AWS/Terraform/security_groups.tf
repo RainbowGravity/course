@@ -4,11 +4,11 @@
 # Security groups
 #===========================================================================================
 
+# Creating a security group for the ALB
 resource "aws_security_group" "VPC_Load_Security_Group" {
   vpc_id = aws_vpc.Homework_VPC.id
 
-  description = "Load balancer ports"
-
+  # Creating a list of the ALB open ports dynamically
   dynamic "ingress" {
     for_each = var.Load_Security_Group_Ports
     content {
@@ -41,9 +41,11 @@ resource "aws_security_group" "VPC_Load_Security_Group" {
   tags = local.Load_Security_Group
 }
 
+# Creating a security group for the EC2 Instances
 resource "aws_security_group" "VPC_Instances_Security_Group" {
   vpc_id = aws_vpc.Homework_VPC.id
 
+  # Creating a list of the EC2 open ports dynamically
   dynamic "ingress" {
     for_each = var.Instances_Security_Group_Ports
     content {
@@ -77,6 +79,7 @@ resource "aws_security_group" "VPC_Instances_Security_Group" {
   tags = local.Instances_Security_Group
 }
 
+# Creating a security group for the SSM services
 resource "aws_security_group" "VPC_SSM_Security_Group" {
   vpc_id = aws_vpc.Homework_VPC.id
 

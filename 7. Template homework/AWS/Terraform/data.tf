@@ -4,6 +4,7 @@
 # Data
 #===========================================================================================
 
+# Retrieving latest Amazon Linux 2 AMI
 data "aws_ami" "Amazon_Latest" {
   owners      = ["amazon"]
   most_recent = true
@@ -13,8 +14,10 @@ data "aws_ami" "Amazon_Latest" {
   }
 }
 
+# Retrieving list of the available availability zones
 data "aws_availability_zones" "Available" {
   state = "available"
 }
 
+# Retrieving current region
 data "aws_region" "Current" {}

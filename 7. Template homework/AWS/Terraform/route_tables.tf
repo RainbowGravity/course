@@ -4,6 +4,7 @@
 # VPC Ruote Tables
 #===========================================================================================
 
+# Creating a route table for the Internet Gateway
 resource "aws_route_table" "VPC_Gateway_Table" {
   vpc_id = aws_vpc.Homework_VPC.id
 
@@ -15,6 +16,7 @@ resource "aws_route_table" "VPC_Gateway_Table" {
   tags = local.Gateway_Table
 }
 
+# Associating public subnets with the Internet Gateway route table
 resource "aws_route_table_association" "VPC_Gateway_Association" {
   count = var.Amount_of_Zones
 
@@ -22,50 +24,26 @@ resource "aws_route_table_association" "VPC_Gateway_Association" {
   route_table_id = aws_route_table.VPC_Gateway_Table.id
 }
 
-# For testing without bills for NATs
-# =====================================
-
-resource "aws_route_table_association" "VPC_NAT_Association" {
+# Creating a route table for private subnets
+resource "aws_route_table" "VPC_Private_Subnet_Table" {
   count = var.Amount_of_Zones
 
-  subnet_id      = aws_subnet.VPC_Private_Subnet[count.index].id
-  route_table_id = aws_route_table.VPC_NAT_Table.id
-}
-
-resource "aws_route_table" "VPC_NAT_Table" {
   vpc_id = aws_vpc.Homework_VPC.id
+  tags   = merge(var.Tags, { Name = "${local.ENV_Tag}-VPC Private Subnet Table #${tostring(count.index + 1)} ${local.Availability_zone[count.index]}" })
 
-  tags = local.NAT_B_Table
+  # Creating a route to the NAT Gateway if NAT was enabled
+  dynamic "route" {
+    for_each = var.Enable_NAT ? toset([1]) : toset([])
+    content {
+      cidr_block = "0.0.0.0/0"
+      gateway_id = aws_nat_gateway.VPC_NAT[count.index].id
+    }
+  }
 }
 
-
-# resource "aws_route_table" "VPC_NAT_A_Table" {
-#   vpc_id = aws_vpc.Homework_VPC.id
-
-#   route {
-#     cidr_block     = "0.0.0.0/0"
-#     nat_gateway_id = aws_nat_gateway.VPC_NAT_A.id
-#   }
-#   tags = local.NAT_A_Table
-# }
-
-# resource "aws_route_table_association" "VPC_NAT_Association_A" {
-#   subnet_id      = aws_subnet.VPC_Private_Subnet_A.id
-#   route_table_id = aws_route_table.VPC_NAT_A_Table.id
-# }
-
-# resource "aws_route_table" "VPC_NAT_B_Table" {
-#   vpc_id = aws_vpc.Homework_VPC.id
-
-#   route {
-#     cidr_block     = "0.0.0.0/0"
-#     nat_gateway_id = aws_nat_gateway.VPC_NAT_B.id
-#   }
-#   tags = local.NAT_B_Table
-# }
-
-# resource "aws_route_table_association" "VPC_NAT_Association_B" {
-#   subnet_id      = aws_subnet.VPC_Private_Subnet_B.id
-#   route_table_id = aws_route_table.VPC_NAT_B_Table.id
-# }
-
+# Associating private subnets with the private subnets route table
+resource "aws_route_table_association" "VPC_Private_Subnet_Association" {
+  count          = var.Amount_of_Zones
+  subnet_id      = aws_subnet.VPC_Private_Subnet[count.index].id
+  route_table_id = aws_route_table.VPC_Private_Subnet_Table[count.index].id
+}

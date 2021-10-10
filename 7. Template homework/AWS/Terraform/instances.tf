@@ -4,6 +4,7 @@
 # VPC Instances
 #===========================================================================================
 
+# Creating EC2 Instances with dynamic userdata and SSM profile
 resource "aws_instance" "VPC_EC2_Instance" {
   count = var.Amount_of_Zones * var.EC2_Per_Zone
 
@@ -12,8 +13,8 @@ resource "aws_instance" "VPC_EC2_Instance" {
   subnet_id              = aws_subnet.VPC_Private_Subnet[count.index % var.Amount_of_Zones].id
   vpc_security_group_ids = [aws_security_group.VPC_Instances_Security_Group.id]
   iam_instance_profile   = aws_iam_instance_profile.Instances_SSM_Profile.name
-
-  user_data = local.User_Data
+  monitoring             = var.Monitoring
+  user_data              = local.User_Data
 
   tags = merge(var.Tags, { Name = "${local.ENV_Tag}-EC2 Instance #${tostring(count.index + 1)} ${local.Availability_zone[count.index % var.Amount_of_Zones]}" })
 
@@ -22,6 +23,7 @@ resource "aws_instance" "VPC_EC2_Instance" {
   }
 }
 
+# Attaching the EC2 Instances to ALB target group
 resource "aws_lb_target_group_attachment" "VPC_EC2_Instance_TG" {
   count = var.Amount_of_Zones * var.EC2_Per_Zone
 

@@ -4,11 +4,14 @@
 # Instances SSM Role
 #----------------------------------------------------------------------
 
+# Creating the SSM profile for EC2 Instances
 resource "aws_iam_instance_profile" "Instances_SSM_Profile" {
   name = "${local.ENV_Tag}InstancesSSMProfile"
+
   role = aws_iam_role.Instances_SSM_Role.name
 }
 
+# Creating the SSM Role for EC2 Instances 
 resource "aws_iam_role" "Instances_SSM_Role" {
   name = "${local.ENV_Tag}InstancesSSMRole"
 
@@ -28,8 +31,10 @@ resource "aws_iam_role" "Instances_SSM_Role" {
   tags = local.SSM_Role
 }
 
+# Creating the SSM Role Policy for the SSM Role
 resource "aws_iam_role_policy" "Instances_SSM_Policy" {
   name = "${local.ENV_Tag}InstancesSSMPolicy"
+
   role = aws_iam_role.Instances_SSM_Role.id
 
   policy = jsonencode({
@@ -38,7 +43,7 @@ resource "aws_iam_role_policy" "Instances_SSM_Policy" {
       {
         "Effect" = "Allow",
         "Action" = [
-          #          "cloudwatch:PutMetricData",
+          "cloudwatch:PutMetricData",
           "ds:CreateComputer",
           "ds:DescribeDirectories",
           "ec2:DescribeInstanceStatus",
