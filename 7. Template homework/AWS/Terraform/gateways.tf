@@ -16,7 +16,7 @@ resource "aws_nat_gateway" "VPC_NAT" {
 
   allocation_id = aws_eip.VPC_NAT_EIP[count.index].id
   subnet_id     = aws_subnet.VPC_Public_Subnet[count.index].id
-  tags          = merge(var.Tags, { Name = "${local.ENV_Tag}-NAT ${local.Availability_zone[count.index]}" })
+  tags          = merge(local.Tags, { Name = "${local.ENV_Tag}-NAT ${local.Availability_zone[count.index]}" })
 
   depends_on = [aws_internet_gateway.VPC_Internet_Gateway, aws_eip.VPC_NAT_EIP]
 }

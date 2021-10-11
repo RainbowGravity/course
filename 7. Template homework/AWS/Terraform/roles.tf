@@ -6,14 +6,14 @@
 
 # Creating the SSM profile for EC2 Instances
 resource "aws_iam_instance_profile" "Instances_SSM_Profile" {
-  name = "${local.ENV_Tag}InstancesSSMProfile"
+  name = "${var.Environment_Tag}InstancesSSMProfile"
 
   role = aws_iam_role.Instances_SSM_Role.name
 }
 
 # Creating the SSM Role for EC2 Instances 
 resource "aws_iam_role" "Instances_SSM_Role" {
-  name = "${local.ENV_Tag}InstancesSSMRole"
+  name = "${var.Environment_Tag}InstancesSSMRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -33,7 +33,7 @@ resource "aws_iam_role" "Instances_SSM_Role" {
 
 # Creating the SSM Role Policy for the SSM Role
 resource "aws_iam_role_policy" "Instances_SSM_Policy" {
-  name = "${local.ENV_Tag}InstancesSSMPolicy"
+  name = "${var.Environment_Tag}InstancesSSMPolicy"
 
   role = aws_iam_role.Instances_SSM_Role.id
 

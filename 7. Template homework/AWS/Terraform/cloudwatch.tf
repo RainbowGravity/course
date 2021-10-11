@@ -8,7 +8,7 @@
 resource "aws_cloudwatch_metric_alarm" "VPC_Instance_Auto_Recovery" {
   count = (var.EC2_Per_Zone * var.Amount_of_Zones)
 
-  alarm_name          = "${local.ENV_Tag}-VPC Instance #${tostring(count.index + 1)} ${local.Availability_zone[count.index % var.Amount_of_Zones]}"
+  alarm_name          = "${var.Environment_Tag}-VPC Instance #${tostring(count.index + 1)} ${local.Availability_zone[count.index % var.Amount_of_Zones]}"
   namespace           = "AWS/EC2"
   evaluation_periods  = "1"
   period              = "60"

@@ -29,7 +29,7 @@ resource "aws_route_table" "VPC_Private_Subnet_Table" {
   count = var.Amount_of_Zones
 
   vpc_id = aws_vpc.Homework_VPC.id
-  tags   = merge(var.Tags, { Name = "${local.ENV_Tag}-VPC Private Subnet Table #${tostring(count.index + 1)} ${local.Availability_zone[count.index]}" })
+  tags   = merge(local.Tags, { Name = "${var.Environment_Tag}-VPC Private Subnet Table #${tostring(count.index + 1)} ${local.Availability_zone[count.index]}" })
 
   # Creating a route to the NAT Gateway if NAT was enabled
   dynamic "route" {

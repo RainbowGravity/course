@@ -93,13 +93,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "DevInstancesSSMRole"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all              = {
           + "Environment" = "Dev"
           + "Name"        = "DevInstancesSSMRole"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + unique_id             = (known after apply)
 
@@ -211,16 +211,16 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-EC2 Instance #1 eu-central-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all                             = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-EC2 Instance #1 eu-central-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tenancy                              = (known after apply)
-      + user_data                            = "e110285e4841e0171cb7d0f22ba8987b817d03ff"
+      + user_data                            = "0ceee1ae5c5dc9c8502d9464329cfb2d2b7fc0c6"
       + user_data_base64                     = (known after apply)
       + vpc_security_group_ids               = (known after apply)
 
@@ -319,16 +319,16 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-EC2 Instance #2 eu-central-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all                             = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-EC2 Instance #2 eu-central-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tenancy                              = (known after apply)
-      + user_data                            = "e110285e4841e0171cb7d0f22ba8987b817d03ff"
+      + user_data                            = "0ceee1ae5c5dc9c8502d9464329cfb2d2b7fc0c6"
       + user_data_base64                     = (known after apply)
       + vpc_security_group_ids               = (known after apply)
 
@@ -399,13 +399,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-VPC Internet Gateway"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-VPC Internet Gateway"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_id   = (known after apply)
     }
@@ -431,13 +431,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "VPC Load Balancer"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all                   = {
           + "Environment" = "Dev"
           + "Name"        = "VPC Load Balancer"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_id                     = (known after apply)
       + zone_id                    = (known after apply)
@@ -551,13 +551,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-VPC Internet Gateway Table"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all         = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-VPC Internet Gateway Table"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_id           = (known after apply)
     }
@@ -573,13 +573,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-VPC Private Subnet Table #1 eu-central-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all         = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-VPC Private Subnet Table #1 eu-central-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_id           = (known after apply)
     }
@@ -595,13 +595,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-VPC Private Subnet Table #2 eu-central-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all         = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-VPC Private Subnet Table #2 eu-central-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_id           = (known after apply)
     }
@@ -639,7 +639,7 @@ Terraform will perform the following actions:
       + acceleration_status         = (known after apply)
       + acl                         = "private"
       + arn                         = (known after apply)
-      + bucket                      = "aws-server-files-rg-eu-central-1"
+      + bucket                      = "dev-my-cool-bucket-eu-central-1"
       + bucket_domain_name          = (known after apply)
       + bucket_regional_domain_name = (known after apply)
       + force_destroy               = false
@@ -651,13 +651,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev VPC Server Files"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all                    = {
           + "Environment" = "Dev"
           + "Name"        = "Dev VPC Server Files"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + website_domain              = (known after apply)
       + website_endpoint            = (known after apply)
@@ -748,13 +748,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-Instances security group"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all               = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-Instances security group"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_id                 = (known after apply)
     }
@@ -806,13 +806,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-Load Balancer security group"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all               = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-Load Balancer security group"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_id                 = (known after apply)
     }
@@ -864,13 +864,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-SSM security group"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all               = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-SSM security group"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_id                 = (known after apply)
     }
@@ -890,13 +890,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-Private Subnet eu-central-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all                        = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-Private Subnet eu-central-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_id                          = (known after apply)
     }
@@ -916,13 +916,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-Private Subnet eu-central-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all                        = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-Private Subnet eu-central-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_id                          = (known after apply)
     }
@@ -942,13 +942,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-Public Subnet eu-central-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all                        = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-Public Subnet eu-central-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_id                          = (known after apply)
     }
@@ -968,13 +968,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-Public Subnet eu-central-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all                        = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-Public Subnet eu-central-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_id                          = (known after apply)
     }
@@ -1002,13 +1002,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev VPC"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all                         = {
           + "Environment" = "Dev"
           + "Name"        = "Dev VPC"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
     }
 
@@ -1033,13 +1033,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-EC2-Messages Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all              = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-EC2-Messages Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_endpoint_type     = "Interface"
       + vpc_id                = (known after apply)
@@ -1066,13 +1066,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-S3 Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all              = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-S3 Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_endpoint_type     = "Gateway"
       + vpc_id                = (known after apply)
@@ -1099,13 +1099,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-SSM Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all              = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-SSM Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_endpoint_type     = "Interface"
       + vpc_id                = (known after apply)
@@ -1132,13 +1132,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-SSM-Messages Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + tags_all              = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-SSM-Messages Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Template Homework"
+          + "Project"     = "Andersen DevOps course homework"
         }
       + vpc_endpoint_type     = "Interface"
       + vpc_id                = (known after apply)
@@ -1148,16 +1148,16 @@ Plan: 34 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
   + Available_zones        = 3
-  + Current_bucket         = "aws-server-files-rg-eu-central-1"
-  + Current_bucket_name    = "aws-server-files-rg-eu-central-1"
+  + Current_bucket         = "dev-my-cool-bucket-eu-central-1"
+  + Current_bucket_name    = "dev-my-cool-bucket-eu-central-1"
   + Current_region         = "eu-central-1"
   + Load_Balancer_DNS_name = (known after apply)
   + User_data              = <<-EOT
         #!/bin/bash
         sudo yum update -y
         sudo amazon-linux-extras install nginx1 -y
-        sudo aws s3 cp s3://aws-server-files-rg-eu-central-1/index.html /usr/share/nginx/html/index.html --endpoint-url https://s3.eu-central-1.amazonaws.com
-        sudo sudo yum install -y https://s3.eu-central-1.amazonaws.com/amazon-ssm-eu-central-1/latest/linux_amd64/amazon-ssm-agent.rpm
+        sudo aws s3 cp s3://dev-my-cool-bucket-eu-central-1/index.html /usr/share/nginx/html/index.html --endpoint-url https://s3.eu-central-1.amazonaws.com
+        sudo yum install -y https://s3.eu-central-1.amazonaws.com/amazon-ssm-eu-central-1/latest/linux_amd64/amazon-ssm-agent.rpm
         EC2=$(hostname -I); sudo sed -i "s/'IP'/$EC2/" /usr/share/nginx/html/index.html
         sudo systemctl start nginx
         sudo systemctl enable nginx
@@ -1165,5 +1165,7 @@ Changes to Outputs:
 
 ─────────────────────────────────────────────────────────────────────────────
 
-Note: You didn't use the -out option to save this plan, so Terraform can't
-guarantee to take exactly these actions if you run "terraform apply" now.
+Saved the plan to: template_homework_apply
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "template_homework_apply"

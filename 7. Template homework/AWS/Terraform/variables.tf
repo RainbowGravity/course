@@ -4,14 +4,25 @@
 # VPC Variables
 #===========================================================================================
 
-# Default tags. You can add or change them. Maximum lenght of the Environment tag is 5, because it used as name prefix for several resources. Don't delete it.
-variable "Tags" {
-  type = map(string)
-  default = {
-    Owner       = "Rainbow Gravity"
-    Project     = "Template Homework"
-    Environment = "Dev"
+# Maximum length of the Environment tag is 5, because it used as name prefix for several resources.
+# DON'T delete it.
+variable "Environment_Tag" {
+  type    = string
+  default = "Dev"
+  validation {
+    condition     = length(var.Environment_Tag) <= 5 && length(var.Environment_Tag) >= 1
+    error_message = "Maximum lenght of the Environment tag is 5, because it used as name prefix for several resources."
   }
+}
+
+variable "Project_Tag" {
+  type    = string
+  default = "Template Homework"
+}
+
+variable "Owner_Tag" {
+  type    = string
+  default = "Rainbow Gravity"
 }
 
 # Region selection
@@ -30,6 +41,11 @@ variable "Instance_Type" {
 variable "EC2_Per_Zone" {
   type    = number
   default = 1
+
+  validation {
+    condition     = var.EC2_Per_Zone >= 1
+    error_message = "Amount of EC2 Instances per avialability zone cannot be less than 1. Why do you need that?"
+  }
 }
 
 # Amount of avialability zones. Cannot be less than 2 or ALB will not start.
@@ -43,7 +59,8 @@ variable "Amount_of_Zones" {
   }
 }
 
-# Enable or disable NAT Gateway for your instances. If true, then NAT Gateway will be created for each avialability zone
+# Enable or disable NAT Gateway for your instances 
+# If true, then NAT Gateway will be created for each avialability zone
 variable "Enable_NAT" {
   type    = bool
   default = false
@@ -61,10 +78,16 @@ variable "Instances_Security_Group_Ports" {
   default = ["22", "80"]
 }
 
-# Name of the S3 Bucket. Region name will be added to the end of the S3 Bucket name. You can see it in locals.tf
+# Name of the S3 Bucket. Environment tag and region name will be added to the beginning 
+# and to the end of the S3 Bucket name respectively. You can see it in locals.tf
 variable "S3_Bucket_Name" {
   type    = string
-  default = "aws-server-files-rg"
+  default = "server-files-ag"
+
+  validation {
+    condition     = can(regex("[A-Z]", var.S3_Bucket_Name)) == false && can(regex(" ", var.S3_Bucket_Name)) == false
+    error_message = "Bucket name must not contain spaces or uppercase letters."
+  }
 }
 
 # Monitoring of the EC2 Instances

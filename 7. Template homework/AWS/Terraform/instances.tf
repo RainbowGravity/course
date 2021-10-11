@@ -16,7 +16,7 @@ resource "aws_instance" "VPC_EC2_Instance" {
   monitoring             = var.Monitoring
   user_data              = local.User_Data
 
-  tags = merge(var.Tags, { Name = "${local.ENV_Tag}-EC2 Instance #${tostring(count.index + 1)} ${local.Availability_zone[count.index % var.Amount_of_Zones]}" })
+  tags = merge(local.Tags, { Name = "${var.Environment_Tag}-EC2 Instance #${tostring(count.index + 1)} ${local.Availability_zone[count.index % var.Amount_of_Zones]}" })
 
   lifecycle {
     create_before_destroy = true

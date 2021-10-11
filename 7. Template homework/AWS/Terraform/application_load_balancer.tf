@@ -5,7 +5,7 @@
 #===========================================================================================
 
 resource "aws_lb" "VPC_Load_Balancer" {
-  name_prefix = "${var.Tags["Environment"]}-"
+  name_prefix = "${var.Environment_Tag}-"
 
   internal           = false
   load_balancer_type = "application"
@@ -16,7 +16,6 @@ resource "aws_lb" "VPC_Load_Balancer" {
 }
 
 resource "aws_lb_listener" "VPC_Load_Balancer_Listener_80" {
-
   load_balancer_arn = aws_lb.VPC_Load_Balancer.arn
   port              = 80
   protocol          = "HTTP"
@@ -28,7 +27,7 @@ resource "aws_lb_listener" "VPC_Load_Balancer_Listener_80" {
 }
 
 resource "aws_lb_target_group" "VPC_Target_Group" {
-  name_prefix = "${var.Tags["Environment"]}-"
+  name_prefix = "${var.Environment_Tag}-"
 
   vpc_id   = aws_vpc.Homework_VPC.id
   port     = 80
