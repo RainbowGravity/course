@@ -1,18 +1,18 @@
 ## Files and template files
 
-In this foldier you will find some different files and foldiers, there is a description for them: 
+In this folder you will find some different files and folders, there is a description for them: 
 
-* [files](files) foldier is containig the [index.html](files/index.html) page that you will see if you will connect to the VPC ALB after deplyment.
-* [templates](templates) foldier is containig [web-server.tpl](templates/web-server.tpl) with a commands for instances to update software, install the Nginx server, copy files from S3 Bucket, install the SSM and start and enable the Nginx server. This file is dynamic and have some variables for Terrafrom which will be applied during ```terraform plan``` and ```terraform apply```. For example, link to the S3 Bucket will be automatically updated depends on current region and S3 Bucket name. 
+* [files](files) folder is containing the [index.html](files/index.html) page that you will see if you will connect to the VPC ALB after deployment.
+* [templates](templates) folder is containing [web-server.tpl](templates/web-server.tpl) with a commands for instances to update software, install the Nginx server, copy files from S3 Bucket, install the SSM and start and enable the Nginx server. This file is dynamic and have some variables for Terrafrom which will be applied during ```terraform plan``` and ```terraform apply```. For example, link to the S3 Bucket will be automatically updated depends on current region and S3 Bucket name. 
 * Every .tf file is named for its purpose, so there is no point to describe them all individually. 
 * [template_homework_apply](template_homework_apply) is a file that will be created/updated after you run the [wrapper-script](wrapper-script.sh). It will be used by script to apply deployment.
 * [template_homework_plan.txt](template_homework_plan.txt) is a file that will be created/updated after you run the [wrapper-script](wrapper-script.sh) too. In this file plan is saved in readable no-color form, so you can open it and check all the changes that Terraform will apply.
-* [varscript.tfvars](varscript.tfvars) is a file with values for the template variables. File is creating/updating automatically after you write last tag during the wrapper-script run and accordiong to this file Terarform will initiate the ```terrafrom plan``` command and update files described above too. 
+* [varscript.tfvars](varscript.tfvars) is a file with values for the template variables. File is creating/updating automatically after you write last tag during the wrapper-script run and according to this file Terarform will initiate the ```terrafrom plan``` command and update files described above too. 
 
 ## About wrapper script
-Wrapper script is used for easy variables management. You can use the script with and without options arguments, or set not all of them. Tag argumets can't be set, you must enter the manually every time. 
+Wrapper script is used for easy variables management. You can use the script with and without options arguments, or set not all of them. Tag arguments can't be set, you must enter the manually every time. 
 
-Every entered variable will be writed to the [varscript.tfvars](varscript.tfvars) file only after your apply for this action. You will see a table with variables you have set and decide then decide to write or not this changes. If you will enter 'yes' then script will start ```terrafrom plan``` with this variables. You can read this plan in [template_homework_plan.txt](template_homework_plan.txt) and then apply it from script answering 'yes' too.
+Every entered variable will be written to the [varscript.tfvars](varscript.tfvars) file only after your apply for this action. You will see a table with variables you have set and decide then decide to write or not this changes. If you will enter 'yes' then script will start ```terrafrom plan``` with this variables. You can read this plan in [template_homework_plan.txt](template_homework_plan.txt) and then apply it from script answering 'yes' too.
 
 ## Script requirements
 
@@ -20,7 +20,7 @@ Every entered variable will be writed to the [varscript.tfvars](varscript.tfvars
 
 ## Script features
 
-* You can set every template vatiable from this script, just run it and enter the values. You are unable to set something wrong because script is checking every sensetive setting.
+* You can set every template variable from this script, just run it and enter the values. You are unable to set something wrong because script is checking every sensitive setting.
 * Ability to run template with applied settings.
 * Clear output with colors. You can see every setting applied and error message with describes. If you've enter something wrong then script will give you another chance to do that right even if wrong setting was declared by option argument.
 
