@@ -9,10 +9,10 @@ Terraform will perform the following actions:
   + resource "aws_cloudwatch_metric_alarm" "VPC_Instance_Auto_Recovery" {
       + actions_enabled                       = true
       + alarm_actions                         = [
-          + "arn:aws:automate:eu-central-1:ec2:recover",
+          + "arn:aws:automate:eu-north-1:ec2:recover",
         ]
-      + alarm_description                     = "Recovery of the EC2 Instance #1 in eu-central-1a zone."
-      + alarm_name                            = "Dev-VPC Instance #1 eu-central-1a"
+      + alarm_description                     = "Recovery of the EC2 Instance #1 in eu-north-1a zone."
+      + alarm_name                            = "Dev-VPC Instance #1 eu-north-1a"
       + arn                                   = (known after apply)
       + comparison_operator                   = "GreaterThanThreshold"
       + dimensions                            = (known after apply)
@@ -32,10 +32,10 @@ Terraform will perform the following actions:
   + resource "aws_cloudwatch_metric_alarm" "VPC_Instance_Auto_Recovery" {
       + actions_enabled                       = true
       + alarm_actions                         = [
-          + "arn:aws:automate:eu-central-1:ec2:recover",
+          + "arn:aws:automate:eu-north-1:ec2:recover",
         ]
-      + alarm_description                     = "Recovery of the EC2 Instance #2 in eu-central-1b zone."
-      + alarm_name                            = "Dev-VPC Instance #2 eu-central-1b"
+      + alarm_description                     = "Recovery of the EC2 Instance #2 in eu-north-1b zone."
+      + alarm_name                            = "Dev-VPC Instance #2 eu-north-1b"
       + arn                                   = (known after apply)
       + comparison_operator                   = "GreaterThanThreshold"
       + dimensions                            = (known after apply)
@@ -93,13 +93,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "DevInstancesSSMRole"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all              = {
           + "Environment" = "Dev"
           + "Name"        = "DevInstancesSSMRole"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + unique_id             = (known after apply)
 
@@ -176,7 +176,7 @@ Terraform will perform the following actions:
 
   # aws_instance.VPC_EC2_Instance[0] will be created
   + resource "aws_instance" "VPC_EC2_Instance" {
-      + ami                                  = "ami-058e6df85cfc7760b"
+      + ami                                  = "ami-0d15082500b576303"
       + arn                                  = (known after apply)
       + associate_public_ip_address          = (known after apply)
       + availability_zone                    = (known after apply)
@@ -190,11 +190,11 @@ Terraform will perform the following actions:
       + id                                   = (known after apply)
       + instance_initiated_shutdown_behavior = (known after apply)
       + instance_state                       = (known after apply)
-      + instance_type                        = "t2.micro"
+      + instance_type                        = "t3.micro"
       + ipv6_address_count                   = (known after apply)
       + ipv6_addresses                       = (known after apply)
       + key_name                             = (known after apply)
-      + monitoring                           = true
+      + monitoring                           = (known after apply)
       + outpost_arn                          = (known after apply)
       + password_data                        = (known after apply)
       + placement_group                      = (known after apply)
@@ -209,18 +209,18 @@ Terraform will perform the following actions:
       + subnet_id                            = (known after apply)
       + tags                                 = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-EC2 Instance #1 eu-central-1a"
+          + "Name"        = "Dev-EC2 Instance #1 eu-north-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all                             = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-EC2 Instance #1 eu-central-1a"
+          + "Name"        = "Dev-EC2 Instance #1 eu-north-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tenancy                              = (known after apply)
-      + user_data                            = "0ceee1ae5c5dc9c8502d9464329cfb2d2b7fc0c6"
+      + user_data                            = "a06d5176f9bda3f2b23db62bef0b354ba928df71"
       + user_data_base64                     = (known after apply)
       + vpc_security_group_ids               = (known after apply)
 
@@ -284,7 +284,7 @@ Terraform will perform the following actions:
 
   # aws_instance.VPC_EC2_Instance[1] will be created
   + resource "aws_instance" "VPC_EC2_Instance" {
-      + ami                                  = "ami-058e6df85cfc7760b"
+      + ami                                  = "ami-0d15082500b576303"
       + arn                                  = (known after apply)
       + associate_public_ip_address          = (known after apply)
       + availability_zone                    = (known after apply)
@@ -298,11 +298,11 @@ Terraform will perform the following actions:
       + id                                   = (known after apply)
       + instance_initiated_shutdown_behavior = (known after apply)
       + instance_state                       = (known after apply)
-      + instance_type                        = "t2.micro"
+      + instance_type                        = "t3.micro"
       + ipv6_address_count                   = (known after apply)
       + ipv6_addresses                       = (known after apply)
       + key_name                             = (known after apply)
-      + monitoring                           = true
+      + monitoring                           = (known after apply)
       + outpost_arn                          = (known after apply)
       + password_data                        = (known after apply)
       + placement_group                      = (known after apply)
@@ -317,18 +317,18 @@ Terraform will perform the following actions:
       + subnet_id                            = (known after apply)
       + tags                                 = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-EC2 Instance #2 eu-central-1b"
+          + "Name"        = "Dev-EC2 Instance #2 eu-north-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all                             = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-EC2 Instance #2 eu-central-1b"
+          + "Name"        = "Dev-EC2 Instance #2 eu-north-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tenancy                              = (known after apply)
-      + user_data                            = "0ceee1ae5c5dc9c8502d9464329cfb2d2b7fc0c6"
+      + user_data                            = "a06d5176f9bda3f2b23db62bef0b354ba928df71"
       + user_data_base64                     = (known after apply)
       + vpc_security_group_ids               = (known after apply)
 
@@ -399,13 +399,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-VPC Internet Gateway"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-VPC Internet Gateway"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_id   = (known after apply)
     }
@@ -431,13 +431,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "VPC Load Balancer"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all                   = {
           + "Environment" = "Dev"
           + "Name"        = "VPC Load Balancer"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_id                     = (known after apply)
       + zone_id                    = (known after apply)
@@ -551,13 +551,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-VPC Internet Gateway Table"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all         = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-VPC Internet Gateway Table"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_id           = (known after apply)
     }
@@ -571,15 +571,15 @@ Terraform will perform the following actions:
       + route            = (known after apply)
       + tags             = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-VPC Private Subnet Table #1 eu-central-1a"
+          + "Name"        = "Dev-VPC Private Subnet Table #1 eu-north-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all         = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-VPC Private Subnet Table #1 eu-central-1a"
+          + "Name"        = "Dev-VPC Private Subnet Table #1 eu-north-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_id           = (known after apply)
     }
@@ -593,15 +593,15 @@ Terraform will perform the following actions:
       + route            = (known after apply)
       + tags             = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-VPC Private Subnet Table #2 eu-central-1b"
+          + "Name"        = "Dev-VPC Private Subnet Table #2 eu-north-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all         = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-VPC Private Subnet Table #2 eu-central-1b"
+          + "Name"        = "Dev-VPC Private Subnet Table #2 eu-north-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_id           = (known after apply)
     }
@@ -639,7 +639,7 @@ Terraform will perform the following actions:
       + acceleration_status         = (known after apply)
       + acl                         = "private"
       + arn                         = (known after apply)
-      + bucket                      = "dev-my-cool-bucket-eu-central-1"
+      + bucket                      = "dev-my-cool-bucket-eu-north-1"
       + bucket_domain_name          = (known after apply)
       + bucket_regional_domain_name = (known after apply)
       + force_destroy               = false
@@ -651,13 +651,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev VPC Server Files"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all                    = {
           + "Environment" = "Dev"
           + "Name"        = "Dev VPC Server Files"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + website_domain              = (known after apply)
       + website_endpoint            = (known after apply)
@@ -748,13 +748,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-Instances security group"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all               = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-Instances security group"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_id                 = (known after apply)
     }
@@ -806,13 +806,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-Load Balancer security group"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all               = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-Load Balancer security group"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_id                 = (known after apply)
     }
@@ -864,13 +864,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev-SSM security group"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all               = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-SSM security group"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_id                 = (known after apply)
     }
@@ -879,7 +879,7 @@ Terraform will perform the following actions:
   + resource "aws_subnet" "VPC_Private_Subnet" {
       + arn                             = (known after apply)
       + assign_ipv6_address_on_creation = false
-      + availability_zone               = "eu-central-1a"
+      + availability_zone               = "eu-north-1a"
       + availability_zone_id            = (known after apply)
       + cidr_block                      = "10.0.21.0/24"
       + id                              = (known after apply)
@@ -888,15 +888,15 @@ Terraform will perform the following actions:
       + owner_id                        = (known after apply)
       + tags                            = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-Private Subnet eu-central-1a"
+          + "Name"        = "Dev-Private Subnet eu-north-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all                        = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-Private Subnet eu-central-1a"
+          + "Name"        = "Dev-Private Subnet eu-north-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_id                          = (known after apply)
     }
@@ -905,7 +905,7 @@ Terraform will perform the following actions:
   + resource "aws_subnet" "VPC_Private_Subnet" {
       + arn                             = (known after apply)
       + assign_ipv6_address_on_creation = false
-      + availability_zone               = "eu-central-1b"
+      + availability_zone               = "eu-north-1b"
       + availability_zone_id            = (known after apply)
       + cidr_block                      = "10.0.22.0/24"
       + id                              = (known after apply)
@@ -914,15 +914,15 @@ Terraform will perform the following actions:
       + owner_id                        = (known after apply)
       + tags                            = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-Private Subnet eu-central-1b"
+          + "Name"        = "Dev-Private Subnet eu-north-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all                        = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-Private Subnet eu-central-1b"
+          + "Name"        = "Dev-Private Subnet eu-north-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_id                          = (known after apply)
     }
@@ -931,7 +931,7 @@ Terraform will perform the following actions:
   + resource "aws_subnet" "VPC_Public_Subnet" {
       + arn                             = (known after apply)
       + assign_ipv6_address_on_creation = false
-      + availability_zone               = "eu-central-1a"
+      + availability_zone               = "eu-north-1a"
       + availability_zone_id            = (known after apply)
       + cidr_block                      = "10.0.11.0/24"
       + id                              = (known after apply)
@@ -940,15 +940,15 @@ Terraform will perform the following actions:
       + owner_id                        = (known after apply)
       + tags                            = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-Public Subnet eu-central-1a"
+          + "Name"        = "Dev-Public Subnet eu-north-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all                        = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-Public Subnet eu-central-1a"
+          + "Name"        = "Dev-Public Subnet eu-north-1a"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_id                          = (known after apply)
     }
@@ -957,7 +957,7 @@ Terraform will perform the following actions:
   + resource "aws_subnet" "VPC_Public_Subnet" {
       + arn                             = (known after apply)
       + assign_ipv6_address_on_creation = false
-      + availability_zone               = "eu-central-1b"
+      + availability_zone               = "eu-north-1b"
       + availability_zone_id            = (known after apply)
       + cidr_block                      = "10.0.12.0/24"
       + id                              = (known after apply)
@@ -966,15 +966,15 @@ Terraform will perform the following actions:
       + owner_id                        = (known after apply)
       + tags                            = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-Public Subnet eu-central-1b"
+          + "Name"        = "Dev-Public Subnet eu-north-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all                        = {
           + "Environment" = "Dev"
-          + "Name"        = "Dev-Public Subnet eu-central-1b"
+          + "Name"        = "Dev-Public Subnet eu-north-1b"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_id                          = (known after apply)
     }
@@ -1002,13 +1002,13 @@ Terraform will perform the following actions:
           + "Environment" = "Dev"
           + "Name"        = "Dev VPC"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all                         = {
           + "Environment" = "Dev"
           + "Name"        = "Dev VPC"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
     }
 
@@ -1026,20 +1026,20 @@ Terraform will perform the following actions:
       + requester_managed     = (known after apply)
       + route_table_ids       = (known after apply)
       + security_group_ids    = (known after apply)
-      + service_name          = "com.amazonaws.eu-central-1.ec2messages"
+      + service_name          = "com.amazonaws.eu-north-1.ec2messages"
       + state                 = (known after apply)
       + subnet_ids            = (known after apply)
       + tags                  = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-EC2-Messages Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all              = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-EC2-Messages Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_endpoint_type     = "Interface"
       + vpc_id                = (known after apply)
@@ -1059,20 +1059,20 @@ Terraform will perform the following actions:
       + requester_managed     = (known after apply)
       + route_table_ids       = (known after apply)
       + security_group_ids    = (known after apply)
-      + service_name          = "com.amazonaws.eu-central-1.s3"
+      + service_name          = "com.amazonaws.eu-north-1.s3"
       + state                 = (known after apply)
       + subnet_ids            = (known after apply)
       + tags                  = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-S3 Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all              = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-S3 Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_endpoint_type     = "Gateway"
       + vpc_id                = (known after apply)
@@ -1092,20 +1092,20 @@ Terraform will perform the following actions:
       + requester_managed     = (known after apply)
       + route_table_ids       = (known after apply)
       + security_group_ids    = (known after apply)
-      + service_name          = "com.amazonaws.eu-central-1.ssm"
+      + service_name          = "com.amazonaws.eu-north-1.ssm"
       + state                 = (known after apply)
       + subnet_ids            = (known after apply)
       + tags                  = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-SSM Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all              = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-SSM Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_endpoint_type     = "Interface"
       + vpc_id                = (known after apply)
@@ -1125,20 +1125,20 @@ Terraform will perform the following actions:
       + requester_managed     = (known after apply)
       + route_table_ids       = (known after apply)
       + security_group_ids    = (known after apply)
-      + service_name          = "com.amazonaws.eu-central-1.ssmmessages"
+      + service_name          = "com.amazonaws.eu-north-1.ssmmessages"
       + state                 = (known after apply)
       + subnet_ids            = (known after apply)
       + tags                  = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-SSM-Messages Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + tags_all              = {
           + "Environment" = "Dev"
           + "Name"        = "Dev-SSM-Messages Endpoint"
           + "Owner"       = "Rainbow Gravity"
-          + "Project"     = "Andersen DevOps course homework"
+          + "Project"     = "Andersen DevOps course"
         }
       + vpc_endpoint_type     = "Interface"
       + vpc_id                = (known after apply)
@@ -1147,21 +1147,7 @@ Terraform will perform the following actions:
 Plan: 34 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
-  + Available_zones        = 3
-  + Current_bucket         = "dev-my-cool-bucket-eu-central-1"
-  + Current_bucket_name    = "dev-my-cool-bucket-eu-central-1"
-  + Current_region         = "eu-central-1"
   + Load_Balancer_DNS_name = (known after apply)
-  + User_data              = <<-EOT
-        #!/bin/bash
-        sudo yum update -y
-        sudo amazon-linux-extras install nginx1 -y
-        sudo aws s3 cp s3://dev-my-cool-bucket-eu-central-1/index.html /usr/share/nginx/html/index.html --endpoint-url https://s3.eu-central-1.amazonaws.com
-        sudo yum install -y https://s3.eu-central-1.amazonaws.com/amazon-ssm-eu-central-1/latest/linux_amd64/amazon-ssm-agent.rpm
-        EC2=$(hostname -I); sudo sed -i "s/'IP'/$EC2/" /usr/share/nginx/html/index.html
-        sudo systemctl start nginx
-        sudo systemctl enable nginx
-    EOT
 
 ─────────────────────────────────────────────────────────────────────────────
 

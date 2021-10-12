@@ -90,12 +90,6 @@ variable "S3_Bucket_Name" {
   }
 }
 
-# Monitoring of the EC2 Instances
-variable "Monitoring" {
-  type    = bool
-  default = true
-}
-
 # ALB Health Check parameters
 variable "Health_Check" {
   type = map(number)

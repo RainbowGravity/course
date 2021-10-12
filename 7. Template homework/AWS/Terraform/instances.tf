@@ -13,7 +13,6 @@ resource "aws_instance" "VPC_EC2_Instance" {
   subnet_id              = aws_subnet.VPC_Private_Subnet[count.index % var.Amount_of_Zones].id
   vpc_security_group_ids = [aws_security_group.VPC_Instances_Security_Group.id]
   iam_instance_profile   = aws_iam_instance_profile.Instances_SSM_Profile.name
-  monitoring             = var.Monitoring
   user_data              = local.User_Data
 
   tags = merge(local.Tags, { Name = "${var.Environment_Tag}-EC2 Instance #${tostring(count.index + 1)} ${local.Availability_zone[count.index % var.Amount_of_Zones]}" })
