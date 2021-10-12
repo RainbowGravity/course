@@ -12,7 +12,7 @@ In this folder you will find some different files and folders, there is a descri
 ## About wrapper script
 Wrapper script is used for easy variables management. You can use the script with and without options arguments, or set not all of them. Tag arguments can't be set as option, you must enter them manually every time. 
 
-Every entered variable will be written to the [varscript.tfvars](varscript.tfvars) file only after your apply for this action. You will see a table with variables you have set and decide then decide to write or not this changes. If you will enter 'yes' then script will start ```terrafrom plan``` with this variables. You can read this plan in [template_homework_plan.txt](template_homework_plan.txt) and then apply it from script answering 'yes' too.
+Every entered variable will be written to the [varscript.tfvars](varscript.tfvars) file only after your apply for this action. You will see a table with variables you have set and then you must decide to write or not this changes. If you will enter 'yes' then script will start ```terrafrom plan``` with this variables. You can read this plan in [template_homework_plan.txt](template_homework_plan.txt) and then apply it from script answering 'yes' too.
 
 ## Script requirements
 
