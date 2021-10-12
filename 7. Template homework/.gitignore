@@ -1,0 +1,5 @@
+terraform.
+terraform.*
+qwerty
+.terraform*
+Testing S3
