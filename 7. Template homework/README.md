@@ -36,18 +36,18 @@ After deployment you will be able to connect to the Application Load Balancer vi
 * Project_Tag     
 * Owner_Tag       
  
-## Updated diagramm
+## Updated diagram
 
-Original diagramm was updated for this homework. Endpints for S3 Bucket and SSM was added. Without this endpoints instances from private subnets will not be able to connect to S3 Bucket and SSM Service.
+Original diagram was updated for this homework. Endpoints for S3 Bucket and SSM was added. Without this endpoints instances from private subnets will not be able to connect to S3 Bucket and SSM Service.
 
-Also public subnets and internet gateway was added to the diagramm. Internet-facing load balancer is connected to the public subnets which are connected to the Internet Gateway. 
+Also public subnets and internet gateway was added to the diagram. Internet-facing load balancer is connected to the public subnets which are connected to the Internet Gateway. 
 
 NAT Gateways for EC2 instances was added. Via this gateways instances are having internet access. NAT gateways can be disabled. 
 
-<p align=center><b>Updated VPC diagramm:</b></p>
+<p align=center><b>Updated VPC diagram:</b></p>
 <p align=center>
 
-  <img width="800" height="810" src="Updated_diagramm.png">
+  <img width="800" height="810" src="Updated_diagram.png">
 
 </p>
 
