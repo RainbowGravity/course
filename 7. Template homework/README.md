@@ -3,7 +3,7 @@
 # Template homework
 ## About
 
-This template is used for crearing a Virtual Private Cloud in Amazon Web Services. Template is creating a VPC with specified tags, specified amount of availability zones and specified amount of EC2 instances per each zone. You also can enable NAT Gateways for your instances in private subnets so they will have internet connection. 
+This template is used for deploying a Virtual Private Cloud in Amazon Web Services. Template is creating a VPC with specified tags, specified amount of availability zones and specified amount of EC2 instances per each zone. You also can enable NAT Gateways for your instances in private subnets so they will have internet connection. 
 
 You can connect to your instances in private subnets using the Session Manager from your AWS Console or AWS CLI using credentials. But you must to wait for several minutes for SSM manager to start. It may take from 1 to 10 minutes, but SSM will start anyway and you will be able to connect to your instances. You can create users in IAM and give them access to your VPC with different rights and policies. It is much easier and secure then creating a bastion host with exposed to the entire internet 22 port and a bunch of SSH keys.
 
