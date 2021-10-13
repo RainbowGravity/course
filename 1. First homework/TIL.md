@@ -9,6 +9,98 @@ You can switch between days and weeks via simple navigation. You can also return
 * ### [III. Third week](#third-week)
 * ### [IV. Fourth week](#fourth-week)
 * ### [V. Fifth week](#fifth-week)
+* ### [VI. Sixth week](#sixth-week)
+
+## [Sixth week](#today-ive-learned) 
+
+| Day   | Date |
+| :-----------: | :-----------: |
+|[Monday](#monday-04102021)| 04.10.2021 |
+|[Tuesday](#tuesday-05102021)| 05.10.2021 |
+|[Wednesday](#wednesday-06102021)| 06.10.2021 |
+|[Thursday](#thursday-07102021)| 07.10.2021 |
+|[Friday](#friday-08102021)| 08.10.2021 |
+|[Saturday](#saturday-09102021)| 09.10.2021 |
+|[Sunday](#sunday-10102021)| 10.10.2021 |
+
+### [Sunday, 10.10.2021](#sixth-week)
+
+<p>
+
+* <b> Today I've learned some more about terraform: </b>
+   * I've created variables and locals, and also I've added counts for my instances, NATs, subnets and AZs. Now template is very flexible and you can create different amounts of subnets, availability zones, disable or enable NATs for private instances and some more. Also CloudWatch alarms was added for every instance, so you will get messages if something is went wrong. Now there is only a wrapper-script I need to create for  my homework.
+
+</p>
+
+### [Saturday, 09.10.2021](#sixth-week)
+
+<p>
+
+* <b> Bastion host is a good thing, but Session Manager is much better! </b>
+   * So, after some googling and thinking about access to the private subnets at first I've decided to create a bstion host. Everything  was good until I've tried to connect to my private instances. It was painfull. At first you need to connect by your key to the bastion host, then you need to copy the ssh key for the private instances and only after that you will be able to connect to your instances. Awful experience. 
+   * Amazon introduced their SSM for that purpose. You are able to connect to the instances via Session Manager through AWS Console or AWS CLI. And only thing you need is to login to console or a pair of access keys for AWS CLI credentials. You can create them individually in IAM and configure rights, password resets and much more. I think this is much more usable and secure then classic bastion hosts.
+ 
+</p>
+
+### [Friday, 08.10.2021](#sixth-week)
+
+<p>
+
+* <b> Change of plans: </b>
+   * Until today I thought that Ubuntu was a good idea, but it was not. Ubuntu image don't have pre-installed AWS tools and can't download from s3 by default and need some tune. There is Amazon Linux 2 image with this tools pre-intalled, Amazon Linux also allows you to update system and install Nginx server without NATs or Internet gateways.
+* <b> Bastion host is in action now: </b>
+   * I've created a bastion host so now I can connect to my private instances. My template is creating a pairs of SSH keys for my private instances and for the bastion host. After that I'm able to connect to my instances via SSH. It's not very convenience, but it works.
+
+</p>
+
+### [Thursday, 07.10.2021](#sixth-week)
+
+<p>
+
+* <b> Today I've created a template for my ubuntu machines: </b>
+   * Now my machines is starting from private subnets with NAT gateways. They are installing the Nginx server and starting with it. But I had some problems with instance debugging. I'll try to create the bastion host for  my instances so I'll be able to connecto to them from the Internet. 
+
+</p>
+
+### [Wednesday, 06.10.2021](#sixth-week)
+
+<p>
+
+* <b> Today I've learned about databases from lession: </b>
+   * There are few types of databases: filesystem, relative, graph, column, in memory, document-priented DBs, TimeSeries and key/value.
+   * Learned about replication: physical and logical. You can physically copy database or logically by some filters and logic.
+   Replication can be async, sync and supersync.
+   * Learned about performance troubleshooting. Lector also give us few insteresting examples of real problems. Almost all of the problems is from devs or wrong database usage.
+   * We can use Prometheus, system tools, logs, pdBadger and Explain.
+   * Also for performance troubleshoots we can add more resources, use indexation, pgBouncer, analyse logic of requests and use denormalisation.
+   * We can create different indexes for popular requests. It will increase speed of reading the database. With indexation you will need to download and process significantly less amount of  information instead as for full scanning without indexes.
+   * Best practice for backups is to initiate a test backup operation. 
+
+</p>
+
+### [Tuesday, 05.10.2021](#sixth-week)
+
+<p>
+
+* <b> Today I've pushed my final version of the Docker container image to the Github. </b>
+* <b> Today I've started to learn AWS and Terraform: </b>
+   * Until today I've created my instances from AWS console by me own hands, but now I can write a Terraform template and launch my instances in less than a minute. IaC is a great thing. 
+
+</p>
+
+
+### [Monday, 04.10.2021](#sixth-week)
+
+<p>
+
+* <b>Today I've learned some more about networks:</b>
+   * MAC address is a uniq indentificator of a network devices which is burned-in. Pools of MAC addresses are devided between each manifacturer.
+   * VLAN allows to make isolated network segments and have 4096-2 VLANs. Every switch have a lookup table that contains information for each port about VLAN's MACs on them. 
+   * On third level there is OSFP, IS-IS, BGP and MPLS routing protocols. Every device in the network is getting information about each other and then they are know how to connect. OSFP and IS-IS have very fast convergence, when BGP is not, but BGP can store much bigger amount of data.
+   * Learned about troubleshooting: you must check every layer of OSI model from 7th to 1th.
+   * Learned something about VPNs. There are two types of them: secure and tunnel. Secure VPN is encrypting established connection, while tunnels are not. 
+
+</p>
 
 ## [Fifth week](#today-ive-learned) 
 
@@ -21,7 +113,6 @@ You can switch between days and weeks via simple navigation. You can also return
 |[Friday](#friday-01102021)| 01.10.2021 |
 |[Saturday](#saturday-02102021)| 02.10.2021 |
 |[Sunday](#sunday-03102021)| 03.10.2021 |
-
 
 ### [Sunday, 03.10.2021](#fifth-week)
 
