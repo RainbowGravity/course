@@ -1,4 +1,4 @@
-# Github open pull requests script
+# AWS CLI snapshots script
 ## About
 
 This script is used for AWS EC2 snapshots listing. You can choose different regions, IDs, set different time and output limit. After listing you can sort snapshots by a tag and copy the snapshot even to the other region. 
@@ -40,7 +40,7 @@ There is no tags
 Script have many options which you can use:
 
 * ```-t``` - enable tag filtering after the main output.
-### Arguments required
+#### Arguments required
 * ```-l``` - limit of the output. By default: 100.
 * ```-r``` - you can set the region by argument for this option.
 * ```-d``` - days offset.
@@ -58,7 +58,6 @@ bash script.sh -l5
 Output:
 ```
 You are logged in! Starting script...
-
 
 Limit value is set to 5
 
@@ -86,8 +85,8 @@ Enter one of the displayed regions:
 eu-central-1
 
 Region is set to eu-central-1
-Enter the owner ID:
 
+Enter the owner ID:
 903794441882
 
 OwnerID value is set to 903794441882
@@ -98,9 +97,9 @@ Enter the snapshot age in days:
 Days value is set to 20
 
 Enter the snapshot age in hours:
-20
+15
 
-Hours value is set to 20
+Hours value is set to 15
 
 Enter the snapshot age in miutes:
 5
@@ -108,55 +107,54 @@ Enter the snapshot age in miutes:
 Minutes value is set to 5
 
 Date is set to:
-UTC:     2021-09-22 23:01:15 UTC
-Local:   2021-09-23 02:01:15 MSK 
-
+UTC:     2021-09-23 05:42:36 UTC
+Local:   2021-09-23 08:42:36 MSK 
 
 Processing...
 
-Description:       Debian 11 (daily build 20210922-773)
-Snapshot ID:       snap-06fcd3393cb2e08fb
+Description:       Debian 10 (daily build 20210923-774)
+Snapshot ID:       snap-06fef7fc47846fb8d
 OwnerID:           903794441882
 Volume size:       8 GiB 
-Start time (UTC):  2021-09-22 05:06:05
-Start time (MSK):  2021-09-22 08:06:05
+Start time (UTC):  2021-09-23 05:06:06
+Start time (MSK):  2021-09-23 08:06:06
 There is no tags
 
-Description:       Debian sid (daily build 20210922-773)
-Snapshot ID:       snap-03a604a049155c31c
+Description:       Debian 11 (daily build 20210923-774)
+Snapshot ID:       snap-0328d1321686ad66c
 OwnerID:           903794441882
 Volume size:       8 GiB 
-Start time (UTC):  2021-09-22 05:15:37
-Start time (MSK):  2021-09-22 08:15:37
+Start time (UTC):  2021-09-23 05:15:53
+Start time (MSK):  2021-09-23 08:15:53
 There is no tags
 
-Description:       Debian 10-backports (daily build 20210922-773)
-Snapshot ID:       snap-08626de7298184227
+Description:       Debian sid (daily build 20210923-774)
+Snapshot ID:       snap-098c9017c65a54066
 OwnerID:           903794441882
 Volume size:       8 GiB 
-Start time (UTC):  2021-09-22 05:19:34
-Start time (MSK):  2021-09-22 08:19:34
+Start time (UTC):  2021-09-23 05:18:50
+Start time (MSK):  2021-09-23 08:18:50
 There is no tags
 
-Description:       Debian 11 (daily build 20210922-773)
-Snapshot ID:       snap-0ee1e6eb1455a1724
+Description:       Debian 10 (daily build 20210923-774)
+Snapshot ID:       snap-02234e322bac38476
 OwnerID:           903794441882
 Volume size:       8 GiB 
-Start time (UTC):  2021-09-22 05:22:23
-Start time (MSK):  2021-09-22 08:22:23
+Start time (UTC):  2021-09-23 05:22:09
+Start time (MSK):  2021-09-23 08:22:09
 There is no tags
 
-Description:       Debian 10 (daily build 20210922-773)
-Snapshot ID:       snap-0a5ee15a33ac1786a
+Description:       Debian 10-backports (daily build 20210923-774)
+Snapshot ID:       snap-0f0b81bcc42250f9e
 OwnerID:           903794441882
 Volume size:       8 GiB 
-Start time (UTC):  2021-09-22 05:38:39
-Start time (MSK):  2021-09-22 08:38:39
+Start time (UTC):  2021-09-23 05:38:08
+Start time (MSK):  2021-09-23 08:38:08
 There is no tags
 
 Date was set to:
-UTC:     2021-09-22 23:01:17 UTC
-Local:   2021-09-23 02:01:17 MSK
+UTC:     2021-09-23 05:42:38 UTC
+Local:   2021-09-23 08:42:38 MSK
 
 Copy a snapshot?
 no
@@ -168,29 +166,43 @@ Copying cancelled.
 
 Input:
 ```
-bash script.sh -r eu-central-1 -d0 -h9 -m28 -o 903794441882 -l5
+bash script.sh -r eu-central-1 -d0 -h15 -m18 -o 903794441882 -l5
 ```
 Output:
 ```
 You are logged in! Starting script...
 
-
 Region is set to eu-central-1
 
 Days value is set to 0
 
-Hours value is set to 9
+Hours value is set to 15
 
-Minutes value is set to 28
+Minutes value is set to 18
 
 Limit value is set to 5
 
 Date is set to:
-UTC:     2021-10-13 09:34:22 UTC
-Local:   2021-10-13 12:34:22 MSK 
-
+UTC:     2021-10-13 05:27:15 UTC
+Local:   2021-10-13 08:27:15 MSK 
 
 Processing...
+
+Description:       Debian 11 (daily build 20211013-794)
+Snapshot ID:       snap-0320e47e72318f410
+OwnerID:           903794441882
+Volume size:       8 GiB 
+Start time (UTC):  2021-10-13 05:05:23
+Start time (MSK):  2021-10-13 08:05:23
+There is no tags
+
+Description:       Debian 10-backports (daily build 20211013-794)
+Snapshot ID:       snap-03fd9d0c051c81db9
+OwnerID:           903794441882
+Volume size:       8 GiB 
+Start time (UTC):  2021-10-13 05:05:49
+Start time (MSK):  2021-10-13 08:05:49
+There is no tags
 
 Description:       Debian sid (daily build 20211013-794)
 Snapshot ID:       snap-0dab062fd7fd9926a
@@ -216,25 +228,9 @@ Start time (UTC):  2021-10-13 05:23:06
 Start time (MSK):  2021-10-13 08:23:06
 There is no tags
 
-Description:       Debian 10-backports (daily build 20211013-794)
-Snapshot ID:       snap-03b6282ddccdf3378
-OwnerID:           903794441882
-Volume size:       8 GiB 
-Start time (UTC):  2021-10-13 05:42:09
-Start time (MSK):  2021-10-13 08:42:09
-There is no tags
-
-Description:       Debian 10 (daily build 20211013-794)
-Snapshot ID:       snap-0066b3daf33049ee4
-OwnerID:           903794441882
-Volume size:       8 GiB 
-Start time (UTC):  2021-10-13 05:58:23
-Start time (MSK):  2021-10-13 08:58:23
-There is no tags
-
 Date was set to:
-UTC:     2021-10-13 09:34:24 UTC
-Local:   2021-10-13 12:34:24 MSK
+UTC:     2021-10-13 05:27:16 UTC
+Local:   2021-10-13 08:27:16 MSK
 
 Copy a snapshot?
 yes

@@ -1,7 +1,6 @@
 #!/bin/bash
-aws ec2 describe-regions 2>/dev/null 1>/dev/null && echo -e "\033[0;32mYou are logged in! Starting script...\033[0m\n" ||\
+aws ec2 describe-regions 2>/dev/null 1>/dev/null && echo -e "\033[0;32mYou are logged in! Starting script...\033[0m" ||\
 { echo -e "\033[0;31mAWS CLI is not configured or AWS CLI is not installed. Exiting...\033[0m"; exit; }
-
 skipRegion=$"0"
 skipOwnerId=$"0"
 skipDays=$"0"
@@ -9,7 +8,6 @@ skipHours=$"0"
 skipMinutes=$"0"
 Limit="100"
 skipTags="1"
-
 CheckDestRegion(){
     check=$"0"
     while [ $check -eq 0 ]
@@ -116,7 +114,7 @@ DestRegion(){
     CheckDestRegion  
 }
 OwnerID(){
-    echo -e "Enter the owner ID:\n"
+    echo -e "\nEnter the owner ID:"
     read -e OwnerId
     echo -e "\n\033[0;32mOwnerID value is set to \033[1;32m$OwnerId\033[0m"
 }
@@ -142,7 +140,6 @@ read -e Key
 echo -e "\nEnter the tag Value:\n"
 read -e Value
 echo -e "\n\033[0;32mProcessing...\033[0m\n"
-
 Snapshots=$(aws ec2 describe-snapshots --owner-ids $OwnerId --region=$Region --query "Snapshots[?(StartTime<='$Time')]")
 tags=$(echo $Snapshots | jq -r --arg Key "$Key" --arg Value "$Value" --arg Limit "$Limit" 'sort_by(.StartTime) | .[-($Limit| tonumber):][] | select(.Tags != null) | select(.Tags[] | .Value == $Value and .Key == $Key) |
   "Description:|"        + .Description + "\n" 
@@ -155,12 +152,8 @@ tags=$(echo $Snapshots | jq -r --arg Key "$Key" --arg Value "$Value" --arg Limit
 ')
 echo $tags | egrep -iq "[a-z]|[0-9]" && { echo -e "Name:|Value:\n\n$tags" | column -ets "|"; CopyToS3Question; } || echo 'There is no snapshots with key "'$Key'" and value "'$Value'"'
 }
-
 AllSnapshots(){
     Time=$(date -d "$date -$Days days -$Hours hours -$Minutes minutes" -u +"%Y-%m-%dT%H:%M:%SZ")
-
-#OwnerId=$"903794441882"
-
 Snapshots=$(aws ec2 describe-snapshots --owner-ids $OwnerId --region=$Region --query "Snapshots[?(StartTime<='$Time')]")
 echo $Snapshots | egrep -iq "[a-z]" && { echo $Snapshots | jq -r --arg Limit "$Limit" 'sort_by(.StartTime) | .[-($Limit| tonumber):][] | 
   "Description:|"        + .Description + "\n" 
@@ -171,16 +164,12 @@ echo $Snapshots | egrep -iq "[a-z]" && { echo $Snapshots | jq -r --arg Limit "$L
 + "Start time (" + (now | strftime("%Z")) + "):|" + (.StartTime | strptime("%Y-%m-%dT%H:%M:%S %Z") | mktime | strflocaltime ("%Y-%m-%d %H:%M:%S")) + "\n"
 + (if (.Tags | length) !=0 then ("\u001b[33mTags:|\n\u001B[0m" + "Key:|" + "Value:|\n" + (.Tags | map(.Key + "|" + .Value) | join ("\n"))) else "\u001b[33mThere is no tags\u001B[0m" end) + "\n"
 ' | column -ets "|"; } || echo "There is no snapshots"
-#select(.Tags[].Value == '\"$Test\"')
-
 echo -e "\033[0;32mDate was set to:\033[0m"
 echo -e "UTC:| $(date -d "$date -$Days days -$Hours hours -$Minutes minutes" -u +"%Y-%m-%d %H:%M:%S %Z")
 Local:| $(date -d "$date -$Days days -$Hours hours -$Minutes minutes" +"%Y-%m-%d %H:%M:%S %Z")" | column -ets "|"
-
 Key=$"Stack"
 Value=$"test"
 }
-
 CopyToS3Question(){
     echo -e "\n\033[0;33mCopy a snapshot?\033[0m"
     read -e apply
@@ -194,7 +183,6 @@ CopyToS3Question(){
             exit
     fi
 }
-
 CopyToS3(){
     echo -e "\n\033[0;33mChange destination region?\033[0m"
     read -e destination
@@ -231,7 +219,6 @@ CopyToS3(){
     echo -e "\nExiting process..." 
     exit
 }
-
 while getopts "l:r:d:h:m:o:tq" option; do
 	case $option in
     l)  Limit=$OPTARG
@@ -248,12 +235,9 @@ while getopts "l:r:d:h:m:o:tq" option; do
     m)  Minutes=$OPTARG
         skipMinutes="1"
         CheckMinutes;;
-	# Repository name/link argument
     o)  OwnerId=$OPTARG
         skipOwnerId="1";;
-    # Page argument
 	t)  skipTags="0";;
-    # Error
     *)  Error exit;;
 	esac
 done
@@ -278,11 +262,9 @@ if [ $skipMinutes -eq "0" ]
     then
         Minutes
 fi
-
 echo -e "\n\033[0;32mDate is set to:\033[0m"
 echo -e "UTC:| $(date -d "$date -$Days days -$Hours hours -$Minutes minutes" -u +"%Y-%m-%d %H:%M:%S %Z")
-Local:| $(date -d "$date -$Days days -$Hours hours -$Minutes minutes" +"%Y-%m-%d %H:%M:%S %Z") \n" | column -ets "|"
-
+Local:| $(date -d "$date -$Days days -$Hours hours -$Minutes minutes" +"%Y-%m-%d %H:%M:%S %Z")" | column -ets "|"
 if [ $skipTags -eq 1 ]
     then
         echo -e "\n\033[0;32mProcessing...\033[0m\n"
@@ -291,3 +273,4 @@ if [ $skipTags -eq 1 ]
     else
         Tags
 fi
+exit
