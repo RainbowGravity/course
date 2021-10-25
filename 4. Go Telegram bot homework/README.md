@@ -23,3 +23,12 @@ To run the bot you need to install [tgbotapi](github.com/go-telegram-bot-api/tel
 BOT_TOKEN=YOUR_BOT_TOKEN
 API_TOKEN=YOUR_GITHUB_API_TOKEN
 ```
+## R.I.P. 01.10.21 - 22.10.21
+
+<p align=center><b>ECS Services diagram</b></p>
+<p align=center>
+
+  <img src="https://user-images.githubusercontent.com/89798605/138754712-dd34d32d-cb8d-46d1-97ce-7ce315d5b09d.png">
+
+ 
+</p>
